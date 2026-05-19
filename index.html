@@ -258,39 +258,35 @@ section { padding:56px 18px; position:relative; }
 
 /* ══ FACTIONS ══ */
 #factions { background:var(--bg-dark); }
-.factions-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .faction-panel {
-  background:var(--bg); overflow:hidden; position:relative; cursor:pointer;
-  border:1px solid var(--line); transition:transform 0.12s, border-color 0.15s;
-  -webkit-tap-highlight-color:transparent; display:flex; flex-direction:column;
+  background:var(--bg); overflow:hidden;
+  border:1px solid var(--line); margin-bottom:12px;
+  display:flex; flex-direction:column;
 }
-.faction-panel:active { transform:scale(0.96); }
+.faction-panel:last-child { margin-bottom:0; }
 .fp-accent-bar { height:3px; width:100%; flex-shrink:0; }
 .faction-panel.android .fp-accent-bar { background:var(--android); }
 .faction-panel.machine  .fp-accent-bar { background:var(--machine); }
-.fp-inner { padding:14px 12px 12px; display:flex; flex-direction:column; gap:9px; flex:1; }
-.fp-top { display:flex; align-items:flex-start; justify-content:space-between; gap:4px; }
-.fp-num-big { font-family:var(--font-ui); font-size:1.8rem; line-height:1; opacity:0.07; color:var(--white); flex-shrink:0; }
+.fp-inner { padding:20px 18px; display:flex; flex-direction:column; gap:14px; }
+.fp-top { display:flex; align-items:flex-start; justify-content:space-between; gap:6px; }
+.fp-num-big { font-family:var(--font-ui); font-size:3rem; line-height:1; opacity:0.06; color:var(--white); flex-shrink:0; margin-top:-4px; }
 .fp-head { flex:1; }
-.fp-id { font-family:var(--font-ui); font-size:0.38rem; letter-spacing:0.24em; color:var(--white-faint); text-transform:uppercase; margin-bottom:4px; }
-.fp-name { font-family:var(--font-ui); font-size:0.75rem; letter-spacing:0.12em; font-weight:400; text-transform:uppercase; line-height:1.3; }
+.fp-id { font-family:var(--font-ui); font-size:0.42rem; letter-spacing:0.28em; color:var(--white-faint); text-transform:uppercase; margin-bottom:5px; }
+.fp-name { font-family:var(--font-ui); font-size:1.05rem; letter-spacing:0.16em; font-weight:400; text-transform:uppercase; line-height:1.3; }
 .faction-panel.android .fp-name { color:var(--android); }
 .faction-panel.machine  .fp-name { color:var(--machine); }
-.fp-desc { font-family:var(--font-he); font-size:0.8rem; color:var(--white-faint); line-height:1.75; }
+.fp-desc { font-family:var(--font-he); font-size:0.95rem; color:var(--white-dim); line-height:1.95; }
 .fp-divider { height:1px; background:var(--line); }
-.fp-data { display:flex; flex-direction:column; }
-.fp-data-row { display:flex; justify-content:space-between; align-items:baseline; padding:4px 0; border-bottom:1px solid rgba(74,74,74,0.4); gap:4px; }
+.fp-long { display:flex; flex-direction:column; gap:8px; }
+.fp-long p { font-family:var(--font-he); font-size:0.9rem; color:var(--white-faint); line-height:1.9; }
+.fp-long p:first-child { color:var(--white-dim); }
+.fp-data { border-top:1px solid var(--line); padding-top:14px; display:flex; flex-direction:column; }
+.fp-data-label { font-family:var(--font-ui); font-size:0.42rem; letter-spacing:0.28em; color:var(--white-faint); text-transform:uppercase; margin-bottom:8px; }
+.fp-data-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(74,74,74,0.4); }
 .fp-data-row:last-child { border-bottom:none; }
-.fpdk { font-family:var(--font-ui); font-size:0.38rem; letter-spacing:0.06em; color:var(--white-faint); text-transform:uppercase; flex-shrink:0; }
-.faction-panel.android .fpdv { color:var(--android); font-family:var(--font-he); font-size:0.75rem; text-align:left; }
-.faction-panel.machine  .fpdv { color:var(--machine); font-family:var(--font-he); font-size:0.75rem; text-align:left; }
-.fp-tap-hint {
-  display:flex; align-items:center; justify-content:center; gap:5px;
-  padding:9px 12px; border-top:1px solid var(--line);
-  font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.18em; color:var(--white-faint);
-  text-transform:uppercase; background:var(--bg-dark); flex-shrink:0;
-}
-.fp-tap-hint::before { content:'▶'; font-size:0.5rem; opacity:0.5; }
+.fpdk { font-family:var(--font-ui); font-size:0.48rem; letter-spacing:0.08em; color:var(--white-faint); text-transform:uppercase; }
+.faction-panel.android .fpdv { color:var(--android); font-family:var(--font-he); font-size:0.9rem; }
+.faction-panel.machine  .fpdv { color:var(--machine); font-family:var(--font-he); font-size:0.9rem; }
 
 /* ══ LORE ══ */
 #lore { background:var(--bg); }
@@ -477,22 +473,18 @@ footer { background:var(--bg-darker); border-top:1px solid var(--line); padding-
 .ap-viz-mini.on .ap-bar { background:var(--white-dim); }
 
 /* ══ ENTRY ANIM ══ */
-#entry-anim { position:fixed; inset:0; z-index:8000; pointer-events:none; overflow:hidden; }
-.ea-slice { position:absolute; left:0; right:0; background:var(--white); opacity:0; }
-.ea-vline { position:absolute; top:0; bottom:0; width:2px; background:var(--white); opacity:0; left:50%; }
-.ea-corner { position:fixed; width:24px; height:24px; opacity:0; }
-.ea-corner.tl { top:var(--hud-h); right:0; border-top:2px solid var(--white); border-right:2px solid var(--white); }
-.ea-corner.tr { top:var(--hud-h); left:0;  border-top:2px solid var(--white); border-left:2px solid var(--white); }
-.ea-corner.bl { bottom:0; right:0; border-bottom:2px solid var(--white); border-right:2px solid var(--white); }
-.ea-corner.br { bottom:0; left:0;  border-bottom:2px solid var(--white); border-left:2px solid var(--white); }
-.ea-flash { position:fixed; inset:0; background:var(--white); opacity:0; }
-.ea-text {
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  font-family:var(--font-ui); font-size:clamp(0.5rem,3.5vw,0.75rem);
-  letter-spacing:0.5em; color:var(--white); text-transform:uppercase;
-  opacity:0; white-space:nowrap; text-align:center;
+#entry-anim {
+  position:fixed; inset:0; z-index:8000; pointer-events:none;
+  display:flex; align-items:center; justify-content:center;
 }
-.ea-hline { position:fixed; left:0; right:0; height:1px; background:var(--white); opacity:0; }
+#ea-canvas { position:absolute; inset:0; width:100%; height:100%; }
+.ea-text {
+  position:relative; z-index:1;
+  font-family:var(--font-ui); font-size:clamp(0.55rem,3vw,0.75rem);
+  letter-spacing:0.45em; color:var(--white); text-transform:uppercase;
+  opacity:0; white-space:nowrap; text-align:center;
+  text-shadow:0 0 20px rgba(232,232,232,0.8);
+}
 </style>
 </head>
 <body>
@@ -529,16 +521,7 @@ footer { background:var(--bg-darker); border-top:1px solid var(--line); padding-
 
 <!-- ENTRY ANIM -->
 <div id="entry-anim">
-  <div class="ea-flash" id="ea-flash"></div>
-  <div class="ea-vline" id="ea-vline"></div>
-  <div class="ea-hline" id="ea-hline" style="top:50%"></div>
-  <div class="ea-slice" id="ea-s1" style="height:2px;"></div>
-  <div class="ea-slice" id="ea-s2" style="height:1px;"></div>
-  <div class="ea-slice" id="ea-s3" style="height:3px;"></div>
-  <div class="ea-corner tl" id="ea-tl"></div>
-  <div class="ea-corner tr" id="ea-tr"></div>
-  <div class="ea-corner bl" id="ea-bl"></div>
-  <div class="ea-corner br" id="ea-br"></div>
+  <canvas id="ea-canvas"></canvas>
   <div class="ea-text" id="ea-text">SYSTEM ONLINE // WELCOME OPERATIVE</div>
 </div>
 
@@ -899,76 +882,154 @@ function playClick(t){
 
 /* ── ENTRY ANIM ── */
 function runEntryAnimation(onDone){
-  const flash=document.getElementById('ea-flash');
-  const vline=document.getElementById('ea-vline');
-  const hline=document.getElementById('ea-hline');
-  const s1=document.getElementById('ea-s1'),s2=document.getElementById('ea-s2'),s3=document.getElementById('ea-s3');
-  const corners=['ea-tl','ea-tr','ea-bl','ea-br'].map(id=>document.getElementById(id));
-  const text=document.getElementById('ea-text');
+  const canvas = document.getElementById('ea-canvas');
+  const textEl = document.getElementById('ea-text');
+  const W = canvas.width  = window.innerWidth;
+  const H = canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const startTime = performance.now();
+  const DURATION = 1400; // total ms
+
+  // colour helpers
+  const WHITE = 'rgba(232,232,232,';
+  const DIM   = 'rgba(100,110,110,';
+
+  // state
+  let raf;
+  let textShown = false;
 
   playClick('enter');
 
-  // 1. Flash breve
-  flash.style.transition='none'; flash.style.opacity='0.18';
-  setTimeout(()=>{ flash.style.transition='opacity 0.15s'; flash.style.opacity='0'; },60);
+  function easeOut(t){ return 1 - Math.pow(1-t, 3); }
+  function easeIn(t) { return t * t; }
+  function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 
-  // 2. Vertical scan line sweeps across
-  setTimeout(()=>{
-    vline.style.transition='none'; vline.style.opacity='0.9'; vline.style.left='-2px';
-    requestAnimationFrame(()=>{
-      vline.style.transition='left 0.28s linear'; vline.style.left='102vw';
-    });
-    setTimeout(()=>{ vline.style.opacity='0'; },320);
-  }, 50);
+  function draw(now){
+    const elapsed = now - startTime;
+    const t = clamp(elapsed / DURATION, 0, 1);
+    ctx.clearRect(0, 0, W, H);
 
-  // 3. Horizontal glitch slices
-  setTimeout(()=>{
-    [[s1,'22%'],[s2,'55%'],[s3,'70%']].forEach(([s,top],i)=>{
+    // ── Phase 0–0.12: white flash fill ──
+    if(t < 0.15){
+      const a = t < 0.06 ? t/0.06 : 1 - (t-0.06)/0.09;
+      ctx.fillStyle = `rgba(232,232,232,${a * 0.22})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    // ── Phase 0.05–0.35: horizontal scan line sweeping down ──
+    if(t >= 0.05 && t < 0.45){
+      const p = (t - 0.05) / 0.40;
+      const y = easeOut(p) * H;
+      // bright leading edge
+      const grad = ctx.createLinearGradient(0, y-60, 0, y+4);
+      grad.addColorStop(0, 'rgba(232,232,232,0)');
+      grad.addColorStop(0.6, `rgba(232,232,232,${0.06 * (1-p*0.5)})`);
+      grad.addColorStop(1, `rgba(232,232,232,${0.55 * (1-p*0.4)})`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, y-60, W, 64);
+      // crisp scan line
+      ctx.fillStyle = `rgba(232,232,232,${0.9 * (1 - p*0.3)})`;
+      ctx.fillRect(0, y, W, 1.5);
+      // afterglow
+      ctx.fillStyle = `rgba(160,180,180,${0.25 * (1 - p)})`;
+      ctx.fillRect(0, 0, W, y);
+    }
+
+    // ── Phase 0.30–0.55: vertical glitch stripes ──
+    if(t >= 0.30 && t < 0.58){
+      const p = (t - 0.30) / 0.28;
+      const stripes = [
+        { y: H * 0.18, h: 2, a: 0.9 },
+        { y: H * 0.42, h: 1, a: 0.7 },
+        { y: H * 0.67, h: 3, a: 0.8 },
+        { y: H * 0.81, h: 1, a: 0.5 },
+      ];
+      stripes.forEach((s, i) => {
+        const delay = i * 0.06;
+        if(p < delay) return;
+        const sp = clamp((p - delay) / 0.25, 0, 1);
+        const alpha = sp < 0.4 ? sp/0.4 : 1 - (sp-0.4)/0.6;
+        ctx.fillStyle = `rgba(232,232,232,${alpha * s.a})`;
+        ctx.fillRect(0, s.y, W, s.h);
+        // offset copy for glitch feel
+        if(alpha > 0.3){
+          ctx.fillStyle = `rgba(160,200,200,${alpha * 0.3})`;
+          ctx.fillRect(4, s.y + 2, W, s.h);
+        }
+      });
+    }
+
+    // ── Phase 0.48–0.75: corner brackets draw in ──
+    if(t >= 0.48 && t < 0.82){
+      const p = clamp((t - 0.48) / 0.27, 0, 1);
+      const fadeOut = t > 0.68 ? clamp(1-(t-0.68)/0.14, 0, 1) : 1;
+      const size = 28;
+      const margin = 16;
+      const hud = 52;
+      const corners = [
+        { x: W - margin, y: hud + margin, dx: -1, dy:  1 },
+        { x: margin,     y: hud + margin, dx:  1, dy:  1 },
+        { x: W - margin, y: H - margin,   dx: -1, dy: -1 },
+        { x: margin,     y: H - margin,   dx:  1, dy: -1 },
+      ];
+      const len = easeOut(p) * size;
+      ctx.strokeStyle = `rgba(232,232,232,${fadeOut * 0.95})`;
+      ctx.lineWidth = 1.5;
+      corners.forEach(c => {
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        ctx.lineTo(c.x + c.dx * len, c.y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        ctx.lineTo(c.x, c.y + c.dy * len);
+        ctx.stroke();
+      });
+    }
+
+    // ── Phase 0.55–0.80: centre crosshair ──
+    if(t >= 0.55 && t < 0.82){
+      const p = clamp((t - 0.55) / 0.25, 0, 1);
+      const fadeOut = t > 0.68 ? clamp(1-(t-0.68)/0.14, 0, 1) : 1;
+      const cx = W/2, cy = H/2;
+      const arm = easeOut(p) * 22;
+      ctx.strokeStyle = `rgba(160,184,184,${fadeOut * 0.7})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(cx - arm, cy); ctx.lineTo(cx + arm, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy - arm); ctx.lineTo(cx, cy + arm); ctx.stroke();
+      // centre dot
+      ctx.fillStyle = `rgba(232,232,232,${fadeOut * 0.9})`;
+      ctx.fillRect(cx - 1, cy - 1, 2, 2);
+    }
+
+    // ── Phase 0.62–0.80: text fade in / out ──
+    if(t >= 0.62 && !textShown){
+      textShown = true;
+      textEl.style.transition = 'opacity 0.12s';
+      textEl.style.opacity = '1';
       setTimeout(()=>{
-        s.style.transition='none'; s.style.top=top; s.style.opacity='0.85';
-        setTimeout(()=>{ s.style.transition='opacity 0.08s'; s.style.opacity='0'; },55);
-      }, i*35);
-    });
-  }, 80);
+        textEl.style.transition = 'opacity 0.3s';
+        textEl.style.opacity = '0';
+      }, 320);
+    }
 
-  // 4. Horizontal center line flash
-  setTimeout(()=>{
-    hline.style.transition='none'; hline.style.opacity='0.5';
-    setTimeout(()=>{ hline.style.transition='opacity 0.12s'; hline.style.opacity='0'; },80);
-  }, 180);
+    // ── Phase 0.80–1.0: final white flash out ──
+    if(t >= 0.80){
+      const p = (t - 0.80) / 0.20;
+      const a = p < 0.35 ? easeIn(p/0.35)*0.12 : (1-(p-0.35)/0.65)*0.12;
+      ctx.fillStyle = `rgba(232,232,232,${a})`;
+      ctx.fillRect(0, 0, W, H);
+    }
 
-  // 5. Corner brackets snap in
-  setTimeout(()=>{
-    corners.forEach((c,i)=>{
-      setTimeout(()=>{
-        c.style.transition='none'; c.style.opacity='0'; c.style.transform='scale(2.2)';
-        requestAnimationFrame(()=>{
-          c.style.transition='opacity 0.08s, transform 0.14s cubic-bezier(0.2,0,0.1,1)';
-          c.style.opacity='1'; c.style.transform='scale(1)';
-        });
-        setTimeout(()=>{ c.style.transition='opacity 0.3s'; c.style.opacity='0'; },320);
-      }, i*40);
-    });
-  }, 220);
+    if(t < 1){
+      raf = requestAnimationFrame(draw);
+    } else {
+      ctx.clearRect(0, 0, W, H);
+      onDone();
+    }
+  }
 
-  // 6. Text flash
-  setTimeout(()=>{
-    text.style.transition='none'; text.style.opacity='0.8';
-    setTimeout(()=>{
-      text.style.transition='opacity 0.06s'; text.style.opacity='0.35';
-      setTimeout(()=>{ text.style.opacity='0'; text.style.transition='opacity 0.22s'; },120);
-    }, 200);
-  }, 300);
-
-  // 7. Second glitch burst
-  setTimeout(()=>{
-    s1.style.transition='none'; s1.style.top='40%'; s1.style.opacity='0.6';
-    setTimeout(()=>{ s1.style.transition='opacity 0.06s'; s1.style.opacity='0'; },40);
-    flash.style.transition='none'; flash.style.opacity='0.07';
-    setTimeout(()=>{ flash.style.transition='opacity 0.1s'; flash.style.opacity='0'; },80);
-  }, 480);
-
-  setTimeout(onDone, 750);
+  raf = requestAnimationFrame(draw);
 }
 
 /* ── INTRO ── */
@@ -1012,8 +1073,8 @@ function tableHTML(data,cls){ return `<table class="modal-table ${cls||''}">${da
 /* ── RENDER ── */
 function render(){
   // Factions
-  document.getElementById('faction-wrap').innerHTML = `<div class="factions-grid">${FACTIONS.map(f=>`
-    <div class="faction-panel ${f.type}" data-faction="${f.type}">
+  document.getElementById('faction-wrap').innerHTML = FACTIONS.map(f=>`
+    <div class="faction-panel ${f.type}">
       <div class="fp-accent-bar"></div>
       <div class="fp-inner">
         <div class="fp-top">
@@ -1023,20 +1084,15 @@ function render(){
           </div>
           <div class="fp-num-big">${f.num}</div>
         </div>
-        <p class="fp-desc">${f.desc.substring(0,90)}…</p>
+        <p class="fp-desc">${f.desc}</p>
         <div class="fp-divider"></div>
-        <div class="fp-data">${f.data.slice(0,3).map(d=>`<div class="fp-data-row"><span class="fpdk">${d.k}</span><span class="fpdv">${d.v}</span></div>`).join('')}</div>
+        <div class="fp-long">${f.longDesc.map(p=>`<p>${p}</p>`).join('')}</div>
+        <div class="fp-data">
+          <div class="fp-data-label">// נתוני סיעה</div>
+          ${f.data.map(d=>`<div class="fp-data-row"><span class="fpdk">${d.k}</span><span class="fpdv">${d.v}</span></div>`).join('')}
+        </div>
       </div>
-      <div class="fp-tap-hint">פרטים נוספים</div>
-    </div>`).join('')}</div>`;
-
-  document.querySelectorAll('.faction-panel').forEach(el=>{
-    el.addEventListener('click',()=>{
-      const f=FACTIONS.find(x=>x.type===el.dataset.faction);
-      openModal({ id:`FACTION_DB // ${f.num}`, type:`// ${f.id}`, title:f.name, titleClass:f.type==='android'?'android-c':'machine-c',
-        bodyHTML:`<div class="modal-faction-header"><div class="modal-faction-stripe ${f.type}"></div><div class="modal-faction-info">${paraHTML(f.longDesc)}</div></div>${tableHTML(f.data,f.type+'-t')}` });
-    });
-  });
+    </div>`).join('');
 
   // Lore
   document.getElementById('lore-wrap').innerHTML = LORE.map((l,i)=>`
