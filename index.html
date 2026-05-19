@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#161616">
-<title>PROJECT REBOOT // MOBILE</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>PROJECT REBOOT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Heebo:wght@300;400;500;700&display=swap');
-
 :root {
   --bg:          #2a2a2a;
   --bg-dark:     #1e1e1e;
@@ -18,442 +20,1061 @@
   --white:       #e8e8e8;
   --white-dim:   #b0b0b0;
   --white-faint: #686868;
+  --white-ghost: #3e3e3e;
   --red:         #cc3333;
   --android:     #c8c8b8;
   --machine:     #a0b8b8;
   --font-ui:     'Share Tech Mono', monospace;
   --font-he:     'Heebo', sans-serif;
-  --padding:     20px;
+  --hud-h:       52px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
 body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: var(--font-he);
-  font-size: 16px;
-  line-height: 1.6;
-  overflow-x: hidden;
-  direction: rtl;
+  background:var(--bg); color:var(--white);
+  font-family:var(--font-he); font-size:15px; line-height:1.8;
+  overflow-x:hidden; direction:rtl;
+  -webkit-font-smoothing:antialiased;
 }
-
-/* Background Scanlines */
 body::before {
-  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 3px);
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 3px);
 }
 
-/* Typography & Utilities */
-.ui-text { font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 0.1em; }
-.btn { 
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  background: var(--white); color: var(--bg-darker);
-  border: none; padding: 16px 24px; width: 100%;
-  font-family: var(--font-ui); font-size: 0.9rem; font-weight: bold; letter-spacing: 0.2em;
-  text-transform: uppercase; text-decoration: none; cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
-}
-.btn:active { transform: scale(0.98); }
-.btn-ghost { background: transparent; color: var(--white); border: 1px solid var(--white-dim); }
-.divider { display: flex; align-items: center; gap: 8px; margin: 20px 0; opacity: 0.5; }
-.divider-line { flex: 1; height: 1px; background: var(--line-light); }
-.divider-diamond { width: 6px; height: 6px; background: var(--white); transform: rotate(45deg); }
+@keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.15} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+@keyframes pulse  { 0%,100%{opacity:0.2} 50%{opacity:1} }
+@keyframes sweep  { 0%{top:-1px;opacity:0} 3%{opacity:1} 97%{opacity:1} 100%{top:100vh;opacity:0} }
+@keyframes gA { 0%,91%,100%{opacity:0;transform:none} 92%{opacity:.8;transform:translate(-3px,1px)} 96%{opacity:0} }
+@keyframes modalIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+@keyframes scanLine { from{top:0} to{top:100%} }
+@keyframes ringP { 0%,100%{opacity:0.15;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.03)} }
 
-/* Top Navigation */
-header {
-  position: fixed; top: 0; left: 0; right: 0; height: 60px;
-  background: rgba(22, 22, 22, 0.95); border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(5px); z-index: 1000;
-  display: flex; align-items: center; justify-content: space-between; padding: 0 var(--padding);
+/* ══ INTRO ══ */
+#intro-screen {
+  position:fixed; inset:0; z-index:9000; background:var(--bg-darker);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity 0.6s ease, visibility 0.6s ease; overflow:hidden;
 }
-.logo { font-family: var(--font-ui); font-size: 1.1rem; letter-spacing: 0.2em; color: var(--white); }
-.menu-toggle {
-  background: none; border: none; color: var(--white);
-  font-family: var(--font-ui); font-size: 0.8rem; letter-spacing: 0.1em; padding: 10px; cursor: pointer;
+#intro-screen.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+.intro-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:linear-gradient(var(--white-ghost) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--white-ghost) 1px,transparent 1px);
+  background-size:44px 44px; opacity:0.18;
 }
+.intro-grid::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 75% 75% at 50% 50%,transparent 20%,var(--bg-darker) 100%); }
+.i-sweep { position:absolute; left:0; right:0; height:1px; background:rgba(232,232,232,0.07); animation:sweep 5s linear infinite; }
+.i-corner { position:absolute; width:28px; height:28px; pointer-events:none; }
+.i-corner.tl { top:20px; right:20px; border-top:1px solid var(--line-light); border-right:1px solid var(--line-light); }
+.i-corner.tr { top:20px; left:20px;  border-top:1px solid var(--line-light); border-left:1px solid var(--line-light); }
+.i-corner.bl { bottom:20px; right:20px; border-bottom:1px solid var(--line-light); border-right:1px solid var(--line-light); }
+.i-corner.br { bottom:20px; left:20px;  border-bottom:1px solid var(--line-light); border-left:1px solid var(--line-light); }
+.intro-content { position:relative; z-index:1; text-align:center; padding:2rem 1.5rem; max-width:360px; }
+.i-sys { font-family:var(--font-ui); font-size:0.44rem; letter-spacing:0.35em; color:var(--white-faint); text-transform:uppercase; margin-bottom:1.6rem; animation:fadeIn 1s ease both; }
+.i-title {
+  font-family:var(--font-ui); font-size:clamp(2rem,14vw,3.2rem); font-weight:400;
+  letter-spacing:0.35em; color:var(--white); line-height:1;
+  margin-bottom:0.8rem; animation:fadeIn 1s 0.15s ease both; position:relative;
+}
+.i-title::before { content:attr(data-text); position:absolute; inset:0; color:#888; animation:gA 5s infinite 3s; clip-path:polygon(0 30%,100% 30%,100% 48%,0 48%); }
+.i-div { display:flex; align-items:center; justify-content:center; gap:6px; margin:1rem auto; animation:fadeIn 1s 0.3s ease both; }
+.i-div-line { width:44px; height:1px; background:var(--line-light); }
+.i-div-d { width:4px; height:4px; background:var(--white-dim); transform:rotate(45deg); }
+.i-sub { font-family:var(--font-ui); font-size:0.55rem; letter-spacing:0.4em; color:var(--white-dim); text-transform:uppercase; margin-bottom:2rem; animation:fadeIn 1s 0.4s ease both; }
+.i-btn-wrap { position:relative; display:inline-block; animation:fadeIn 1s 0.7s ease both; }
+.i-btn-wrap::before {
+  content:''; position:absolute; top:-6px; left:-6px; right:-6px; bottom:-6px;
+  border:1px solid rgba(232,232,232,0.15); animation:ringP 2.5s ease-in-out infinite;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.i-btn {
+  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:12px;
+  padding:16px 48px; font-family:var(--font-ui); font-size:0.7rem; letter-spacing:0.35em;
+  text-transform:uppercase; color:var(--bg-darker); background:var(--white); border:none; cursor:pointer;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+  transition:background 0.15s; -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation; min-height:52px;
+}
+.i-btn:active { background:var(--white-dim); }
+.i-hint { font-family:var(--font-ui); font-size:0.42rem; letter-spacing:0.28em; color:var(--white-faint); margin-top:1.5rem; text-transform:uppercase; animation:fadeIn 1.5s 1.4s ease both; }
+.i-loading { font-family:var(--font-ui); font-size:0.44rem; letter-spacing:0.22em; color:var(--white-faint); margin-top:1.2rem; animation:fadeIn 1s 1s ease both; min-height:1.2em; }
+.i-loading::after { content:'_'; animation:blink 1s infinite; }
+.i-status {
+  position:absolute; bottom:0; left:0; right:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:5px 14px; border-top:1px solid var(--line); background:rgba(10,10,10,0.6);
+  direction:ltr; padding-bottom:calc(5px + var(--safe-bottom));
+}
+.i-status-cell { font-family:var(--font-ui); font-size:0.38rem; letter-spacing:0.14em; color:var(--white-faint); text-transform:uppercase; display:flex; align-items:center; gap:4px; }
+.dot { width:4px; height:4px; border-radius:50%; background:var(--white-faint); animation:blink 2s infinite; flex-shrink:0; }
+.dot.green { background:#88cc88; }
 
-/* Fullscreen Menu Overlay */
-#nav-menu {
-  position: fixed; inset: 0; top: 60px; background: var(--bg-darker); z-index: 999;
-  display: flex; flex-direction: column; overflow-y: auto;
-  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ══ HUD — MOBILE ══ */
+.hud {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  background:var(--bg-darker); border-bottom:1px solid var(--line);
+  height:var(--hud-h);
 }
-#nav-menu.open { transform: translateX(0); }
-.nav-link {
-  padding: 20px var(--padding); border-bottom: 1px solid var(--line);
-  color: var(--white); text-decoration: none; font-size: 1.1rem;
-  display: flex; flex-direction: column; gap: 4px;
+.hud-inner {
+  display:flex; align-items:center; justify-content:space-between;
+  height:100%; padding:0 14px;
 }
-.nav-link-en { font-family: var(--font-ui); font-size: 0.7rem; color: var(--white-faint); letter-spacing: 0.2em; }
+.hud-logo { font-family:var(--font-ui); font-size:0.72rem; letter-spacing:0.3em; color:var(--white); }
+.hud-right { display:flex; align-items:center; gap:10px; }
+.hud-clock { font-family:var(--font-ui); font-size:0.54rem; color:var(--white-dim); }
+.hud-menu-btn {
+  display:flex; flex-direction:column; justify-content:center; gap:4px;
+  width:36px; height:36px; background:none; border:1px solid var(--line); cursor:pointer;
+  align-items:center; transition:border-color 0.15s;
+}
+.hud-menu-btn span { display:block; width:16px; height:1px; background:var(--white-faint); transition:all 0.2s; }
+.hud-menu-btn.open span:nth-child(1) { transform:rotate(45deg) translate(3px,3px); }
+.hud-menu-btn.open span:nth-child(2) { opacity:0; }
+.hud-menu-btn.open span:nth-child(3) { transform:rotate(-45deg) translate(3px,-3px); }
 
-/* Section Base */
-section { padding: 60px var(--padding); border-bottom: 1px solid var(--line); position: relative; }
-.section-tag { font-family: var(--font-ui); font-size: 0.6rem; color: var(--white-faint); letter-spacing: 0.3em; text-align: center; margin-bottom: 8px; }
-.section-title { font-family: var(--font-ui); font-size: 1.8rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 30px; text-transform: uppercase; }
+/* ══ MOBILE NAV DRAWER ══ */
+.nav-drawer {
+  position:fixed; top:var(--hud-h); left:0; right:0; z-index:490;
+  background:var(--bg-darker); border-bottom:1px solid var(--line-light);
+  transform:translateY(-100%); opacity:0;
+  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+  pointer-events:none;
+}
+.nav-drawer.open { transform:translateY(0); opacity:1; pointer-events:all; }
+.nav-drawer a {
+  display:flex; align-items:center; gap:10px; padding:14px 18px;
+  font-family:var(--font-ui); font-size:0.65rem; letter-spacing:0.22em;
+  color:var(--white-faint); text-decoration:none; border-bottom:1px solid var(--line);
+  text-transform:uppercase; transition:color 0.1s, background 0.1s;
+}
+.nav-drawer a:active { background:rgba(255,255,255,0.05); color:var(--white); }
+.nav-drawer a::before { content:'▶'; font-size:0.45rem; opacity:0.4; flex-shrink:0; }
 
-/* Hero */
+/* ══ GLITCH SWEEP ══ */
+.glitch-sweep { position:fixed; z-index:9990; pointer-events:none; left:0; right:0; height:1px; background:rgba(232,232,232,0.06); animation:sweep 12s linear infinite; }
+
+/* ══ SHARED ══ */
+section { padding:56px 18px; position:relative; }
+.container { max-width:480px; margin:0 auto; }
+.sep { height:1px; background:var(--line); position:relative; }
+.sep::before { content:'◆'; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:0.38rem; color:var(--line-light); background:var(--bg); padding:0 6px; }
+.sh { margin-bottom:32px; text-align:center; }
+.sh-tag { font-family:var(--font-ui); font-size:0.5rem; letter-spacing:0.35em; color:var(--white-faint); text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.sh-tag::before,.sh-tag::after { content:''; display:block; width:16px; height:1px; background:var(--line-light); flex-shrink:0; }
+.sh-title { font-family:var(--font-ui); font-size:clamp(1rem,5vw,1.4rem); font-weight:400; letter-spacing:0.2em; color:var(--white); text-transform:uppercase; margin-bottom:10px; }
+.sh-line { display:flex; align-items:center; justify-content:center; gap:6px; }
+.sh-line-bar { width:30px; height:1px; background:var(--line); }
+.sh-line-txt { font-family:var(--font-ui); font-size:0.44rem; color:var(--white-faint); letter-spacing:0.12em; white-space:nowrap; }
+.reveal { opacity:0; transform:translateY(10px); transition:opacity 0.5s ease,transform 0.5s ease; }
+.reveal.visible { opacity:1; transform:none; }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--bg-dark); }
+::-webkit-scrollbar-thumb { background:var(--line-light); }
+
+/* ══ BTN ══ */
+.btn {
+  font-family:var(--font-ui); font-size:0.68rem; letter-spacing:0.28em; text-transform:uppercase;
+  padding:14px 30px; text-decoration:none; cursor:pointer; border:1px solid;
+  display:inline-flex; align-items:center; gap:9px; transition:all 0.1s;
+  touch-action:manipulation; min-height:48px;
+}
+.btn::before { content:'►'; font-size:0.48rem; opacity:0.6; }
+.btn-primary { background:var(--white); border-color:var(--white); color:var(--bg-darker); }
+.btn-primary:active { background:var(--white-dim); }
+.btn-ghost { background:transparent; border-color:var(--line-light); color:var(--white-dim); }
+.btn-ghost:active { border-color:var(--white-dim); color:var(--white); }
+
+/* ══ HERO ══ */
 #hero {
-  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding-top: 60px; text-align: center; background: radial-gradient(circle at center, var(--bg-light), var(--bg-darker));
+  min-height:100svh; display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden; padding-top:var(--hud-h); background:var(--bg);
 }
-.hero-sys { font-size: 0.6rem; color: var(--white-faint); margin-bottom: 20px; }
-.hero-title { font-family: var(--font-ui); font-size: clamp(2.5rem, 12vw, 4rem); line-height: 1; letter-spacing: 0.2em; margin-bottom: 10px; }
-.hero-sub { font-size: 0.8rem; color: var(--white-dim); letter-spacing: 0.3em; margin-bottom: 30px; }
-.hero-desc { font-size: 1.1rem; color: var(--white-dim); max-width: 90%; }
-.scroll-indicator { position: absolute; bottom: 30px; font-size: 0.6rem; color: var(--white-faint); letter-spacing: 0.2em; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.scroll-line { width: 1px; height: 30px; background: linear-gradient(to bottom, var(--white-dim), transparent); animation: pulse 2s infinite; }
-
-/* Data Blocks (About) */
-.data-block { background: var(--bg-dark); border: 1px solid var(--line); margin-bottom: 15px; }
-.data-header { background: var(--bg-darker); border-bottom: 1px solid var(--line); padding: 8px 12px; font-size: 0.6rem; color: var(--white-dim); letter-spacing: 0.2em; display: flex; justify-content: space-between;}
-.data-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--line); }
-.data-row:last-child { border-bottom: none; }
-.data-key { font-size: 0.7rem; color: var(--white-faint); }
-.data-val { font-weight: 500; }
-.about-text { margin-bottom: 30px; color: var(--white-dim); font-size: 1.05rem; }
-
-/* Accordion Component (Factions, Lore, Rules) */
-.accordion { background: var(--bg-dark); border: 1px solid var(--line); margin-bottom: 10px; }
-.acc-trigger { 
-  width: 100%; padding: 16px; display: flex; align-items: center; justify-content: space-between;
-  background: none; border: none; color: var(--white); text-align: right; cursor: pointer;
+.hero-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:linear-gradient(var(--white-ghost) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--white-ghost) 1px,transparent 1px);
+  background-size:44px 44px; opacity:0.18;
 }
-.acc-trigger-left { display: flex; flex-direction: column; gap: 4px; }
-.acc-id { font-family: var(--font-ui); font-size: 0.6rem; color: var(--white-faint); letter-spacing: 0.1em; }
-.acc-title { font-family: var(--font-ui); font-size: 1.2rem; font-weight: bold; letter-spacing: 0.1em; text-transform: uppercase; }
-.acc-icon { transition: transform 0.3s; font-family: var(--font-ui); }
-.accordion.open .acc-icon { transform: rotate(45deg); }
-.acc-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
-.acc-inner { padding: 0 16px 16px 16px; border-top: 1px dashed var(--line); margin-top: 8px; padding-top: 16px; color: var(--white-dim); font-size: 0.95rem; }
-
-/* Theming for Factions */
-.acc-title.android { color: var(--android); }
-.acc-title.machine { color: var(--machine); }
-
-/* Timeline (History) */
-.timeline { position: relative; padding-right: 30px; }
-.timeline::before { content: ''; position: absolute; top: 0; bottom: 0; right: 8px; width: 2px; background: var(--line); }
-.tl-item { position: relative; margin-bottom: 40px; }
-.tl-item::before { content: ''; position: absolute; top: 5px; right: -28px; width: 12px; height: 12px; background: var(--bg); border: 2px solid var(--white-dim); transform: rotate(45deg); }
-.tl-year { font-family: var(--font-ui); font-size: 0.8rem; color: var(--white-faint); letter-spacing: 0.1em; margin-bottom: 4px; }
-.tl-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; font-family: var(--font-ui); text-transform: uppercase;}
-.tl-desc { color: var(--white-dim); font-size: 0.95rem; }
-.tl-badge { display: inline-block; margin-top: 10px; font-family: var(--font-ui); font-size: 0.6rem; padding: 4px 8px; border: 1px solid var(--line); letter-spacing: 0.1em; }
-
-/* Grid (Gallery & Team) */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.gallery-img { aspect-ratio: 1; background: var(--bg-dark); border: 1px solid var(--line); object-fit: cover; width: 100%; }
-.team-card { background: var(--bg-dark); border: 1px solid var(--line); display: flex; flex-direction: column; }
-.team-img { width: 100%; aspect-ratio: 1; background: var(--bg-darker); object-fit: cover; filter: grayscale(100%); }
-.team-info { padding: 12px; text-align: center; }
-.team-role { font-family: var(--font-ui); font-size: 0.6rem; color: var(--white-faint); margin-bottom: 4px; letter-spacing: 0.1em;}
-.team-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 4px; }
-
-/* Floating Audio Button */
-#fab-audio {
-  position: fixed; bottom: 20px; left: 20px; z-index: 1000;
-  width: 50px; height: 50px; border-radius: 50%;
-  background: var(--bg-darker); border: 1px solid var(--line-light);
-  color: var(--white); font-size: 1.2rem;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer;
+.hero-grid::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 30%,var(--bg) 100%); }
+.hero-frame { position:absolute; top:calc(var(--hud-h) + 14px); left:14px; right:14px; bottom:14px; pointer-events:none; }
+.hero-frame::before  { content:''; position:absolute; top:0; right:0; width:14px; height:14px; border-top:1px solid var(--line-light); border-right:1px solid var(--line-light); }
+.hero-frame::after   { content:''; position:absolute; top:0; left:0;  width:14px; height:14px; border-top:1px solid var(--line-light); border-left:1px solid var(--line-light); }
+.hero-frame .fi::before { content:''; position:absolute; bottom:0; right:0; width:14px; height:14px; border-bottom:1px solid var(--line-light); border-right:1px solid var(--line-light); }
+.hero-frame .fi::after  { content:''; position:absolute; bottom:0; left:0;  width:14px; height:14px; border-bottom:1px solid var(--line-light); border-left:1px solid var(--line-light); }
+.hero-content { position:relative; z-index:1; text-align:center; padding:2rem 1.2rem; width:100%; }
+.hero-sys {
+  font-family:var(--font-ui); font-size:0.44rem; letter-spacing:0.32em; color:var(--white-faint);
+  text-transform:uppercase; margin-bottom:1.4rem; display:flex; align-items:center; justify-content:center; gap:8px;
+  animation:fadeIn 0.9s ease both;
 }
-#fab-audio.playing { border-color: var(--white); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
-
-/* Boot Screen */
-#boot-screen {
-  position: fixed; inset: 0; background: var(--bg-darker); z-index: 9999;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: var(--padding); transition: opacity 0.5s;
+.hero-sys-line { width:20px; height:1px; background:var(--line-light); flex-shrink:0; }
+.hero-title {
+  font-family:var(--font-ui); font-size:clamp(2rem,13vw,3.5rem); font-weight:400;
+  letter-spacing:0.3em; color:var(--white); line-height:1; position:relative;
+  animation:fadeIn 0.9s 0.1s ease both;
 }
-#boot-btn { margin-top: 40px; }
+.hero-title::before { content:attr(data-text); position:absolute; inset:0; color:#888; animation:gA 7s infinite 4s; clip-path:polygon(0 25%,100% 25%,100% 42%,0 42%); }
+.nier-div { display:flex; align-items:center; justify-content:center; gap:5px; margin:12px auto; animation:fadeIn 0.9s 0.2s ease both; }
+.nd-line { width:50px; height:1px; background:var(--line-light); }
+.nd-d { width:4px; height:4px; background:var(--white-dim); transform:rotate(45deg); flex-shrink:0; }
+.nd-dot { width:2px; height:2px; background:var(--white-faint); transform:rotate(45deg); flex-shrink:0; }
+.hero-sub { font-family:var(--font-ui); font-size:0.62rem; letter-spacing:0.4em; color:var(--white-dim); text-transform:uppercase; margin-bottom:14px; animation:fadeIn 0.9s 0.3s ease both; }
+.hero-tagline { font-family:var(--font-he); font-size:1rem; color:var(--white-dim); max-width:320px; margin:0 auto; line-height:2; animation:fadeIn 0.9s 0.5s ease both; }
+.hero-scroll { position:absolute; bottom:18px; left:50%; transform:translateX(-50%); font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.38em; color:var(--white-faint); text-align:center; animation:fadeIn 2s 1.6s ease both; }
+.scroll-bar { width:1px; height:18px; background:linear-gradient(to bottom,var(--white-faint),transparent); margin:4px auto 0; animation:pulse 1.5s infinite; }
 
-@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+/* ══ ABOUT ══ */
+#about { background:var(--bg); }
+.about-body p { color:var(--white-dim); margin-bottom:14px; font-size:0.97rem; line-height:2; }
+.data-panel { border:1px solid var(--line); background:var(--bg-dark); overflow:hidden; margin-top:24px; }
+.data-panel-hd { background:var(--bg-darker); border-bottom:1px solid var(--line); padding:7px 12px; display:flex; justify-content:space-between; }
+.data-panel-hd-l { font-family:var(--font-ui); font-size:0.48rem; letter-spacing:0.2em; color:var(--white-dim); text-transform:uppercase; }
+.data-panel-hd-r { font-family:var(--font-ui); font-size:0.44rem; color:var(--white-faint); }
+.data-row { display:flex; justify-content:space-between; align-items:center; padding:11px 14px; border-bottom:1px solid var(--line); }
+.data-row:last-child { border-bottom:none; }
+.drk { font-family:var(--font-ui); font-size:0.52rem; letter-spacing:0.1em; color:var(--white-faint); text-transform:uppercase; }
+.drv { font-family:var(--font-he); font-size:0.92rem; color:var(--white); text-align:left; max-width:58%; }
+
+/* ══ HISTORY ══ */
+#history { background:var(--bg-darker); position:relative; overflow:hidden; }
+.hist-bg-text { position:absolute; font-family:var(--font-ui); font-size:clamp(4rem,22vw,8rem); font-weight:400; color:rgba(232,232,232,0.025); letter-spacing:0.1em; top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; user-select:none; }
+.hist-wrap { position:relative; }
+.hist-wrap::before { content:''; position:absolute; top:0; bottom:0; right:16px; width:1px; background:linear-gradient(to bottom,transparent,var(--line-light) 8%,var(--line-light) 92%,transparent); }
+.hist-item { position:relative; padding:0 50px 0 0; border-bottom:1px solid rgba(74,74,74,0.3); }
+.hist-item:last-child { border-bottom:none; }
+.hist-node { position:absolute; top:24px; right:8px; display:flex; flex-direction:column; align-items:center; gap:6px; z-index:2; }
+.hist-year { background:var(--bg-darker); border:1px solid var(--line-light); padding:4px 8px; font-family:var(--font-ui); font-size:0.44rem; letter-spacing:0.14em; color:var(--white-dim); white-space:nowrap; }
+.hist-diamond { width:7px; height:7px; background:var(--bg-darker); border:1px solid var(--line-light); transform:rotate(45deg); }
+.hist-panel { padding:22px 4px 24px; }
+.hist-event-tag { font-family:var(--font-ui); font-size:0.42rem; letter-spacing:0.28em; color:var(--white-faint); text-transform:uppercase; margin-bottom:7px; display:block; }
+.hist-title { font-family:var(--font-ui); font-size:0.82rem; letter-spacing:0.14em; color:var(--white); text-transform:uppercase; margin-bottom:10px; line-height:1.4; }
+.hist-body { font-family:var(--font-he); font-size:0.93rem; color:var(--white-dim); line-height:1.95; }
+.hist-badge { display:inline-block; margin-top:10px; font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.16em; border:1px solid var(--line); padding:3px 8px; text-transform:uppercase; color:var(--white-faint); }
+.hist-badge.alert  { border-color:rgba(204,51,51,0.45); color:var(--red); }
+.hist-badge.active { border-color:rgba(200,200,180,0.45); color:var(--android); }
+
+/* ══ FACTIONS ══ */
+#factions { background:var(--bg-dark); }
+.faction-panel {
+  background:var(--bg); overflow:hidden; position:relative; cursor:pointer;
+  border:1px solid var(--line); margin-bottom:1px; transition:background 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.faction-panel:active { background:var(--bg-light); }
+.fp-header { border-bottom:1px solid var(--line); padding:18px 18px 16px; position:relative; background:var(--bg-dark); }
+.fp-header::before { content:''; position:absolute; top:0; right:0; bottom:0; width:3px; }
+.faction-panel.android .fp-header::before { background:var(--android); }
+.faction-panel.machine  .fp-header::before { background:var(--machine); }
+.fp-num { position:absolute; top:6px; left:12px; font-family:var(--font-ui); font-size:2.5rem; line-height:1; opacity:0.06; color:var(--white); }
+.fp-id { font-family:var(--font-ui); font-size:0.5rem; letter-spacing:0.3em; color:var(--white-faint); margin-bottom:7px; text-transform:uppercase; }
+.fp-name { font-family:var(--font-ui); font-size:1rem; letter-spacing:0.18em; font-weight:400; text-transform:uppercase; margin-bottom:2px; }
+.faction-panel.android .fp-name { color:var(--android); }
+.faction-panel.machine  .fp-name { color:var(--machine); }
+.fp-body { padding:18px; }
+.fp-desc { font-family:var(--font-he); font-size:0.95rem; color:var(--white-dim); line-height:2; margin-bottom:16px; }
+.fp-data { border-top:1px solid var(--line); padding-top:14px; }
+.fp-data-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line); }
+.fp-data-row:last-child { border-bottom:none; }
+.fpdk { font-family:var(--font-ui); font-size:0.5rem; letter-spacing:0.08em; color:var(--white-faint); text-transform:uppercase; }
+.faction-panel.android .fpdv { color:var(--android); font-family:var(--font-he); font-size:0.9rem; }
+.faction-panel.machine  .fpdv { color:var(--machine); font-family:var(--font-he); font-size:0.9rem; }
+.fp-tap-hint { text-align:center; padding:10px; font-family:var(--font-ui); font-size:0.44rem; color:var(--white-faint); letter-spacing:0.2em; border-top:1px solid var(--line); }
+
+/* ══ LORE ══ */
+#lore { background:var(--bg); }
+.timeline { position:relative; padding-right:28px; }
+.timeline::before { content:''; position:absolute; top:0; bottom:0; right:12px; width:1px; background:var(--line); }
+.tl-item { position:relative; border-bottom:1px solid var(--line); }
+.tl-item:last-child { border-bottom:none; }
+.tl-item::before { content:''; position:absolute; top:22px; right:-21px; width:7px; height:7px; background:var(--bg); border:1px solid var(--line-light); transform:rotate(45deg); z-index:1; transition:background 0.2s; }
+.tl-item.open::before { background:var(--white-dim); border-color:var(--white); }
+.tl-trigger { display:flex; align-items:center; justify-content:space-between; padding:18px 0; cursor:pointer; user-select:none; gap:10px; touch-action:manipulation; }
+.tl-left { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+.tl-num { font-family:var(--font-ui); font-size:0.48rem; color:var(--white-faint); letter-spacing:0.08em; flex-shrink:0; }
+.tl-title { font-family:var(--font-ui); font-size:0.78rem; letter-spacing:0.16em; color:var(--white-dim); text-transform:uppercase; transition:color 0.2s; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tl-item.open .tl-title { color:var(--white); }
+.tl-stamp { display:none; }
+.tl-arrow { font-family:var(--font-ui); font-size:0.62rem; color:var(--white-faint); transition:transform 0.3s ease; flex-shrink:0; line-height:1; }
+.tl-item.open .tl-arrow { transform:rotate(90deg); }
+.tl-body { max-height:0; overflow:hidden; opacity:0; transition:max-height 0.45s cubic-bezier(0.4,0,0.2,1),opacity 0.3s ease; }
+.tl-item.open .tl-body { opacity:1; }
+.tl-body-inner { padding-bottom:20px; }
+.tl-summary { font-family:var(--font-he); font-size:0.95rem; color:var(--white-dim); line-height:2; border-right:2px solid var(--line-light); padding-right:14px; margin-bottom:12px; }
+.tl-long { font-family:var(--font-he); font-size:0.9rem; color:var(--white-faint); line-height:2; border-top:1px dashed var(--line); padding-top:12px; }
+
+/* ══ RULES ══ */
+#rules { background:var(--bg-dark); }
+.rule-card { background:var(--bg); padding:22px 18px; position:relative; overflow:hidden; border-bottom:1px solid var(--line); transition:background 0.15s; }
+.rule-card:last-child { border-bottom:none; }
+.rule-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:var(--line-light); }
+.rule-card.warn::before { background:var(--red); }
+.rule-card.warn::after { content:'WARNING'; position:absolute; top:0; left:0; font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.14em; color:var(--bg); background:var(--red); padding:2px 7px; }
+.rule-num { font-family:var(--font-ui); font-size:0.48rem; letter-spacing:0.24em; color:var(--white-faint); margin-bottom:10px; }
+.rule-icon { font-size:1.3rem; margin-bottom:7px; display:block; opacity:0.65; }
+.rule-title { font-family:var(--font-ui); font-size:0.7rem; letter-spacing:0.14em; color:var(--white); text-transform:uppercase; margin-bottom:8px; }
+.rule-short { font-family:var(--font-he); font-size:0.93rem; color:var(--white-dim); line-height:1.9; margin-bottom:10px; }
+.rule-detail { font-family:var(--font-he); font-size:0.88rem; color:var(--white-faint); line-height:1.9; border-top:1px dashed var(--line); padding-top:10px; }
+
+/* ══ GALLERY ══ */
+#gallery { background:var(--bg); }
+.gallery-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); }
+.gallery-cell { background:var(--bg-dark); aspect-ratio:1/1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; transition:background 0.15s; position:relative; overflow:hidden; }
+.gallery-cell:active { background:var(--bg-light); }
+.g-id { position:absolute; top:6px; right:8px; font-family:var(--font-ui); font-size:0.38rem; color:var(--white-faint); letter-spacing:0.12em; }
+.g-ico { font-size:1rem; opacity:0.2; }
+.g-lbl { font-family:var(--font-he); font-size:0.82rem; color:var(--white-faint); text-align:center; padding:0 10px; }
+
+/* ══ TEAM ══ */
+#team { background:var(--bg-dark); }
+.team-card {
+  background:var(--bg); border:1px solid var(--line); margin-bottom:1px; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.team-photo { position:relative; overflow:hidden; background:var(--bg-darker); display:flex; align-items:center; justify-content:center; height:200px; }
+.team-photo img { width:100%; height:100%; object-fit:cover; filter:grayscale(100%) contrast(1.05); }
+.team-photo-ph { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; width:100%; height:100%; color:var(--white-faint); }
+.team-photo-ph .ph-icon { font-size:2rem; opacity:0.2; }
+.team-photo-ph .ph-txt { font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.18em; opacity:0.4; text-transform:uppercase; }
+.team-photo::after { content:''; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(0,0,0,0.1) 3px,rgba(0,0,0,0.1) 4px); }
+.team-photo-tag { position:absolute; bottom:0; left:0; right:0; background:rgba(14,14,12,0.85); border-top:1px solid var(--line); padding:4px 8px; font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.16em; color:var(--white-faint); text-transform:uppercase; text-align:center; }
+.team-info { padding:18px 16px; display:flex; flex-direction:column; gap:9px; }
+.team-role { font-family:var(--font-ui); font-size:0.5rem; letter-spacing:0.32em; color:var(--white-faint); text-transform:uppercase; display:flex; align-items:center; gap:7px; }
+.team-role::before { content:''; display:block; width:10px; height:1px; background:var(--line-light); flex-shrink:0; }
+.team-name { font-family:var(--font-ui); font-size:1rem; letter-spacing:0.16em; color:var(--white); text-transform:uppercase; }
+.team-title-he { font-family:var(--font-he); font-size:0.9rem; color:var(--white-faint); }
+.team-divider { display:flex; align-items:center; gap:5px; }
+.team-divider-line { flex:1; height:1px; background:var(--line); }
+.team-divider-d { width:3px; height:3px; background:var(--line-light); transform:rotate(45deg); flex-shrink:0; }
+.team-desc { font-family:var(--font-he); font-size:0.95rem; color:var(--white-dim); line-height:1.9; }
+.team-long { font-family:var(--font-he); font-size:0.9rem; color:var(--white-faint); line-height:1.9; border-top:1px dashed var(--line); padding-top:10px; }
+.team-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.team-tag { font-family:var(--font-ui); font-size:0.44rem; letter-spacing:0.12em; color:var(--white-faint); border:1px solid var(--line); padding:3px 8px; text-transform:uppercase; }
+
+/* ══ JOIN ══ */
+#join { background:var(--bg); }
+.join-desc { font-family:var(--font-he); font-size:1rem; color:var(--white-dim); line-height:2; margin-bottom:22px; }
+.join-fp {
+  background:var(--bg-dark); padding:18px; cursor:pointer; transition:background 0.15s;
+  position:relative; border:1px solid var(--line); margin-bottom:1px;
+  -webkit-tap-highlight-color:transparent;
+}
+.join-fp:active { background:var(--bg-light); }
+.jf-type { font-family:var(--font-ui); font-size:0.42rem; letter-spacing:0.28em; color:var(--white-faint); margin-bottom:5px; text-transform:uppercase; }
+.jf-name { font-family:var(--font-ui); font-size:0.9rem; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:4px; }
+.join-fp.android .jf-name { color:var(--android); }
+.join-fp.machine  .jf-name { color:var(--machine); }
+.jf-desc { font-family:var(--font-he); font-size:0.88rem; color:var(--white-faint); margin-top:4px; }
+.join-cta { text-align:center; margin-top:24px; }
+
+/* ══ FOOTER ══ */
+footer { background:var(--bg-darker); border-top:1px solid var(--line); padding-bottom:var(--safe-bottom); }
+.footer-top { padding:10px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+.footer-logo { font-family:var(--font-ui); font-size:0.6rem; letter-spacing:0.3em; color:var(--white); }
+.footer-status { font-family:var(--font-ui); font-size:0.4rem; letter-spacing:0.12em; color:var(--white-faint); display:flex; align-items:center; gap:5px; }
+.footer-links { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border-bottom:1px solid var(--line); }
+.footer-link-btn {
+  display:flex; align-items:center; gap:10px; padding:14px 16px;
+  text-decoration:none; background:var(--bg); transition:background 0.15s; position:relative; overflow:hidden;
+  min-height:56px; touch-action:manipulation;
+}
+.footer-link-btn:active { background:var(--bg-light); }
+.footer-link-btn::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.discord-btn::before { background:#5865f2; }
+.spotify-btn::before  { background:#1db954; }
+.fl-icon { font-size:1.2rem; opacity:0.7; flex-shrink:0; }
+.fl-texts { display:flex; flex-direction:column; gap:2px; }
+.fl-label { font-family:var(--font-ui); font-size:0.38rem; letter-spacing:0.24em; color:var(--white-faint); text-transform:uppercase; }
+.fl-name  { font-family:var(--font-ui); font-size:0.62rem; letter-spacing:0.16em; color:var(--white); text-transform:uppercase; }
+.discord-btn .fl-name { color:#9ba8f5; }
+.spotify-btn .fl-name { color:#6dd97a; }
+.footer-copy { padding:10px 16px; font-family:var(--font-he); font-size:0.72rem; color:var(--white-faint); text-align:center; }
+
+/* ══ MODAL ══ */
+.modal-overlay {
+  position:fixed; inset:0; z-index:2000; background:rgba(10,10,10,0.94);
+  display:flex; align-items:flex-end; padding:0;
+  opacity:0; pointer-events:none; transition:opacity 0.25s ease; backdrop-filter:blur(4px);
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--bg-dark); border:1px solid var(--line-light); border-bottom:none;
+  width:100%; max-height:85svh; overflow-y:auto; position:relative;
+  border-radius:0; transform:translateY(40px); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  padding-bottom:var(--safe-bottom);
+}
+.modal-overlay.open .modal-box { transform:translateY(0); }
+.modal-box::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:40px; height:3px; background:var(--line-light); border-radius:2px; margin-top:8px; }
+.modal-header { border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg-darker); z-index:10; padding-top:18px; }
+.modal-header-strip { display:flex; align-items:center; justify-content:space-between; padding:8px 16px; border-bottom:1px solid var(--line); direction:ltr; }
+.modal-header-id { font-family:var(--font-ui); font-size:0.44rem; letter-spacing:0.24em; color:var(--white-faint); text-transform:uppercase; }
+.modal-close-btn { font-family:var(--font-ui); font-size:0.48rem; letter-spacing:0.16em; color:var(--white-faint); background:none; border:1px solid var(--line); cursor:pointer; padding:5px 12px; display:flex; align-items:center; gap:5px; min-height:36px; touch-action:manipulation; }
+.modal-header-main { padding:16px 16px 14px; }
+.modal-type { font-family:var(--font-ui); font-size:0.46rem; letter-spacing:0.32em; color:var(--white-faint); text-transform:uppercase; margin-bottom:5px; }
+.modal-title { font-family:var(--font-ui); font-size:clamp(1rem,5vw,1.5rem); font-weight:400; letter-spacing:0.16em; color:var(--white); text-transform:uppercase; margin-bottom:5px; }
+.modal-title.android-c { color:var(--android); }
+.modal-title.machine-c { color:var(--machine); }
+.modal-divider { display:flex; align-items:center; gap:6px; margin-top:8px; }
+.modal-divider-line { flex:1; height:1px; background:var(--line); }
+.modal-divider-d { width:3px; height:3px; background:var(--white-faint); transform:rotate(45deg); flex-shrink:0; }
+.modal-body { padding:18px 16px; }
+.modal-body p { font-family:var(--font-he); font-size:0.93rem; color:var(--white-dim); line-height:2; margin-bottom:12px; }
+.modal-table { width:100%; border-collapse:collapse; margin-top:14px; }
+.modal-table tr { border-bottom:1px solid var(--line); }
+.modal-table tr:last-child { border-bottom:none; }
+.modal-table td { padding:8px 10px; }
+.modal-table .mtk { font-family:var(--font-ui); font-size:0.46rem; letter-spacing:0.1em; color:var(--white-faint); text-transform:uppercase; white-space:nowrap; }
+.modal-table .mtv { font-family:var(--font-he); font-size:0.85rem; color:var(--white); text-align:right; }
+.modal-table.android-t .mtv { color:var(--android); }
+.modal-table.machine-t .mtv { color:var(--machine); }
+.modal-faction-header { display:flex; align-items:stretch; margin-bottom:0; }
+.modal-faction-stripe { width:3px; flex-shrink:0; }
+.modal-faction-stripe.android { background:var(--android); }
+.modal-faction-stripe.machine  { background:var(--machine); }
+.modal-faction-info { padding:12px 16px; flex:1; }
+
+/* ══ AUDIO PLAYER — MOBILE ══ */
+#audioPlayer {
+  position:fixed; bottom:calc(16px + var(--safe-bottom)); right:16px; z-index:600;
+  background:var(--bg-darker); border:1px solid var(--line-light); width:56px;
+  transition:width 0.3s ease; overflow:hidden;
+}
+#audioPlayer.expanded { width:190px; }
+#audioPlayer::before { content:''; position:absolute; top:-1px; right:-1px; width:8px; height:8px; border-top:1px solid var(--white-faint); border-right:1px solid var(--white-faint); }
+.ap-toggle {
+  display:flex; align-items:center; justify-content:center; width:54px; height:54px;
+  background:none; border:none; cursor:pointer; flex-shrink:0; position:relative;
+  touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+}
+.ap-toggle-icon { font-size:1.1rem; }
+.ap-indicator { position:absolute; top:8px; right:8px; width:5px; height:5px; border-radius:50%; background:var(--white-faint); }
+.ap-indicator.on { background:#88cc88; animation:blink 1.5s infinite; }
+.ap-expanded-row { display:flex; align-items:center; height:54px; opacity:0; transition:opacity 0.2s; pointer-events:none; }
+#audioPlayer.expanded .ap-expanded-row { opacity:1; pointer-events:all; }
+.ap-track-name { font-family:var(--font-ui); font-size:0.38rem; letter-spacing:0.1em; color:var(--white-dim); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-transform:uppercase; flex:1; padding:0 6px 0 4px; }
+.ap-inner { display:flex; align-items:center; }
+.ap-play-btn {
+  display:flex; align-items:center; justify-content:center;
+  width:30px; height:30px; background:none; border:1px solid var(--line);
+  cursor:pointer; font-family:var(--font-ui); font-size:0.5rem; color:var(--white-faint);
+  flex-shrink:0; margin-left:6px; margin-right:2px; touch-action:manipulation;
+  transition:all 0.1s;
+}
+.ap-play-btn.playing { color:var(--bg-darker); background:var(--white-dim); border-color:var(--white-dim); }
+.ap-viz-mini { display:flex; align-items:flex-end; gap:1px; height:14px; flex-shrink:0; margin-right:4px; }
+.ap-bar { width:2px; background:var(--line-light); min-height:2px; transition:height 0.1s ease; }
+.ap-viz-mini.on .ap-bar { background:var(--white-dim); }
+
+/* ══ ENTRY ANIM ══ */
+#entry-anim { position:fixed; inset:0; z-index:8000; pointer-events:none; overflow:hidden; }
+.ea-slice { position:absolute; left:0; right:0; background:var(--white); opacity:0; }
+.ea-text { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-family:var(--font-ui); font-size:0.62rem; letter-spacing:0.5em; color:var(--white); text-transform:uppercase; opacity:0; white-space:nowrap; }
 </style>
 </head>
 <body>
 
-<!-- Boot Screen -->
-<div id="boot-screen">
-  <div class="ui-text" style="font-size: 0.7rem; color: var(--white-faint); margin-bottom: 20px;">// TACTICAL NET_</div>
-  <h1 class="ui-text" style="font-size: 2.5rem; letter-spacing: 0.2em; text-align: center;">PROJECT<br>REBOOT</h1>
-  <button id="boot-btn" class="btn"><span>[ הִתְחַבְּרוּת ]</span></button>
+<!-- INTRO -->
+<div id="intro-screen">
+  <div class="intro-grid"></div>
+  <div class="i-sweep"></div>
+  <div class="i-corner tl"></div><div class="i-corner tr"></div>
+  <div class="i-corner bl"></div><div class="i-corner br"></div>
+  <div class="intro-content">
+    <div class="i-sys">// SYSTEM BOOT — TACTICAL NET // NODE: REBOOT_PRIME</div>
+    <h1 class="i-title" data-text="PROJECT REBOOT">PROJECT REBOOT</h1>
+    <div class="i-div">
+      <div class="i-div-line"></div><div class="i-div-d"></div><div class="i-div-line"></div>
+    </div>
+    <div class="i-sub">Glory to Mankind</div>
+    <div class="i-btn-wrap">
+      <button class="i-btn" id="introPlayBtn"><span>▶</span><span>ENTER</span></button>
+    </div>
+    <div class="i-hint">גע כדי להיכנס // TAP TO ENTER</div>
+    <div class="i-loading" id="introLoading">INITIALIZING SYSTEM</div>
+  </div>
+  <div class="i-status">
+    <div class="i-status-cell"><div class="dot"></div>ANDROIDS: ONLINE</div>
+    <div class="i-status-cell" id="intro-clock">00:00:00</div>
+    <div class="i-status-cell">MACHINES: ONLINE</div>
+  </div>
 </div>
 
-<!-- Background Audio -->
-<audio id="bgMusic" loop preload="none">
+<audio id="bgMusic" loop preload="auto">
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- FAB Audio Toggle -->
-<button id="fab-audio">🔇</button>
+<!-- ENTRY ANIM -->
+<div id="entry-anim">
+  <div class="ea-slice" id="ea-s1" style="height:2px;"></div>
+  <div class="ea-slice" id="ea-s2" style="height:1px;"></div>
+  <div class="ea-text" id="ea-text">SYSTEM ONLINE // WELCOME OPERATIVE</div>
+</div>
 
-<!-- Header -->
-<header>
-  <div class="logo">REBOOT_</div>
-  <button class="menu-toggle ui-text" id="menu-btn">MENU ☰</button>
-</header>
+<div class="glitch-sweep"></div>
 
-<!-- Fullscreen Menu -->
-<nav id="nav-menu">
-  <a href="#about" class="nav-link"><span class="nav-link-en">01 // BRIEFING</span><span>תדרוך משימה</span></a>
-  <a href="#history" class="nav-link"><span class="nav-link-en">02 // HISTORY</span><span>היסטוריה</span></a>
-  <a href="#factions" class="nav-link"><span class="nav-link-en">03 // FACTIONS</span><span>סיעות ופלגים</span></a>
-  <a href="#lore" class="nav-link"><span class="nav-link-en">04 // ARCHIVES</span><span>ארכיון מידע</span></a>
-  <a href="#rules" class="nav-link"><span class="nav-link-en">05 // DIRECTIVES</span><span>נהלי בטיחות</span></a>
-  <a href="#team" class="nav-link"><span class="nav-link-en">06 // ROSTER</span><span>סגל פיקוד</span></a>
-  <a href="#join" class="nav-link" style="background: var(--white); color: var(--bg-darker); margin-top: auto;"><span class="nav-link-en" style="color: var(--bg-darker);">07 // ENLIST</span><span style="font-weight: bold;">הצטרפו עכשיו</span></a>
+<!-- HUD -->
+<div class="hud">
+  <div class="hud-inner">
+    <div class="hud-logo">PROJECT REBOOT</div>
+    <div class="hud-right">
+      <span class="hud-clock" id="hud-clock">00:00:00</span>
+      <button class="hud-menu-btn" id="menuBtn" aria-label="תפריט">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV DRAWER -->
+<nav class="nav-drawer" id="navDrawer">
+  <a href="#about"    data-nav>BRIEFING</a>
+  <a href="#history"  data-nav>HISTORY</a>
+  <a href="#factions" data-nav>FACTIONS</a>
+  <a href="#lore"     data-nav>ARCHIVES</a>
+  <a href="#rules"    data-nav>DIRECTIVES</a>
+  <a href="#gallery"  data-nav>RECORDS</a>
+  <a href="#team"     data-nav>TEAM</a>
+  <a href="#join"     data-nav>ENLIST</a>
 </nav>
 
-<!-- Main Content -->
-<main>
-
-  <!-- Hero -->
-  <section id="hero">
-    <div class="hero-sys ui-text">NODE: REBOOT_PRIME // ONLINE</div>
-    <h1 class="hero-title">PROJECT<br>REBOOT</h1>
-    <div class="divider" style="width: 80%;"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-    <div class="hero-sub ui-text">Glory to Mankind</div>
-    <p class="hero-desc">בעולם שבו הכל נראה מוכתב מראש, המרד האמיתי הוא לבחור בעצמך.</p>
-    <div class="scroll-indicator">
-      <span>SCROLL</span>
-      <div class="scroll-line"></div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-frame"><div class="fi"></div></div>
+  <div class="hero-content">
+    <div class="hero-sys">
+      <div class="hero-sys-line"></div>
+      <span>YoRHa Tactical Net // REBOOT_PRIME</span>
+      <div class="hero-sys-line"></div>
     </div>
-  </section>
+    <h1 class="hero-title" data-text="PROJECT REBOOT">PROJECT REBOOT</h1>
+    <div class="nier-div"><div class="nd-line"></div><div class="nd-dot"></div><div class="nd-d"></div><div class="nd-dot"></div><div class="nd-line"></div></div>
+    <div class="hero-sub">Glory to Mankind</div>
+    <p class="hero-tagline">בעולם שבו הכל נראה מוכתב מראש, המרד האמיתי הוא לבחור בעצמך.</p>
+  </div>
+  <div class="hero-scroll">SCROLL DOWN<div class="scroll-bar"></div></div>
+</section>
 
-  <!-- Briefing -->
-  <section id="about">
-    <div class="section-tag">// MISSION BRIEFING</div>
-    <h2 class="section-title">אודות האירוע</h2>
-    <div class="about-text">
-      <p style="margin-bottom: 15px;">פרויקט ריבוט הוא משחק LARP מיליטנטי המתרחש בעולם פוסט-אפוקליפטי עתידני בהשראת המשחק NieR: Automata.</p>
-      <p style="margin-bottom: 15px;">בלארפ זה תכנסו לעולם העתידני, תצטרכו לבחור צד במלחמה ארוכת השנים ולהוביל את הקבוצה שלכם לניצחון בתוך חוויה אינטראקטיבית שמשלבת משחק חברתי וקרבות בטוחים.</p>
-    </div>
-    <div class="data-block">
-      <div class="data-header"><span>EVENT PARAMETERS</span><span style="color:var(--white);">ACTIVE</span></div>
-      <div class="data-row"><span class="data-key ui-text">DATE</span><span class="data-val">XX/XX/XXXX</span></div>
-      <div class="data-row"><span class="data-key ui-text">LOCATION</span><span class="data-val">מקורות הירקון</span></div>
-      <div class="data-row"><span class="data-key ui-text">FEE</span><span class="data-val">150 ש"ח</span></div>
-      <div class="data-row"><span class="data-key ui-text">COMMS</span><span class="data-val" style="font-size:0.85rem;">noy.wolster@gmail.com</span></div>
-    </div>
-  </section>
+<div class="sep"></div>
 
-  <!-- History -->
-  <section id="history">
-    <div class="section-tag">// HISTORICAL RECORD</div>
-    <h2 class="section-title">ציר זמן</h2>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-year">YEAR 5012</div>
-        <div class="tl-title">Alien Invasion</div>
-        <div class="tl-desc">חייזרים פלשו לכדור הארץ ושחררו נשק חדש — רובוטים. האנושות הושמדה ברובה והניצולים נמלטו אל הירח.</div>
-        <span class="tl-badge" style="color: var(--red); border-color: var(--red);">CATASTROPHE</span>
-      </div>
-      <div class="tl-item">
-        <div class="tl-year">YEAR 5204</div>
-        <div class="tl-title">YoRHa Counterattack</div>
-        <div class="tl-desc">האנושות נלחמה חזרה — יצירת צבא אנדרואידים לתקיפת החייזרים. מלחמת שחרור אכזרית החלה.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-year">YEAR 11945</div>
-        <div class="tl-title">The Endless War</div>
-        <div class="tl-desc">המלחמה נמשכת אלפי שנים, שני הצדדים לכודים בלולאה אינסופית — שוכחים מדוע החלו להילחם.</div>
-        <span class="tl-badge" style="color: var(--android); border-color: var(--android);">PRESENT DAY</span>
-      </div>
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Mission Briefing</div>
+      <h2 class="sh-title">About the Event</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">FILE: PUBLIC RECORD</span><div class="sh-line-bar"></div></div>
     </div>
-  </section>
+    <div class="about-body reveal">
+      <p>פרויקט ריבוט הוא משחק LARP מיליטנטי המתרחש בעולם פוסט-אפוקליפטי עתידני בהשראת המשחק NieR: Automata.</p>
+      <p>מה זה LARP? ראשי התיבות LARP הן קיצור של Live Action Role-Playing — או בעברית: משחק תפקידים חי. מדובר בחוויה אינטראקטיבית המשלבת בין תיאטרון מאולתר, משחק חברתי, אתגרים והרפתקה בעולם אחר. במהלך האירוע כל משתתף נכנס לדמות משלו, וחווה את העולם דרך העיניים שלה.</p>
+      <p>בלארפ זה תכנסו לעולם העתידני של NieR. תצטרכו לבחור צד במלחמה ארוכת השנים ולהוביל את הקבוצה שלכם לניצחון.</p>
+    </div>
+    <div class="data-panel reveal">
+      <div class="data-panel-hd"><span class="data-panel-hd-l">Event Data</span><span class="data-panel-hd-r">▶ ACTIVE</span></div>
+      <div class="data-row"><span class="drk">תאריך</span><span class="drv">XX/XX/XXXX</span></div>
+      <div class="data-row"><span class="drk">מיקום</span><span class="drv">מקורות הירקון</span></div>
+      <div class="data-row"><span class="drk">מחיר</span><span class="drv">150 ש"ח</span></div>
+      <div class="data-row"><span class="drk">יצירת קשר</span><span class="drv" style="font-size:0.78rem">noy.wolster@gmail.com</span></div>
+    </div>
+  </div>
+</section>
 
-  <!-- Factions (Accordion) -->
-  <section id="factions">
-    <div class="section-tag">// DATABASE</div>
-    <h2 class="section-title">בחירת סיעה</h2>
-    
-    <div class="accordion">
-      <button class="acc-trigger">
-        <div class="acc-trigger-left">
-          <span class="acc-id">UNIT_01</span>
-          <span class="acc-title android">Androids</span>
+<div class="sep"></div>
+
+<!-- HISTORY -->
+<section id="history">
+  <div class="hist-bg-text">HISTORY</div>
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Historical Record</div>
+      <h2 class="sh-title">World Timeline</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">CLASSIFIED // DELTA</span><div class="sh-line-bar"></div></div>
+    </div>
+    <div class="hist-wrap reveal">
+      <div class="hist-item">
+        <div class="hist-node"><div class="hist-year">5012</div><div class="hist-diamond"></div></div>
+        <div class="hist-panel">
+          <span class="hist-event-tag">// EVENT_01 // YEAR 5012</span>
+          <div class="hist-title">Alien Invasion</div>
+          <p class="hist-body">חייזרים פלשו לכדור הארץ ושחררו צורת חיים מלאכותית — רובוטים. רוב האנושות הושמדה. הניצולים נמלטו לירח.</p>
+          <span class="hist-badge alert">// CATASTROPHIC EVENT</span>
         </div>
-        <span class="acc-icon">+</span>
-      </button>
-      <div class="acc-content">
-        <div class="acc-inner">
-          <p style="margin-bottom: 10px;">אנדרואידים תחת ארגון YoRHa — ארגון צבאי היררכי שנוצר להילחם ברובוטים ולהחזיר את כדור הארץ לבני האדם. מתאפיינים ביעילות, קור רוח ומשמעת נוקשה.</p>
-          <ul style="padding-right: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
-            <li><strong>B-Type:</strong> התמקדות בלחימה ונשק.</li>
-            <li><strong>S-Type:</strong> חקר ואיסוף מידע.</li>
-            <li><strong>H-Type:</strong> ריפוי ותמיכה.</li>
-          </ul>
-          <div class="data-block" style="margin: 0;">
-            <div class="data-row"><span class="data-key">סגנון</span><span class="data-val">צבאי ונוקשה</span></div>
-            <div class="data-row"><span class="data-key">מטרה</span><span class="data-val">השמדת המכונות</span></div>
-          </div>
+      </div>
+      <div class="hist-item">
+        <div class="hist-node"><div class="hist-year">5204</div><div class="hist-diamond"></div></div>
+        <div class="hist-panel">
+          <span class="hist-event-tag">// EVENT_02 // YEAR 5204</span>
+          <div class="hist-title">YoRHa Counterattack</div>
+          <p class="hist-body">האנושות נלחמה חזרה — שלחה את צבא האנדרואידים לתקוף את החייזרים והרובוטים. מלחמת שחרור ארוכה ואכזרית החלה.</p>
+          <span class="hist-badge alert">// WAR INITIATED</span>
+        </div>
+      </div>
+      <div class="hist-item">
+        <div class="hist-node"><div class="hist-year">11,945</div><div class="hist-diamond"></div></div>
+        <div class="hist-panel">
+          <span class="hist-event-tag">// EVENT_03 // PRESENT DAY</span>
+          <div class="hist-title">The Endless War</div>
+          <p class="hist-body">הקרב בין הרובוטים והאנדרואידים עדיין מתחולל. מלחמה שנמשכת אלפי שנים, שני הצדדים לכודים בלולאה אינסופית.</p>
+          <span class="hist-badge active">// ACTIVE — YEAR 11,945</span>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="accordion">
-      <button class="acc-trigger">
-        <div class="acc-trigger-left">
-          <span class="acc-id">UNIT_02</span>
-          <span class="acc-title machine">Machines</span>
-        </div>
-        <span class="acc-icon">+</span>
-      </button>
-      <div class="acc-content">
-        <div class="acc-inner">
-          <p style="margin-bottom: 10px;">יצורי מכונה שפיתחו קהילות ודפוסי התנהגות דמויי אדם. חיים בצורה שיתופית, מחוברים לרשת מידע משותפת, ורואים בקהילה ערך עליון.</p>
-          <p style="margin-bottom: 15px;">למרות חזותם התמימה, הם קטלניים בעת איום על המשפחה או הקהילה שלהם.</p>
-          <div class="data-block" style="margin: 0;">
-            <div class="data-row"><span class="data-key">סגנון</span><span class="data-val">קהילתי ושיתופי</span></div>
-            <div class="data-row"><span class="data-key">מטרה</span><span class="data-val">הישרדות ולמידה</span></div>
-          </div>
-        </div>
+<div class="sep"></div>
+
+<!-- FACTIONS -->
+<section id="factions">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Faction Database</div>
+      <h2 class="sh-title">Choose Your Allegiance</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">גע לפרטים נוספים</span><div class="sh-line-bar"></div></div>
+    </div>
+    <div class="reveal" id="faction-wrap"></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- LORE -->
+<section id="lore">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Classified Archives</div>
+      <h2 class="sh-title">World Records</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">CLEARANCE: DELTA</span><div class="sh-line-bar"></div></div>
+    </div>
+    <div class="timeline reveal" id="lore-wrap"></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Operational Directives</div>
+      <h2 class="sh-title">Field Conduct</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">MANDATORY COMPLIANCE</span><div class="sh-line-bar"></div></div>
+    </div>
+    <div class="reveal" id="rules-wrap"></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Visual Records</div>
+      <h2 class="sh-title">Field Archive</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">IMAGE DATABASE</span><div class="sh-line-bar"></div></div>
+    </div>
+    <div class="gallery-grid reveal" id="gallery-wrap"></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Operative Files</div>
+      <h2 class="sh-title">The Team</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">ORGANIZER DATABASE</span><div class="sh-line-bar"></div></div>
+    </div>
+    <div class="reveal" id="team-grid"></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="container">
+    <div class="sh reveal">
+      <div class="sh-tag">Enlistment Protocol</div>
+      <h2 class="sh-title">הצטרף עכשיו</h2>
+      <div class="sh-line"><div class="sh-line-bar"></div><span class="sh-line-txt">ROSTER OPEN</span><div class="sh-line-bar"></div></div>
+    </div>
+    <p class="join-desc reveal">המקומות מוגבלים. בחר את הצד שלך והירשם לפני שהרשימה מתמלאת. שחקנים חדשים מוזמנים — לא נדרש ניסיון קודם ב-LARP.</p>
+    <div class="join-cta reveal" id="join-cta"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">PROJECT REBOOT</div>
+    <div class="footer-status"><div class="dot green"></div>NETWORK STABLE</div>
+  </div>
+  <div class="footer-links">
+    <a href="#" target="_blank" class="footer-link-btn discord-btn" id="discordBtn">
+      <span class="fl-icon">⚡</span>
+      <span class="fl-texts"><span class="fl-label">JOIN US ON</span><span class="fl-name">DISCORD</span></span>
+    </a>
+    <a href="https://open.spotify.com/playlist/5bZw0uBXQ2xQKsfN7tfcw7?si=8c85c4f54fb443a7" target="_blank" class="footer-link-btn spotify-btn">
+      <span class="fl-icon">♪</span>
+      <span class="fl-texts"><span class="fl-label">LISTEN ON</span><span class="fl-name">SPOTIFY</span></span>
+    </a>
+  </div>
+  <div class="footer-copy">© פרויקט ריבוט LARP · יוזמת מעריצים — אינה קשורה ל-Square Enix או Yoko Taro</div>
+</footer>
+
+<!-- MODAL (bottom sheet on mobile) -->
+<div class="modal-overlay" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-header-strip">
+        <span class="modal-header-id" id="modal-id">SYS // RECORD</span>
+        <button class="modal-close-btn" id="modal-close">✕ &nbsp;סגור</button>
+      </div>
+      <div class="modal-header-main">
+        <div class="modal-type" id="modal-type"></div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-divider"><div class="modal-divider-line"></div><div class="modal-divider-d"></div><div class="modal-divider-line"></div></div>
       </div>
     </div>
-  </section>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
 
-  <!-- Team -->
-  <section id="team">
-    <div class="section-tag">// OPERATIVES</div>
-    <h2 class="section-title">סגל פיקוד</h2>
-    <div class="grid-2">
-      <div class="team-card">
-        <img src="image_noy.jpg" alt="Noy" class="team-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%231e1e1e\'/></svg>'">
-        <div class="team-info">
-          <div class="team-role">GAME MASTER</div>
-          <div class="team-name">נוי וולסטר</div>
-        </div>
+<!-- AUDIO PLAYER — mobile floating button -->
+<div id="audioPlayer">
+  <div class="ap-inner">
+    <button class="ap-toggle" id="apToggle" aria-label="נגן מוזיקה">
+      <span class="ap-toggle-icon">♪</span>
+      <div class="ap-indicator" id="apDot"></div>
+    </button>
+    <div class="ap-expanded-row">
+      <div class="ap-viz-mini" id="apViz">
+        <div class="ap-bar"></div><div class="ap-bar"></div><div class="ap-bar"></div>
+        <div class="ap-bar"></div><div class="ap-bar"></div><div class="ap-bar"></div>
       </div>
-      <div class="team-card">
-        <img src="image_adi.jpg" alt="Adi" class="team-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%231e1e1e\'/></svg>'">
-        <div class="team-info">
-          <div class="team-role">GAME MASTER</div>
-          <div class="team-name">עדי יעקבסון</div>
-        </div>
-      </div>
+      <span class="ap-track-name">PROJECT REBOOT // OST</span>
+      <button class="ap-play-btn" id="apPlay">■</button>
     </div>
-  </section>
-
-  <!-- Rules -->
-  <section id="rules">
-    <div class="section-tag">// DIRECTIVES</div>
-    <h2 class="section-title">נהלי בטיחות</h2>
-    
-    <div class="accordion">
-      <button class="acc-trigger">
-        <div class="acc-trigger-left">
-          <span class="acc-id">DIR_01 // 🛡</span>
-          <span class="acc-title" style="color: var(--red);">Safety First</span>
-        </div>
-        <span class="acc-icon">+</span>
-      </button>
-      <div class="acc-content">
-        <div class="acc-inner">מילת בטיחות מוגדרת "חד"ל" מפסיקה את כל הלחימה והמשחק מיד. בטיחות פיזית קודמת לכל סיפור.</div>
-      </div>
-    </div>
-
-    <div class="accordion">
-      <button class="acc-trigger">
-        <div class="acc-trigger-left">
-          <span class="acc-id">DIR_02 // ⚔</span>
-          <span class="acc-title" style="font-size: 1rem;">Combat Rules</span>
-        </div>
-        <span class="acc-icon">+</span>
-      </button>
-      <div class="acc-content">
-        <div class="acc-inner">לחימה רק בנשק ספוג מאושר. אין לכוון לראש או למפשעה. כבוד להכרזות פגיעה של היריב.</div>
-      </div>
-    </div>
-    
-    <div class="accordion">
-      <button class="acc-trigger">
-        <div class="acc-trigger-left">
-          <span class="acc-id">DIR_03 // 🤝</span>
-          <span class="acc-title" style="font-size: 1rem;">Consent</span>
-        </div>
-        <span class="acc-icon">+</span>
-      </button>
-      <div class="acc-content">
-        <div class="acc-inner">חובה לכבד גבולות אישיים בכל עת. הטרדה מכל סוג תוביל להרחקה מיידית מהאירוע.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Enlist -->
-  <section id="join" style="text-align: center;">
-    <div class="section-tag">// ROSTER OPEN</div>
-    <h2 class="section-title">הצטרפו למערכה</h2>
-    <p style="margin-bottom: 30px; color: var(--white-dim);">המקומות מוגבלים. בחרו את הצד שלכם והירשמו לפני שהרשימה מתמלאת. שחקנים חדשים מוזמנים בברכה.</p>
-    <a href="#" class="btn" style="margin-bottom: 15px;"><span>הרשמה לאירוע</span></a>
-    <a href="#" class="btn btn-ghost"><span>הצטרפות לדיסקורד</span></a>
-  </section>
-
-</main>
+  </div>
+</div>
 
 <script>
-// Mobile Menu Logic
-const menuBtn = document.getElementById('menu-btn');
-const navMenu = document.getElementById('nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
+/* ── DATA ── */
+const FACTIONS = [
+  {
+    type:"android", num:"01", name:"Android Units", id:"YoRHa Combat Designation",
+    desc:"האנדרואידים הם יצורים מלאכותיים דמויי-אדם שנוצרו על ידי האנושות כדי להילחם ביצורי המכונות שכבשו את כדור הארץ. בזמן שבני האדם חיים בגלות על הירח, האנדרואידים נשלחים לכדור הארץ כחיילים, סיירים ותומכי לחימה.",
+    longDesc:[
+      "במשחק זה תשחקו אנדרואידים תחת ארגון YoRHa — ארגון צבאי של אנדרואידים מתקדמים, שנוצר במטרה להילחם ברובוטים ולהחזיר את השליטה בכדור הארץ לבני האדם.",
+      "קיימים סוגים שונים של אנדרואידים לתפקידים שונים בארגון:",
+      "מודל קרבי (B-Type): התמקדות בנשק פיזי, לחימה וטקטיקה — מכאניקה עם יתרונות לקרב.",
+      "מודל סקאוט (S-Type): התמקדות בחקר ואהבה למידע — מכאניקה עם יתרונות לסיוע בלחימה.",
+      "מודל מרפא (H-Type): התמקדות בריפוי והתמחות בטיפול בנזקים פיזיים.",
+      "הפרוטוקול האנדרואידי אוסר על קשרים אישיים, שמות עצמיים, ועצמאות שמנוגדת לפקודות."
+    ],
+    data:[
+      { k:"יעד ראשי",    v:"השמדת הרובוטים על כדור הארץ" },
+      { k:"סגנון משחק",  v:"היררכי, מיליטנטי, צבאי" },
+      { k:"עיקרון קרבי", v:"יעילות מעל הכל" },
+      { k:"התנהגות שדה", v:"קור רוח ויעילות קרבית" }
+    ]
+  },
+  {
+    type:"machine", num:"02", name:"Machine Lifeforms", id:"Network Intelligence Unit",
+    desc:"הרובוטים הם יצורי מכונה שנוצרו במקור לצורכי מלחמה, אך עם הזמן החלו לפתח קהילות, תרבות ודפוסי התנהגות המזכירים בני אדם. הם חיים בצורה שיתופית ומשפחתית.",
+    longDesc:[
+      "מכונות נחותות במורכבותן מהאנדרואידים, אך נעלות בפן החברתי והקהילתי. הן חיות באופן הדומה מאוד לבני אדם — בצורה קומוניסטית ומשותפת, אך הפרשנות שלהן להתנהגות בני האדם מאוד מילולית.",
+      "לרובוטים יש רשת משותפת בה הם מעבירים מידע מאחד לשני — יכולת לחלוק מידע עם כל בני מינם.",
+      "הרובוטים עצמם רואים את הקהילות שלהם כמשפחות. הם גדלים על סיפורים בהם הערכים המרכזיים הם הגנת המשפחה, יצירת קהילה ושמירה על חבריהם."
+    ],
+    data:[
+      { k:"מטרה מרכזית",  v:"הישרדות ולמידת האנושות" },
+      { k:"סגנון משחק",   v:"הקמת קהילה והתפתחות" },
+      { k:"דפוס התנהגות", v:"אנושי ותמים" },
+      { k:"פוטנציאל קרבי",v:"קטלני בעת איום" }
+    ]
+  }
+];
 
-function toggleMenu() {
-  const isOpen = navMenu.classList.toggle('open');
-  menuBtn.textContent = isOpen ? 'CLOSE ✕' : 'MENU ☰';
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+const LORE = [
+  { title:"The Abandonment",    stamp:"HISTORICAL RECORD",
+    text:"לפני אלפי שנים, מכונות חייזריות פלשו לכדור הארץ. האנושות ברחה לבסיסי הירח ומינתה את אנדרואידיה תחת ארגון YoRHa לנהל את המלחמה.",
+    long:"עד היום המלחמה מתנהלת. האנושות עדיין חיה ונושמת על בסיסי הירח. בתקופה האחרונה לא נראה זכר לחייזרים אך המכונות שיצרו עדיין מהוות איום — עד שהאנדרואידים לא יצליחו לחסל את אחרון המכונות, האנושות תישאר בבסיסה על הירח." },
+  { title:"The Machine Network", stamp:"INTELLIGENCE REPORT",
+    text:"כל יצורי המכונות מקושרים דרך רשת משותפת — תודעה קולקטיבית המחברת בין כלל המכונות ומשתפת ביניהן מידע, זיכרונות ופקודות בזמן אמת.",
+    long:"הרשת היא אחד הדברים המרתקים ביותר בעולם: מבנה שאמור לאחד יצורים רבים לכוח אחד, שהפך לאוסף של אינדיבידואלים עם צרכים שונים לחלוטין. חלקם אלימים ומסוכנים. חלקם תמימים ומבולבלים. וחלקם פשוט רוצים לחיות." },
+  { title:"YoRHa Directive",    stamp:"CLASSIFIED — DELTA",
+    text:"יחידות אנדרואיד פועלות תחת היררכיה צבאית נוקשה. הן אסורות בשמות אישיים, קשרים, או הגנה עצמית שמנוגדת לפקודות. רבים מפרים כללים אלה בסתר.",
+    long:"הפרוטוקול של YoRHa בנוי על האמונה שאנדרואידים יעילים יותר כאשר הם נטולי רגשות. אך ההיסטוריה מלא בדוגמאות שמוכיחות ההפך — שדווקא הקשרים שנאסרו הם שהצילו משימות." },
+  { title:"The Ruined Cities",  stamp:"FIELD OBSERVATION",
+    text:"שטח המשחק משתרע על יסודות עיר אנושית לשעבר — מגדלים קורסים, כיכרות מוצפות, ושרידי מכונות עתיקות שחצי בלעה אותן צמחייה.",
+    long:"שדה המשחק מחולק לאזורים שונים עם אווירה ייחודית. בחלק האנדרואידים מחזיקים עמדות ביצוריות. בחלק המכונות בנו קהילות מוזרות. ובאזורים אחרים — לא ברור למי שייכת הקרקע." },
+  { title:"Outliers",           stamp:"ANOMALY REPORT",
+    text:"לא כל יחידה מתאימה לאידיאולוגיה של סיעתה. אנדרואידים סוררים שנטשו את YoRHa. מכונות שעזבו את הרשת. אלה קיימים בשוליים.",
+    long:"ה-Outliers הם הפרשנות החופשית ביותר בלארפ. אם לא מתחבר לאף אחד מהצדדים — אנדרואיד שנטש, מכונה שהתפכחה — זו יכולה להיות האופציה הנכונה. הם נלחמים למענם בלבד." }
+];
+
+const RULES = [
+  { warn:true,  icon:"🛡", title:"Safety Protocol",    short:'מילת בטיחות מוגדרת "חד"ל" מפסיקה את כל הלחימה והמשחק מיד, ללא שאלות. פציעה אמיתית או מצוקה עולה על כל שיקול נרטיבי.', detail:"מילת הבטיחות חייבת להיות ידועה לכל המשתתפים. כאשר נאמרת, כולם עוצרים מיד — ללא יוצא מן הכלל. הבטיחות הפיזית והנפשית של כל משתתף חשובה יותר מכל סיפור." },
+  { warn:false, icon:"⚔",  title:"Combat System",       short:"לחימה משתמשת רק בנשק ספוג / בטוח ל-LARP. כל הנשקים חייבים לעבור בדיקת בטיחות. מכות לראש, גרון ומפשעה אסורות תמיד.", detail:"נשק LARP מאושר בלבד. בדיקת הנשק נעשית בתחילת האירוע ע\"י הצוות. לחימה הוגנת כוללת הצהרה על פגיעות ביושר." },
+  { warn:true,  icon:"🤝", title:"Consent & Respect",  short:"כל השחקנים חייבים לכבד גבולות אישיים בכל עת. נדרשת הסכמה לפני כל משחק פיזי מעבר ללחימה. הטרדה מכל סוג גורמת להסרה מיידית.", detail:"גבולות הם גבולות — גם בתוך דמות. קונפליקטים בין דמויות מעודדים. קונפליקטים בין שחקנים — לא. כל בעיה: פנה מיד לחבר צוות." },
+  { warn:false, icon:"🎭", title:"Character Integrity",  short:"שמור על דמות בתוך אזור המשחק. שיחות מחוץ לדמות משתמשות באות ברור. מטאגיימינג — שימוש במידע מחוץ לדמות — פוגע בחוויה של כולם.", detail:"בתוך האזור — אתה הדמות שלך. אם צריך לצאת מדמות בתוך האזור, יש לתת אות ברור (יד מורמת על הראש)." },
+  { warn:false, icon:"💀", title:"Death & Respawn",     short:"כשנפלת — כרע ברך ושים יד על הראש. מרפאים מיועדים יכולים לתחיות אותך. אל תפחדו מהמוות — הוא חלק מהמשחק הזה.", detail:"מערכת ה-Respawn מאפשרת לחזור לפעולה לאחר מוות זמני. מוות קבוע הוא בחירה דרמטית שנעשית ביחד עם המארגנים." },
+  { warn:false, icon:"📋", title:"Organizer Authority", short:"למארגנים יש סמכות סופית בכל מחלוקת. ההחלטות בזמן המשחק סופיות; אפשר להביע משוב לאחר האירוע.", detail:"הצוות נמצא כאן כדי לוודא שכולם נהנים. אם משהו לא נראה נכון — בטיחות, יחס, הוגנות — פנה מיד לאחד מחברי הצוות." }
+];
+
+const GALLERY = [
+  { src:"robot2.jpg",       label:"מכונה חיה — 01" },
+  { src:"yorah.png",        label:"יצור מכונה — 02" },
+  { src:"android1.jpeg",    label:"שדה קרב — 03" },
+  { src:"android 2.jpg",    label:"תחרות תלבושות — 04" },
+  { src:"city.jpg",         label:"סרטון לחימה — 05" },
+  { src:"pascal.webp",      label:"תמונה קבוצתית — 06" }
+];
+
+const TEAM = [
+  { id:"OPERATIVE_01", name:"נוי וולסטר", role:"Game Master", titleHe:"מנהלת משחק ראשי", photo:"image_noy.jpg",
+    desc:"חלק מקהילת ה-LARP בשנתיים האחרונות, במהלכן לקחה חלק בהקמה, ניהול ופיתוח של מספר יוזמות ואירועים קהילתיים, ביניהם אולדהיים, מעשיות אוסטמיר וערבי פונדק שונים.",
+    long:"המטרה שלי היא לחלוק את הערצה שלי לסדרת המשחקים הנהדרת הזאת.", tags:["Game Master"] },
+  { id:"OPERATIVE_02", name:"עדי יעקבסון", role:"Game Master", titleHe:"מנהל משחק ראשי", photo:"image_adi.jpg",
+    desc:"חלק מקהילת הלארפים בחמש שנים האחרונות, במהלכן השתתף בלארפים רבים בתור שחקן ובתור נאפס.",
+    long:"המטרה שלי היא ליצור חווית רולפליי ייחודית שעוד לא נראתה כמותה.", tags:["Game Master"] }
+];
+
+const JOIN_LINK = "https://your-signup-link-here.com";
+
+/* ── SOUND ENGINE ── */
+let _sfxCtx=null;
+function getSfxCtx(){
+  if(!_sfxCtx) _sfxCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(_sfxCtx.state==='suspended') _sfxCtx.resume();
+  return _sfxCtx;
+}
+function playClick(t){
+  try{
+    const c=getSfxCtx(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g); g.connect(c.destination);
+    if(t==='ui'){ o.frequency.setValueAtTime(1200,c.currentTime); o.frequency.exponentialRampToValueAtTime(800,c.currentTime+0.04); g.gain.setValueAtTime(0.12,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+0.07); o.start(); o.stop(c.currentTime+0.07); }
+    else if(t==='modal'){ o.type='sine'; o.frequency.setValueAtTime(440,c.currentTime); o.frequency.exponentialRampToValueAtTime(600,c.currentTime+0.05); g.gain.setValueAtTime(0.1,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+0.1); o.start(); o.stop(c.currentTime+0.1); }
+    else if(t==='enter'){ const o2=c.createOscillator(),g2=c.createGain(); o2.connect(g2); g2.connect(c.destination); o.frequency.setValueAtTime(80,c.currentTime); o.frequency.exponentialRampToValueAtTime(40,c.currentTime+0.3); g.gain.setValueAtTime(0.3,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+0.3); o2.frequency.setValueAtTime(2000,c.currentTime); o2.frequency.exponentialRampToValueAtTime(1000,c.currentTime+0.15); g2.gain.setValueAtTime(0.15,c.currentTime+0.05); g2.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+0.2); o.start(); o.stop(c.currentTime+0.3); o2.start(c.currentTime+0.05); o2.stop(c.currentTime+0.2); }
+  }catch(e){}
 }
 
-menuBtn.addEventListener('click', toggleMenu);
-navLinks.forEach(link => link.addEventListener('click', toggleMenu));
+/* ── ENTRY ANIM ── */
+function runEntryAnimation(onDone){
+  const s1=document.getElementById('ea-s1'),s2=document.getElementById('ea-s2');
+  const text=document.getElementById('ea-text');
+  playClick('enter');
+  [s1,s2].forEach((s,i)=>{ s.style.top=(25+i*35)+'%'; s.style.opacity='0.8'; s.style.transition='none'; setTimeout(()=>{ s.style.opacity='0'; s.style.transition='opacity 0.1s'; },80+i*30); });
+  setTimeout(()=>{ text.style.opacity='0.7'; text.style.transition='opacity 0.05s'; setTimeout(()=>{ text.style.opacity='0'; text.style.transition='opacity 0.25s'; },180); },200);
+  setTimeout(onDone,600);
+}
 
-// Accordion Logic
-document.querySelectorAll('.accordion').forEach(acc => {
-  const trigger = acc.querySelector('.acc-trigger');
-  const content = acc.querySelector('.acc-content');
-  
-  trigger.addEventListener('click', () => {
-    const isOpen = acc.classList.contains('open');
-    
-    // Close all others (optional - remove if you want multiple open)
-    document.querySelectorAll('.accordion').forEach(other => {
-      other.classList.remove('open');
-      other.querySelector('.acc-content').style.maxHeight = null;
+/* ── INTRO ── */
+(function(){
+  const screen=document.getElementById('intro-screen');
+  const btn=document.getElementById('introPlayBtn');
+  const loadTxt=document.getElementById('introLoading');
+  const ic=document.getElementById('intro-clock');
+  const clockInt=setInterval(()=>{ if(ic) ic.textContent=new Date().toTimeString().slice(0,8); },1000);
+  const lines=['INITIALIZING SYSTEM','LOADING TACTICAL NET','ESTABLISHING NODE CONNECTION','SYNCING ANDROID DATABASE','SYNCING MACHINE NETWORK','ALL SYSTEMS NOMINAL','AWAITING OPERATOR INPUT'];
+  let li=0,ci=0,typing=true;
+  const ti=setInterval(()=>{ if(!loadTxt) return; if(typing){ ci++; loadTxt.textContent=lines[li].slice(0,ci); if(ci>=lines[li].length){ typing=false; setTimeout(()=>{ ci=0; li=(li+1)%lines.length; typing=true; },1200); } } },60);
+  function enter(){
+    clearInterval(ti); clearInterval(clockInt);
+    screen.style.transition='opacity 0.04s'; screen.style.opacity='0.15';
+    setTimeout(()=>{ screen.style.opacity='0.9'; setTimeout(()=>{ screen.style.transition='opacity 0.3s ease'; screen.style.opacity='0'; setTimeout(()=>{ screen.style.visibility='hidden'; screen.classList.add('hidden'); document.body.style.overflow=''; runEntryAnimation(()=>{ if(window.startBgMusic) window.startBgMusic(); }); },300); },30); },30);
+  }
+  document.body.style.overflow='hidden';
+  btn.addEventListener('click',enter);
+  btn.addEventListener('touchend',e=>{ e.preventDefault(); enter(); });
+})();
+
+/* ── MODAL ── */
+const modalOverlay=document.getElementById('modal');
+function openModal({id,type,title,titleClass,bodyHTML}){
+  document.getElementById('modal-id').textContent=id||'';
+  document.getElementById('modal-type').textContent=type||'';
+  const mt=document.getElementById('modal-title'); mt.textContent=title||''; mt.className='modal-title '+(titleClass||'');
+  document.getElementById('modal-body').innerHTML=bodyHTML||'';
+  modalOverlay.classList.add('open'); document.body.style.overflow='hidden';
+  playClick('modal');
+}
+function closeModal(){ modalOverlay.classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('modal-close').addEventListener('click',closeModal);
+modalOverlay.addEventListener('click',e=>{ if(e.target===modalOverlay) closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+function paraHTML(arr){ return arr.map(p=>`<p>${p}</p>`).join(''); }
+function tableHTML(data,cls){ return `<table class="modal-table ${cls||''}">${data.map(d=>`<tr><td class="mtk">${d.k}</td><td class="mtv">${d.v}</td></tr>`).join('')}</table>`; }
+
+/* ── RENDER ── */
+function render(){
+  // Factions
+  document.getElementById('faction-wrap').innerHTML = FACTIONS.map(f=>`
+    <div class="faction-panel ${f.type}" data-faction="${f.type}">
+      <div class="fp-header"><div class="fp-num">${f.num}</div><div class="fp-id">// ${f.id}</div><div class="fp-name">${f.name}</div></div>
+      <div class="fp-body">
+        <p class="fp-desc">${f.desc}</p>
+        <div class="fp-data">${f.data.map(d=>`<div class="fp-data-row"><span class="fpdk">${d.k}</span><span class="fpdv">${d.v}</span></div>`).join('')}</div>
+      </div>
+      <div class="fp-tap-hint">[ גע לפרטים נוספים ]</div>
+    </div>`).join('');
+
+  document.querySelectorAll('.faction-panel').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const f=FACTIONS.find(x=>x.type===el.dataset.faction);
+      openModal({ id:`FACTION_DB // ${f.num}`, type:`// ${f.id}`, title:f.name, titleClass:f.type==='android'?'android-c':'machine-c',
+        bodyHTML:`<div class="modal-faction-header"><div class="modal-faction-stripe ${f.type}"></div><div class="modal-faction-info">${paraHTML(f.longDesc)}</div></div>${tableHTML(f.data,f.type+'-t')}` });
     });
+  });
 
-    if (!isOpen) {
-      acc.classList.add('open');
-      content.style.maxHeight = content.scrollHeight + "px";
+  // Lore
+  document.getElementById('lore-wrap').innerHTML = LORE.map((l,i)=>`
+    <div class="tl-item" data-tl="${i}">
+      <div class="tl-trigger">
+        <div class="tl-left"><span class="tl-num">${String(i+1).padStart(2,'0')}</span><span class="tl-title">${l.title}</span></div>
+        <span class="tl-arrow">▶</span>
+      </div>
+      <div class="tl-body"><div class="tl-body-inner"><p class="tl-summary">${l.text}</p><p class="tl-long">${l.long}</p></div></div>
+    </div>`).join('');
+
+  document.querySelectorAll('.tl-item').forEach(item=>{
+    const trigger=item.querySelector('.tl-trigger'), body=item.querySelector('.tl-body');
+    trigger.addEventListener('click',()=>{
+      const isOpen=item.classList.contains('open');
+      document.querySelectorAll('.tl-item').forEach(i=>{ i.classList.remove('open'); i.querySelector('.tl-body').style.maxHeight='0'; });
+      if(!isOpen){ item.classList.add('open'); body.style.maxHeight=body.scrollHeight+'px'; playClick('ui'); }
+    });
+  });
+
+  // Rules
+  document.getElementById('rules-wrap').innerHTML = RULES.map((r,i)=>`
+    <div class="rule-card ${r.warn?'warn':''}">
+      <div class="rule-num">DIR-${String(i+1).padStart(3,'0')}</div>
+      <span class="rule-icon">${r.icon}</span>
+      <div class="rule-title">${r.title}</div>
+      <p class="rule-short">${r.short}</p>
+      <p class="rule-detail">${r.detail}</p>
+    </div>`).join('');
+
+  // Gallery
+  document.getElementById('gallery-wrap').innerHTML = GALLERY.map((g,i)=>
+    `<div class="gallery-cell">
+      <img src="${g.src}" alt="${g.label}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="g-id">IMG_${String(i+1).padStart(3,'0')}</div>
+    </div>`).join('');
+
+  // Team
+  document.getElementById('team-grid').innerHTML = TEAM.map(m=>`
+    <div class="team-card">
+      <div class="team-photo">
+        ${m.photo?`<img src="${m.photo}" alt="${m.name}">`:`<div class="team-photo-ph"><div class="ph-icon">◈</div><div class="ph-txt">PHOTO PENDING</div></div>`}
+        <div class="team-photo-tag">${m.id}</div>
+      </div>
+      <div class="team-info">
+        <div class="team-role">// ${m.role}</div>
+        <div class="team-name">${m.name}</div>
+        <div class="team-title-he">${m.titleHe}</div>
+        <div class="team-divider"><div class="team-divider-line"></div><div class="team-divider-d"></div><div class="team-divider-line"></div></div>
+        <p class="team-desc">${m.desc}</p>
+        <p class="team-long">${m.long}</p>
+        <div class="team-tags">${m.tags.map(t=>`<span class="team-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+
+  // Join
+  document.getElementById('join-cta').innerHTML=`<a href="${JOIN_LINK}" class="btn btn-primary" target="_blank">הירשם עכשיו</a>`;
+}
+
+/* ── CLOCK ── */
+function tick(){ const el=document.getElementById('hud-clock'); if(el) el.textContent=new Date().toTimeString().slice(0,8); }
+setInterval(tick,1000); tick();
+
+/* ── HUD MENU ── */
+(function(){
+  const btn=document.getElementById('menuBtn'), drawer=document.getElementById('navDrawer');
+  btn.addEventListener('click',()=>{
+    const open=!drawer.classList.contains('open');
+    drawer.classList.toggle('open',open);
+    btn.classList.toggle('open',open);
+    playClick('ui');
+  });
+  document.querySelectorAll('[data-nav]').forEach(a=>{
+    a.addEventListener('click',()=>{
+      drawer.classList.remove('open');
+      btn.classList.remove('open');
+      playClick('ui');
+    });
+  });
+  document.addEventListener('click',e=>{
+    if(!btn.contains(e.target)&&!drawer.contains(e.target)){
+      drawer.classList.remove('open'); btn.classList.remove('open');
     }
   });
-});
+})();
 
-// Audio & Boot Screen Logic
-const bootScreen = document.getElementById('boot-screen');
-const bootBtn = document.getElementById('boot-btn');
-const bgMusic = document.getElementById('bgMusic');
-const fabAudio = document.getElementById('fab-audio');
-let isPlaying = false;
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.06});
+render();
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-bootBtn.addEventListener('click', () => {
-  bootScreen.style.opacity = '0';
-  setTimeout(() => {
-    bootScreen.style.display = 'none';
-  }, 500);
-});
+/* ── AUDIO PLAYER ── */
+(function(){
+  const music=document.getElementById('bgMusic');
+  const elPlay=document.getElementById('apPlay'), elDot=document.getElementById('apDot');
+  const elViz=document.getElementById('apViz'), elBars=document.querySelectorAll('.ap-bar');
+  const elToggle=document.getElementById('apToggle'), elPlayer=document.getElementById('audioPlayer');
+  let vizRaf=null, audioCtx=null, analyser=null, playerOpen=false;
 
-fabAudio.addEventListener('click', () => {
-  if (isPlaying) {
-    bgMusic.pause();
-    fabAudio.textContent = '🔇';
-    fabAudio.classList.remove('playing');
-  } else {
-    bgMusic.play().catch(e => console.log("Audio play failed:", e));
-    fabAudio.textContent = '🔊';
-    fabAudio.classList.add('playing');
+  function initAnalyser(){
+    if(audioCtx) return;
+    try{
+      audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+      analyser=audioCtx.createAnalyser(); analyser.fftSize=32;
+      const src=audioCtx.createMediaElementSource(music);
+      src.connect(analyser); analyser.connect(audioCtx.destination);
+    }catch(e){}
   }
-  isPlaying = !isPlaying;
-});
+  function startViz(){
+    elViz.classList.add('on');
+    const data=analyser?new Uint8Array(analyser.frequencyBinCount):null;
+    const tick=()=>{ if(music.paused){stopViz();return;} if(analyser&&data){analyser.getByteFrequencyData(data);elBars.forEach((b,i)=>{b.style.height=Math.max(2,(data[Math.floor(i*data.length/elBars.length)]/255)*100)+'%';});}else{elBars.forEach(b=>{b.style.height=(Math.random()*80+5)+'%';});} vizRaf=requestAnimationFrame(tick); };
+    vizRaf=requestAnimationFrame(tick);
+  }
+  function stopViz(){ elViz.classList.remove('on'); if(vizRaf){cancelAnimationFrame(vizRaf);vizRaf=null;} elBars.forEach(b=>b.style.height='2px'); }
+  function setUI(){ const p=!music.paused; elPlay.textContent=p?'■':'►'; elPlay.classList.toggle('playing',p); elDot.classList.toggle('on',p); if(p) startViz(); else stopViz(); }
+
+  elToggle.addEventListener('click',()=>{
+    playerOpen=!playerOpen;
+    elPlayer.classList.toggle('expanded',playerOpen);
+    playClick('ui');
+  });
+  elPlay.addEventListener('click',()=>{
+    initAnalyser();
+    if(audioCtx&&audioCtx.state==='suspended') audioCtx.resume();
+    if(music.paused) music.play().then(setUI).catch(()=>{});
+    else { music.pause(); setUI(); }
+    playClick('ui');
+  });
+
+  window.startBgMusic=function(){
+    initAnalyser();
+    if(audioCtx&&audioCtx.state==='suspended') audioCtx.resume();
+    music.volume=0.7;
+    music.play().then(setUI).catch(()=>{});
+  };
+
+  music.addEventListener('play',setUI);
+  music.addEventListener('pause',setUI);
+})();
 </script>
 </body>
 </html>
