@@ -79,26 +79,14 @@ button { font-family: inherit; cursor: pointer; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--br-hi); }
 
-/* ── flowers background (about + hero) ── */
+/* ── flowers background (hero only) ── */
 .flowers-bg {
   position: absolute; inset: 0; pointer-events: none; user-select: none;
   width: 100%; height: 100%;
-  object-fit: cover; object-position: center 30%;
-  mix-blend-mode: screen;
-  filter: grayscale(20%) brightness(0.45) contrast(1.3);
-  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, black 0%, transparent 100%);
-  mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, black 0%, transparent 100%);
-  opacity: 0.55;
-  z-index: 0;
-  transition: opacity 1.5s ease;
-}
-#hero .flowers-bg {
-  object-position: center 45%;
-  opacity: 0.35;
-  mix-blend-mode: screen;
-  filter: grayscale(40%) brightness(0.35) contrast(1.2);
-  -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 60%, black 0%, transparent 100%);
-  mask-image: radial-gradient(ellipse 90% 75% at 50% 60%, black 0%, transparent 100%);
+  object-fit: cover; object-position: center 40%;
+  filter: grayscale(100%) brightness(0.28) contrast(1.3);
+  opacity: 1;
+  z-index: 1;
 }
 
 
@@ -992,8 +980,8 @@ footer {
 
 <!-- ══ HERO ══ -->
 <section id="hero">
-  <img class="flowers-bg" src="1779268648819_image.png" alt="" aria-hidden="true">
   <div id="hero-bg"></div>
+  <img class="flowers-bg" src="1779268648819_image.png" alt="" aria-hidden="true">
   <div id="orb-a"></div>
   <div id="orb-b"></div>
   <div id="hero-grid"></div>
@@ -1002,7 +990,7 @@ footer {
   <div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div>
   <div class="corner corner-br"></div>
-  <div class="hero-inner">
+  <div class="hero-inner" style="position:relative;z-index:2">
     <p class="hero-eye">// YoRHa Tactical Net — Node: REBOOT_PRIME //</p>
     <h1 class="hero-title">PROJECT REBOOT</h1>
     <p class="hero-sub-line">Glory to Mankind</p>
