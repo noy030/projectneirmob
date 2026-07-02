@@ -738,7 +738,156 @@ footer {
 </style>
 </head>
 <body>
+<!-- BOOT SCREEN -->
+<div id="boot-overlay" style="
+  position:fixed;inset:0;z-index:9999;background:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Share Tech Mono',monospace;overflow:hidden;
+  transition:opacity .6s ease;
+">
+  <canvas id="boot-canvas" style="position:absolute;inset:0;pointer-events:none"></canvas>
+  <div style="position:absolute;top:12px;right:12px;width:16px;height:16px;border-top:1px solid #38383f;border-right:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:1px solid #38383f;border-left:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:1px solid #38383f;border-right:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;bottom:12px;left:12px;width:16px;height:16px;border-bottom:1px solid #38383f;border-left:1px solid #38383f;opacity:.3"></div>
+  <div id="boot-scan" style="position:absolute;inset-inline:0;height:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.03),transparent);animation:bootscan 8s linear infinite;pointer-events:none"></div>
 
+  <div style="position:relative;z-index:2;text-align:center;padding:32px 20px;max-width:580px;width:100%">
+    <div style="font-size:9px;letter-spacing:5px;color:#2a4a2a;margin-bottom:18px">// YoRHa Tactical Net — Node: REBOOT_PRIME //</div>
+    <div style="font-size:clamp(26px,8vw,52px);letter-spacing:14px;color:#c8c4a8;margin-bottom:6px;text-shadow:0 0 30px rgba(200,196,168,.2)">PROJECT REBOOT</div>
+    <div style="font-size:9px;letter-spacing:6px;color:#4a7a78;margin-bottom:30px">GLORY TO MANKIND</div>
+
+    <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px">
+      <div style="flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,#38383f,transparent)"></div>
+      <div style="width:6px;height:6px;background:#7a7660;transform:rotate(45deg)"></div>
+      <div style="flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,#38383f)"></div>
+    </div>
+
+    <div id="boot-log" style="width:100%;max-width:460px;margin:0 auto 24px;height:100px;overflow:hidden;position:relative;text-align:left">
+      <div id="boot-log-inner" style="position:absolute;bottom:0;width:100%"></div>
+    </div>
+
+    <div style="width:100%;max-width:380px;margin:0 auto 10px">
+      <div style="display:flex;justify-content:space-between;font-size:9px;letter-spacing:3px;color:#3a5a3a;margin-bottom:6px">
+        <span>BOOT SEQUENCE</span><span id="boot-pct-label">0%</span>
+      </div>
+      <div style="height:2px;background:#111;border:1px solid #1a2a1a">
+        <div id="boot-bar" style="height:100%;width:0%;background:#4a7a48;box-shadow:0 0 8px rgba(74,122,72,.6);transition:width .12s linear"></div>
+      </div>
+    </div>
+    <div id="boot-num" style="font-size:clamp(28px,8vw,54px);letter-spacing:8px;color:#3a5a3a;margin-bottom:4px;transition:color .4s ease">000%</div>
+    <div id="boot-status" style="font-size:9px;letter-spacing:3px;color:#2a3a2a;min-height:14px;transition:color .3s ease">INITIALIZING SYSTEM...</div>
+  </div>
+</div>
+
+<style>
+@keyframes bootscan { 0%{top:-4px} 100%{top:100%} }
+</style>
+
+<script>
+(function(){
+  var ov = document.getElementById('boot-overlay');
+  var cv = document.getElementById('boot-canvas');
+  var ctx = cv.getContext('2d');
+
+  function sz(){ cv.width=ov.offsetWidth; cv.height=ov.offsetHeight; }
+  sz(); window.addEventListener('resize',sz,{passive:true});
+
+  var chars='01アイウエオカキクケコサシスセソ0110101ヤユヨラリルレロ';
+  var cols=Math.floor(cv.width/18);
+  var drops=[];
+  for(var i=0;i<cols;i++) drops[i]=Math.random()*-60;
+
+  function rain(){
+    ctx.fillStyle='rgba(0,0,0,0.06)';
+    ctx.fillRect(0,0,cv.width,cv.height);
+    for(var c=0;c<drops.length;c++){
+      var ch=chars[Math.floor(Math.random()*chars.length)];
+      var a=0.07+Math.random()*0.11;
+      ctx.fillStyle='rgba(40,90,40,'+a+')';
+      ctx.font='13px "Share Tech Mono",monospace';
+      ctx.fillText(ch,c*18,drops[c]*18);
+      if(drops[c]*18>cv.height&&Math.random()>.97) drops[c]=0;
+      drops[c]++;
+    }
+  }
+  var rainId=setInterval(rain,55);
+
+  var logInner=document.getElementById('boot-log-inner');
+  var logEls=[];
+  var logs=[
+    {t:400, c:'#2a5a5a', s:'[SYS] YoRHa Command Server......... ONLINE'},
+    {t:780, c:'#3a6a3a', s:'[OK]  Machine Network Interface..... READY'},
+    {t:1100,c:'#2a5a5a', s:'[SYS] Loading faction database... 100%'},
+    {t:1400,c:'#3a6a3a', s:'[OK]  Android Unit Protocols........ ACTIVE'},
+    {t:1680,c:'#2a5a5a', s:'[SYS] Scanning field coordinates...'},
+    {t:1950,c:'#3a6a3a', s:'[OK]  HACK-THE-BOX breach system... ARMED'},
+    {t:2220,c:'#8a7030', s:'[!]   Alien threat level: CRITICAL'},
+    {t:2500,c:'#4a7050', s:'[SYS] Battlefield: '},
+    {t:2780,c:'#3a6a3a', s:'[OK]  OST playlist............... STREAMING'},
+    {t:3050,c:'#2a5a5a', s:'[SYS] YoRHa combat nodes......... ALLOCATED'},
+    {t:3300,c:'#3a6a3a', s:'[OK]  Machine collective.......... CONNECTED'},
+    {t:3580,c:'#5a8060', s:'>>> WELCOME TO PROJECT REBOOT <<<'},
+  ];
+  logs.forEach(function(l){
+    setTimeout(function(){
+      var el=document.createElement('div');
+      el.style.cssText='font-size:11px;line-height:1.85;color:'+l.c+';opacity:0;transform:translateY(4px);transition:opacity .2s ease,transform .2s ease;';
+      el.textContent=l.s;
+      logInner.appendChild(el);
+      setTimeout(function(){el.style.opacity='1';el.style.transform='none';},20);
+      logEls.push(el);
+      if(logEls.length>6) logEls[logEls.length-7].style.opacity='.2';
+      if(logEls.length>8){ var o=logEls[logEls.length-9]; if(o) o.style.display='none'; }
+    },l.t);
+  });
+
+  var pctLabel=document.getElementById('boot-pct-label');
+  var bar=document.getElementById('boot-bar');
+  var num=document.getElementById('boot-num');
+  var statusEl=document.getElementById('boot-status');
+  var displayed=0, target=0, done=false;
+
+  var stages=[{d:400,v:12},{d:800,v:30},{d:1150,v:50},{d:1500,v:68},{d:1850,v:82},{d:2200,v:94},{d:2700,v:100}];
+  var statuses=[{p:12,m:'LOADING FACTION DATABASE...'},{p:30,m:'SYNCING MACHINE NETWORK...'},{p:50,m:'CALIBRATING COMBAT SYSTEMS...'},{p:68,m:'DECRYPTING HACK-THE-BOX NODES...'},{p:82,m:'ESTABLISHING YORHA CONNECTION...'},{p:100,m:'SYSTEM ONLINE — GLORY TO MANKIND'}];
+  var si=0;
+  stages.forEach(function(s){ setTimeout(function(){ target=s.v; },s.d); });
+
+  function pad3(n){ return String(n).padStart(3,'0'); }
+
+  function tick(){
+    if(displayed<target){
+      displayed=Math.min(displayed+1,target);
+      num.textContent=pad3(displayed)+'%';
+      pctLabel.textContent=displayed+'%';
+      bar.style.width=displayed+'%';
+      for(var i=si;i<statuses.length;i++){
+        if(displayed>=statuses[i].p){ statusEl.textContent=statuses[i].m; si=i+1; }
+      }
+      if(displayed>=100&&!done){
+        done=true;
+        num.style.color='#c8c4a8';
+        statusEl.style.color='#7a7660';
+        // ——— הפעל מוזיקה ———
+        var bgMusic=document.getElementById('bgMusic');
+        if(bgMusic){
+          bgMusic.volume=0.6;
+          bgMusic.play().catch(function(){});
+        }
+        // הסתר overlay אחרי 900ms
+        setTimeout(function(){
+          clearInterval(rainId);
+          ov.style.opacity='0';
+          ov.style.pointerEvents='none';
+          setTimeout(function(){ ov.style.display='none'; },650);
+        },900);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
 <header id="topbar">
   <span class="nav-logo">PROJECT REBOOT</span>
   <nav class="nav-links">
