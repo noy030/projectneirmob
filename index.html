@@ -34,3 +34,1464 @@
   --red:        #b84040;
   --green:      #5a9060;
   --ui: 'Share Tech Mono', monospace;
+  --he: 'Heebo', sans-serif;
+  --nav-h: 54px;
+  --r:     6px;
+  --tap:   48px;
+  --safe:  env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--tx);
+  font-family: var(--he);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--br-hi); }
+
+#hero {
+  background-image: url('1779268648819_image.png');
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
+}
+#hero::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: rgba(12,12,16,.78);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+}
+
+@keyframes fadeUp    { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+@keyframes blink     { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes scanline  { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
+@keyframes shimmer   { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+@keyframes orb-a     { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-16px) scale(1.06)} }
+@keyframes orb-b     { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-18px,14px) scale(.96)} }
+@keyframes glow-a    { 0%,100%{box-shadow:0 0 0 0 transparent,inset 0 1px 0 rgba(200,196,168,.04)} 50%{box-shadow:0 0 24px 2px rgba(200,196,168,.1),inset 0 1px 0 rgba(200,196,168,.08)} }
+@keyframes glow-m    { 0%,100%{box-shadow:0 0 0 0 transparent,inset 0 1px 0 rgba(122,184,180,.04)} 50%{box-shadow:0 0 24px 2px rgba(122,184,180,.1),inset 0 1px 0 rgba(122,184,180,.08)} }
+@keyframes flip-in   { 0%{transform:rotateX(-90deg);opacity:0} 55%{transform:rotateX(6deg)} 100%{transform:none;opacity:1} }
+@keyframes badge-pop { 0%{transform:scale(.75);opacity:0} 65%{transform:scale(1.05)} 100%{transform:none;opacity:1} }
+@keyframes tl-in     { from{scaleY:0} to{scaleY:1} }
+@keyframes pulse-spotify { 0%,100%{box-shadow:0 0 0 0 rgba(109,217,122,.12)} 50%{box-shadow:0 0 18px 4px rgba(109,217,122,.22)} }
+
+.reveal { opacity:0; transform:translateY(16px); transition:opacity .55s ease, transform .55s ease; }
+.reveal.in { opacity:1; transform:none; }
+.stagger > * { opacity:0; transform:translateY(12px); transition:opacity .45s ease, transform .45s ease; }
+.stagger.in > *:nth-child(1){opacity:1;transform:none;transition-delay:.04s}
+.stagger.in > *:nth-child(2){opacity:1;transform:none;transition-delay:.11s}
+.stagger.in > *:nth-child(3){opacity:1;transform:none;transition-delay:.18s}
+.stagger.in > *:nth-child(4){opacity:1;transform:none;transition-delay:.25s}
+.stagger.in > *:nth-child(5){opacity:1;transform:none;transition-delay:.32s}
+.stagger.in > *:nth-child(6){opacity:1;transform:none;transition-delay:.39s}
+
+#topbar {
+  position: fixed; top: 0; inset-inline: 0; z-index: 900;
+  height: var(--nav-h);
+  background: rgba(12,12,16,.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid var(--br);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; gap: 12px;
+}
+.nav-logo {
+  font-family: var(--ui);
+  font-size: clamp(.65rem, 3vw, .82rem);
+  letter-spacing: .32em;
+  white-space: nowrap; flex-shrink: 0;
+  background: linear-gradient(90deg, var(--android) 0%, #fff 45%, var(--machine) 75%, var(--android) 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+.nav-links { display: none; align-items: center; height: 100%; }
+@media(min-width:820px){ .nav-links{display:flex;} }
+.nav-links a {
+  display: flex; align-items: center; height: 100%;
+  padding: 0 11px;
+  font-family: var(--ui); font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--tx-2);
+  border-right: 1px solid var(--br);
+  transition: color .15s;
+}
+.nav-links a:first-child { border-left: 1px solid var(--br); }
+.nav-links a:hover { color: var(--tx); }
+
+/* ── REGISTRATION nav badge ── */
+.nav-soon {
+  background: rgba(184,150,64,.12);
+  border: 1px solid rgba(184,150,64,.35);
+  color: var(--gold);
+  font-family: var(--ui); font-size: .56rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  padding: 0 14px; height: 36px; border-radius: 3px;
+  display: flex; align-items: center; gap: 7px;
+  flex-shrink: 0;
+  transition: border-color .2s, background .2s;
+}
+.nav-soon:hover { border-color: var(--gold); background: rgba(184,150,64,.2); }
+.nav-soon-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0;
+  animation: blink 1.8s step-end infinite;
+}
+
+.nav-burger {
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center; gap: 5px;
+  width: var(--tap); height: var(--tap);
+  background: none; border: none; flex-shrink: 0;
+}
+@media(min-width:820px){ .nav-burger{display:none;} }
+.nav-burger span {
+  display: block; width: 18px; height: 1px;
+  background: var(--tx-2); transition: transform .2s, opacity .2s;
+}
+.nav-burger.open span:nth-child(1){ transform:rotate(45deg) translate(4px,4px); }
+.nav-burger.open span:nth-child(2){ opacity:0; }
+.nav-burger.open span:nth-child(3){ transform:rotate(-45deg) translate(4px,-4px); }
+
+#mobile-nav {
+  position: fixed; inset: 0; z-index: 800;
+  background: rgba(12,12,16,.98);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transform: translateY(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1);
+  padding-top: var(--nav-h);
+}
+#mobile-nav.open { transform: none; }
+#mobile-nav a {
+  width: 100%; text-align: center;
+  font-family: var(--ui); font-size: .9rem; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--tx-2);
+  height: var(--tap); display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--br);
+  transition: color .15s, background .15s;
+}
+#mobile-nav a:first-child { border-top: 1px solid var(--br); }
+#mobile-nav a:active { color: var(--tx); background: rgba(255,255,255,.03); }
+
+main { padding-top: var(--nav-h); }
+
+#hero {
+  min-height: calc(100svh - var(--nav-h));
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 48px 20px 56px;
+  position: relative; overflow: hidden;
+}
+#hero-bg {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 50%, rgba(122,184,180,.04) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 80% 40%, rgba(200,196,168,.05) 0%, transparent 55%);
+}
+#orb-a {
+  position: absolute; width: 320px; height: 220px;
+  border-radius: 50%; pointer-events: none; z-index: 2;
+  background: radial-gradient(ellipse, rgba(200,196,168,.08) 0%, transparent 70%);
+  top: 15%; left: -5%;
+  animation: orb-a 18s ease-in-out infinite;
+}
+#orb-b {
+  position: absolute; width: 280px; height: 200px;
+  border-radius: 50%; pointer-events: none; z-index: 2;
+  background: radial-gradient(ellipse, rgba(122,184,180,.07) 0%, transparent 70%);
+  bottom: 20%; right: -8%;
+  animation: orb-b 22s ease-in-out infinite;
+}
+#hero-grid {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+.hero-scan {
+  position: absolute; inset-inline: 0; height: 90px; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.018), transparent);
+  animation: scanline 12s linear infinite;
+}
+.corner {
+  position: absolute; width: 18px; height: 18px; pointer-events: none;
+  border-color: var(--br-hi); border-style: solid; opacity: .5;
+}
+.corner-tl { top:16px; right:16px; border-width:1px 1px 0 0; }
+.corner-tr { top:16px; left:16px;  border-width:1px 0 0 1px; }
+.corner-bl { bottom:16px; right:16px; border-width:0 1px 1px 0; }
+.corner-br { bottom:16px; left:16px;  border-width:0 0 1px 1px; }
+@media(min-width:600px){
+  .corner{width:26px;height:26px;}
+  .corner-tl,.corner-tr{top:24px;}
+  .corner-tl{right:24px;} .corner-tr{left:24px;}
+  .corner-bl,.corner-br{bottom:24px;}
+  .corner-bl{right:24px;} .corner-br{left:24px;}
+}
+
+.hero-inner { position: relative; z-index: 1; max-width: 740px; }
+.hero-eye {
+  font-family: var(--ui); font-size: clamp(.42rem,1.6vw,.56rem);
+  letter-spacing: .55em; color: var(--tx-3); text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeUp .7s ease both;
+}
+.hero-title {
+  font-family: var(--ui);
+  font-size: clamp(2.6rem, 12vw, 6.5rem);
+  letter-spacing: .24em; line-height: .95;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #c8c4a8 0%, #ffffff 35%, #ddd8cc 55%, #c8c4a8 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeUp .7s .08s ease both, shimmer 6s linear 1.2s infinite;
+}
+.hero-sub-line {
+  font-family: var(--ui); font-size: clamp(.48rem,1.8vw,.62rem);
+  letter-spacing: .6em; text-transform: uppercase;
+  color: rgba(184,150,64,.7);
+  margin-bottom: 28px;
+  animation: fadeUp .7s .2s ease both;
+}
+.hero-div {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin: 0 auto 24px; max-width: 280px;
+  animation: fadeUp .7s .26s ease both;
+}
+.hero-div-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--br-hi));
+}
+.hero-div-line:first-child {
+  background: linear-gradient(90deg, var(--br-hi), transparent);
+}
+.hero-div-gem { width: 6px; height: 6px; background: var(--tx-2); transform: rotate(45deg); flex-shrink: 0; }
+.hero-tagline {
+  font-size: clamp(.95rem,2.3vw,1.1rem); color: var(--tx-2);
+  max-width: 460px; margin: 0 auto 36px; line-height: 2;
+  animation: fadeUp .7s .32s ease both;
+}
+.hero-cta { display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+  margin-bottom: 48px; animation: fadeUp .7s .42s ease both; }
+
+/* ── REGISTRATION button ── */
+.btn-coming-soon {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent;
+  border: 1px solid rgba(184,150,64,.4);
+  color: var(--gold);
+  font-family: var(--ui); font-size: .62rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  padding: 0 32px; height: 50px; border-radius: 3px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color .2s, background .2s, transform .15s;
+}
+.btn-coming-soon:hover { border-color: var(--gold); background: rgba(184,150,64,.1); }
+.btn-coming-soon:active { transform: scale(.98); }
+.btn-coming-soon::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(184,150,64,.05), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+.btn-cs-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0;
+  animation: blink 1.8s step-end infinite;
+}
+
+@keyframes btn-glow { 0%,100%{box-shadow:0 0 8px rgba(221,216,204,.15),inset 0 0 0 1px rgba(221,216,204,.1)} 50%{box-shadow:0 0 24px rgba(221,216,204,.35),inset 0 0 0 1px rgba(221,216,204,.25)} }
+
+.hero-countdown { animation: fadeUp .7s .5s ease both; }
+.cd-lbl {
+  font-family: var(--ui); font-size: clamp(.4rem,1.4vw,.5rem);
+  letter-spacing: .4em; color: var(--tx-3); text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.cd-units { display: flex; align-items: flex-end; gap: 4px; justify-content: center; }
+.cd-unit  { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.cd-num {
+  font-family: var(--ui); font-size: clamp(1.5rem,5.5vw,2.6rem);
+  color: var(--tx);
+  background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg-2) 100%);
+  border: 1px solid var(--br-glow);
+  border-top: 1px solid rgba(221,216,204,.18);
+  border-radius: 4px; padding: 10px 12px;
+  min-width: clamp(48px,12vw,72px); text-align: center; line-height: 1;
+  perspective: 200px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 1px 0 rgba(221,216,204,.06);
+}
+.cd-num.flip { animation: flip-in .28s ease both; }
+.cd-sep {
+  font-family: var(--ui); font-size: clamp(1.1rem,3.5vw,2rem);
+  color: var(--tx-3); padding-bottom: 20px;
+  animation: blink 1.4s step-end infinite;
+}
+.cd-sub { font-family: var(--ui); font-size: clamp(.32rem,1.1vw,.4rem); letter-spacing: .2em; color: var(--tx-3); text-transform: uppercase; }
+.cd-tbd {
+  font-family: var(--ui); font-size: .9rem; letter-spacing: .32em; color: var(--tx-3);
+  border: 1px solid var(--br-hi); padding: 12px 28px; border-radius: 3px;
+  background: var(--bg-3);
+}
+.cd-tbd-sub { font-family: var(--ui); font-size: .46rem; letter-spacing: .2em; color: var(--tx-3); margin-top: 8px; }
+
+section { padding: 56px 16px; }
+@media(min-width:600px){ section{padding:68px 24px;} }
+@media(min-width:960px){ section{padding:84px 32px;} }
+.sec-alt { background: var(--bg-2); position: relative; overflow: hidden; }
+.sec-inner { max-width: 1080px; margin: 0 auto; }
+.sec-head { text-align: center; margin-bottom: 44px; }
+.sec-eye {
+  font-family: var(--ui); font-size: .56rem; letter-spacing: .48em;
+  text-transform: uppercase; color: var(--tx-3); margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.sec-eye::before,.sec-eye::after {
+  content:''; display:block; width:20px; height:1px;
+  background: linear-gradient(90deg, var(--br-hi), transparent);
+}
+.sec-eye::before { background: linear-gradient(90deg, transparent, var(--br-hi)); }
+.sec-title {
+  font-family: var(--ui); font-size: clamp(1rem,3.5vw,1.8rem);
+  letter-spacing: .2em; text-transform: uppercase; color: var(--tx);
+  margin-bottom: 8px;
+}
+.sec-rule {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;
+}
+.sec-rule-line { width: 28px; height: 1px; background: linear-gradient(90deg, var(--br-hi), transparent); }
+.sec-rule-line:first-child { background: linear-gradient(90deg, transparent, var(--br-hi)); }
+.sec-rule-txt { font-family: var(--ui); font-size: .44rem; letter-spacing: .2em; color: var(--tx-3); }
+
+#about { position: relative; }
+#about::before {
+  content: 'GLORY TO MANKIND';
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  font-family: var(--ui); font-size: clamp(1.2rem, 5vw, 3.5rem);
+  letter-spacing: .28em; color: var(--tx);
+  opacity: .028; pointer-events: none; user-select: none;
+  white-space: nowrap; z-index: 0;
+}
+.about-grid { display: grid; grid-template-columns: 1fr; gap: 24px; position: relative; z-index: 1; }
+@media(min-width:720px){ .about-grid{grid-template-columns:3fr 2fr;gap:36px;} }
+.about-body p { color:var(--tx-2); margin-bottom:14px; font-size:clamp(.95rem,2vw,1.05rem); line-height:2; }
+.data-card {
+  background: var(--bg-2); border: 1px solid var(--br);
+  border-radius: var(--r); overflow: hidden;
+  border-right: 2px solid var(--br-hi);
+}
+.data-card-head {
+  background: var(--bg-3); border-bottom: 1px solid var(--br);
+  padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;
+}
+.data-head-l { font-family:var(--ui); font-size:.52rem; letter-spacing:.22em; color:var(--tx-2); text-transform:uppercase; }
+.data-head-r { font-family:var(--ui); font-size:.46rem; color:var(--green); }
+.data-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; border-bottom: 1px solid var(--br); min-height: var(--tap);
+  transition: background .15s;
+}
+.data-row:last-child { border-bottom: none; }
+.data-row:hover { background: rgba(255,255,255,.02); }
+.data-k { font-family:var(--ui); font-size:.5rem; letter-spacing:.1em; color:var(--tx-3); text-transform:uppercase; }
+.data-v { font-size:clamp(.9rem,2vw,1rem); color:var(--tx); text-align:left; }
+
+#history { background: var(--bg); }
+.tl-wrap {
+  max-width: 680px; margin: 0 auto;
+  position: relative; padding-right: 30px;
+}
+.tl-wrap::before {
+  content:''; position:absolute; top:0;bottom:0; right:10px;width:1px;
+  background: linear-gradient(to bottom, transparent, var(--br-hi) 8%, var(--br-hi) 92%, transparent);
+  transform-origin: top; animation: tl-in .6s ease both .2s;
+}
+.tl-item { position:relative; padding:24px 0; border-bottom:1px solid var(--br); }
+.tl-item:last-child { border-bottom:none; }
+.tl-dot {
+  position:absolute; top:28px; right:-24px;
+  width:9px;height:9px; background:var(--bg); border:1.5px solid var(--br-hi);
+  border-radius:50%; transition:background .2s,border-color .2s,box-shadow .2s;
+}
+.tl-item.in .tl-dot { animation:badge-pop .4s ease both .15s; }
+.tl-item:hover .tl-dot { background:var(--tx-2);border-color:var(--tx);box-shadow:0 0 8px rgba(221,216,204,.25); }
+.tl-year { font-family:var(--ui);font-size:.48rem;letter-spacing:.2em;color:var(--tx-3);margin-bottom:6px; }
+.tl-title { font-family:var(--ui);font-size:clamp(.78rem,2.4vw,.95rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase;margin-bottom:9px; }
+.tl-body  { font-size:clamp(.9rem,1.9vw,1rem);color:var(--tx-2);line-height:1.85; }
+.tl-badge {
+  display:inline-block;margin-top:10px;
+  font-family:var(--ui);font-size:.4rem;letter-spacing:.16em;
+  border:1px solid;padding:3px 12px;border-radius:20px;text-transform:uppercase;
+  animation:badge-pop .4s ease both .3s;
+}
+.tl-badge.alert { color:var(--red);border-color:rgba(184,64,64,.4);background:rgba(184,64,64,.06); }
+.tl-badge.live  { color:var(--android);border-color:rgba(200,196,168,.35);background:rgba(200,196,168,.05); }
+
+#factions { background: var(--bg-2); }
+.fac-grid { display:grid;grid-template-columns:1fr;gap:16px; }
+@media(min-width:540px){ .fac-grid{grid-template-columns:1fr 1fr;} }
+.fac-card {
+  border-radius: var(--r); overflow: hidden; position: relative;
+  border: 1px solid var(--br);
+  transition: border-color .3s;
+}
+.fac-card.android { border-top: 2px solid var(--android); animation: glow-a 5s ease-in-out infinite; }
+.fac-card.machine { border-top: 2px solid var(--machine); animation: glow-m 5s ease-in-out infinite 1.5s; }
+.fac-watermark {
+  position: absolute; top: 12px; left: 14px;
+  font-family: var(--ui); font-size: 5.5rem; line-height: 1;
+  font-weight: 700; pointer-events: none; user-select: none;
+  opacity: .25; color: var(--tx);
+}
+.fac-head { padding: 22px 22px 18px; position: relative; overflow: hidden; }
+.fac-card.android .fac-head { background: linear-gradient(135deg, rgba(200,196,168,.09) 0%, var(--bg-3) 60%); border-bottom: 1px solid rgba(200,196,168,.12); }
+.fac-card.machine .fac-head { background: linear-gradient(135deg, rgba(122,184,180,.09) 0%, var(--bg-3) 60%); border-bottom: 1px solid rgba(122,184,180,.12); }
+.fac-head-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  opacity: .09; filter: grayscale(100%) contrast(1.2);
+  pointer-events: none; user-select: none;
+  mix-blend-mode: lighten;
+}
+.fac-card.android .fac-head-img { object-position: center 20%; }
+.fac-card.machine .fac-head-img { object-position: center 30%; }
+.fac-id   { font-family:var(--ui);font-size:.48rem;letter-spacing:.32em;color:var(--tx-3);text-transform:uppercase;margin-bottom:8px; }
+.fac-name { font-family: var(--ui); font-size: clamp(.95rem,2.8vw,1.25rem); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 2px; }
+.fac-card.android .fac-name { color:var(--android); text-shadow:0 0 18px rgba(200,196,168,.18); }
+.fac-card.machine .fac-name { color:var(--machine); text-shadow:0 0 18px rgba(122,184,180,.18); }
+.fac-body { padding: 18px 22px; background: var(--bg-2); }
+.fac-desc { font-size:clamp(.88rem,1.9vw,.98rem);color:var(--tx-2);line-height:1.9;margin-bottom:16px; }
+.fac-details { display:flex;flex-direction:column;gap:7px;margin-bottom:18px; }
+.fac-details p { font-size: clamp(.82rem,1.7vw,.9rem); color: var(--tx-3); line-height: 1.8; padding-right: 12px; }
+.fac-card.android .fac-details p { border-right: 1.5px solid rgba(200,196,168,.25); }
+.fac-card.machine .fac-details p { border-right: 1.5px solid rgba(122,184,180,.25); }
+.fac-stats { border-top: 1px solid var(--br); padding-top: 14px; }
+.fac-stat { display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--br); }
+.fac-stat:last-child { border-bottom:none; }
+.fac-sk { font-family:var(--ui);font-size:.46rem;letter-spacing:.08em;color:var(--tx-3);text-transform:uppercase; }
+.fac-card.android .fac-sv { color:var(--android);font-size:clamp(.82rem,1.7vw,.92rem); }
+.fac-card.machine .fac-sv { color:var(--machine);font-size:clamp(.82rem,1.7vw,.92rem); }
+
+#lore { background:var(--bg); }
+.acc-wrap { max-width:700px;margin:0 auto; border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
+.acc-item { border-bottom:1px solid var(--br); }
+.acc-item:last-child { border-bottom:none; }
+.acc-trigger { width:100%;background:none;border:none; display:flex;align-items:center;gap:12px; padding:16px 20px;cursor:pointer; min-height:var(--tap);text-align:right; -webkit-tap-highlight-color:transparent; transition:background .15s; }
+.acc-trigger:hover { background:rgba(255,255,255,.02); }
+.acc-trigger:active{ background:rgba(255,255,255,.04); }
+.acc-num { font-family:var(--ui);font-size:.46rem;color:var(--tx-3);min-width:20px;flex-shrink:0; }
+.acc-title { font-family:var(--ui);font-size:clamp(.68rem,2.1vw,.84rem);letter-spacing:.14em;color:var(--tx-2);text-transform:uppercase;flex:1;text-align:right; }
+.acc-item.open .acc-title { color:var(--tx); }
+.acc-stamp { font-family:var(--ui);font-size:.4rem;letter-spacing:.1em;color:var(--tx-3);border:1px solid var(--br);padding:3px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;display:none; }
+@media(min-width:440px){ .acc-stamp{display:block;} }
+.acc-arrow { font-family:var(--ui);font-size:.58rem;color:var(--tx-3);transition:transform .3s ease;flex-shrink:0; }
+.acc-item.open .acc-arrow { transform:rotate(90deg); }
+.acc-body { max-height:0;overflow:hidden;opacity:0;transition:max-height .42s cubic-bezier(.4,0,.2,1),opacity .25s ease; }
+.acc-item.open .acc-body { opacity:1; }
+.acc-inner { padding:0 20px 22px 20px; }
+.acc-text { font-size:clamp(.88rem,1.9vw,.98rem);color:var(--tx-2);line-height:1.9;border-right:2px solid var(--br-hi);padding-right:14px;margin-bottom:12px; }
+.acc-extra{ font-size:clamp(.82rem,1.7vw,.9rem);color:var(--tx-3);line-height:1.9;border-top:1px dashed var(--br);padding-top:12px; }
+
+#tech { background:var(--bg-2); }
+.tech-intro { max-width:660px;margin:0 auto 32px;text-align:center; background:var(--bg-3);border:1px solid var(--br);border-radius:var(--r);padding:20px 24px; }
+.tech-intro p { font-size:clamp(.92rem,1.9vw,1.02rem);color:var(--tx-2);line-height:1.9; }
+.tech-steps { display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:720px;margin:0 auto 28px; }
+@media(min-width:680px){ .tech-steps{grid-template-columns:repeat(4,1fr);} }
+.ts-step { background:var(--bg-3);border:1px solid var(--br);border-radius:var(--r); padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center; cursor:pointer;transition:border-color .2s,background .15s; -webkit-tap-highlight-color:transparent; }
+.ts-step:hover { border-color:var(--br-glow);background:var(--bg-4); }
+.ts-step#step4 { border-color:rgba(184,150,64,.35); }
+.ts-step#step4:hover { border-color:var(--gold); }
+.ts-num   { font-family:var(--ui);font-size:.4rem;letter-spacing:.26em;color:var(--tx-3); }
+.ts-icon  { font-size:1.25rem;opacity:.65; }
+.ts-label { font-family:var(--ui);font-size:clamp(.48rem,1.7vw,.58rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
+.ts-sub   { font-size:clamp(.76rem,1.6vw,.82rem);color:var(--tx-3);line-height:1.55; }
+.ts-hint  { font-family:var(--ui);font-size:.38rem;letter-spacing:.14em;color:var(--gold); }
+.tabs-outer { max-width:720px;margin:0 auto 14px; }
+.tabs-bar   { display:flex;border:1px solid var(--br);border-radius:var(--r) var(--r) 0 0;overflow:hidden; }
+.tab-btn { flex:1;display:flex;align-items:center;justify-content:center;gap:6px; height:var(--tap);font-family:var(--ui);font-size:clamp(.4rem,1.5vw,.5rem); letter-spacing:.18em;text-transform:uppercase;cursor:pointer; background:var(--bg-3);color:var(--tx-3);border:none; border-bottom:2px solid transparent;transition:color .15s,background .15s; -webkit-tap-highlight-color:transparent; }
+.tab-btn.active.android { color:var(--android);border-bottom-color:var(--android);background:var(--bg-2); }
+.tab-btn.active.machine { color:var(--machine);border-bottom-color:var(--machine);background:var(--bg-2); }
+.tab-dot { width:5px;height:5px;border-radius:50%;flex-shrink:0; }
+.tab-btn.android .tab-dot { background:var(--android); }
+.tab-btn.machine .tab-dot { background:var(--machine); }
+.tab-panel { display:none;background:var(--bg-2);border:1px solid var(--br);border-top:none;border-radius:0 0 var(--r) var(--r);padding:20px; }
+.tab-panel.active { display:block; }
+.tab-title { font-family:var(--ui);font-size:clamp(.7rem,2.1vw,.84rem);letter-spacing:.16em;color:var(--tx);text-transform:uppercase;margin-bottom:10px; }
+.tab-panel p { font-size:clamp(.88rem,1.9vw,.98rem);color:var(--tx-2);line-height:1.85; }
+.tab-badge { display:inline-block;margin-top:10px;font-family:var(--ui);font-size:.4rem;letter-spacing:.16em;border:1px solid;padding:3px 9px;border-radius:3px;text-transform:uppercase; }
+.tab-badge.android { color:var(--android);border-color:rgba(200,196,168,.3); }
+.tab-badge.machine { color:var(--machine);border-color:rgba(122,184,180,.3); }
+.tab-badge.all     { color:var(--tx-3);border-color:var(--br-hi); }
+.net3-card { max-width:720px;margin:0 auto;background:var(--bg-2);border:1px solid var(--br);border-radius:var(--r);padding:20px; }
+.hack-trigger { max-width:720px;margin:22px auto 0; background:var(--bg-3);border:1px solid rgba(184,150,64,.3);border-radius:var(--r); display:flex;align-items:center;gap:14px;padding:16px 20px; cursor:pointer;-webkit-tap-highlight-color:transparent; transition:border-color .2s,background .15s; }
+.hack-trigger:hover { border-color:var(--gold);background:rgba(184,150,64,.04); }
+.hack-trigger.open  { border-color:var(--gold);background:rgba(184,150,64,.05); }
+.ht-i   { font-size:1.1rem;opacity:.6;flex-shrink:0; }
+.ht-b   { flex:1;min-width:0; }
+.ht-n   { font-family:var(--ui);font-size:.4rem;letter-spacing:.26em;color:var(--tx-3);margin-bottom:4px; }
+.ht-t   { font-family:var(--ui);font-size:clamp(.62rem,2vw,.8rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase;margin-bottom:3px; }
+.ht-s   { font-size:clamp(.8rem,1.7vw,.92rem);color:var(--tx-2); }
+.ht-badge { font-family:var(--ui);font-size:.38rem;letter-spacing:.14em;color:var(--gold);border:1px solid rgba(184,150,64,.35);padding:3px 8px;border-radius:3px;text-transform:uppercase;flex-shrink:0; }
+.ht-arrow { font-family:var(--ui);font-size:.68rem;color:var(--tx-3);transition:transform .32s;flex-shrink:0; }
+.hack-trigger.open .ht-arrow { transform:rotate(90deg); }
+.hack-drawer { max-width:720px;margin:0 auto;max-height:0;overflow:hidden;opacity:0;transition:max-height .52s cubic-bezier(.4,0,.2,1),opacity .28s ease; }
+.hack-drawer.open { opacity:1; }
+.hack-inner { padding-top:14px;display:flex;flex-direction:column;gap:16px; }
+.flow-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+@media(min-width:580px){ .flow-grid{grid-template-columns:repeat(4,1fr);} }
+.flow-step { background:var(--bg-3);border:1px solid var(--br);border-radius:var(--r);padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center; }
+.fs-n { font-family:var(--ui);font-size:.38rem;letter-spacing:.24em;color:var(--tx-3); }
+.fs-i { font-size:1.05rem;opacity:.6; }
+.fs-l { font-family:var(--ui);font-size:clamp(.46rem,1.6vw,.56rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
+.fs-s { font-size:clamp(.76rem,1.5vw,.8rem);color:var(--tx-3);line-height:1.5; }
+.game-grid { display:grid;grid-template-columns:1fr;gap:8px; }
+@media(min-width:460px){ .game-grid{grid-template-columns:repeat(3,1fr);} }
+.game-card { background:var(--bg-3);border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
+.game-top  { height:2px; }
+.game-card.shooter .game-top { background:var(--android); }
+.game-card.memory  .game-top { background:var(--machine); }
+.game-card.blocks  .game-top { background:var(--gold); }
+.game-in   { padding:14px 14px; }
+.game-id   { font-family:var(--ui);font-size:.38rem;letter-spacing:.2em;color:var(--tx-3);margin-bottom:5px; }
+.game-ico  { font-size:.95rem;opacity:.55;margin-bottom:6px;display:block; }
+.game-name { font-family:var(--ui);font-size:clamp(.62rem,1.9vw,.78rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase;margin-bottom:6px; }
+.game-desc { font-size:clamp(.8rem,1.7vw,.9rem);color:var(--tx-2);line-height:1.75;margin-bottom:8px; }
+.game-mode { font-family:var(--ui);font-size:.36rem;letter-spacing:.14em;padding:2px 7px;border:1px solid;border-radius:3px;display:inline-block;text-transform:uppercase; }
+.game-card.shooter .game-mode { color:var(--android);border-color:rgba(200,196,168,.28); }
+.game-card.memory  .game-mode { color:var(--machine);border-color:rgba(122,184,180,.28); }
+.game-card.blocks  .game-mode { color:var(--gold);border-color:rgba(184,150,64,.28); }
+.alert-box { display:flex;gap:12px;align-items:flex-start;background:rgba(184,64,64,.07);border:1px solid rgba(184,64,64,.28);border-radius:var(--r);padding:14px 16px; }
+.alert-ico { color:var(--red);font-size:.9rem;flex-shrink:0;margin-top:2px; }
+.alert-t   { font-family:var(--ui);font-size:.58rem;letter-spacing:.18em;color:var(--red);text-transform:uppercase;margin-bottom:6px; }
+.alert-b   { font-size:clamp(.82rem,1.7vw,.9rem);color:var(--tx-2);line-height:1.75; }
+
+#rules { background:var(--bg); }
+.rules-list { display:flex;flex-direction:column;gap:0; max-width:720px;margin:0 auto; border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
+.r-item { display:grid;grid-template-columns:52px 1fr; background:var(--bg-2); border-bottom:1px solid var(--br); transition:background .18s; }
+.r-item:last-child { border-bottom:none; }
+.r-item:hover { background:var(--bg-3); }
+.r-item.warn { border-right:3px solid var(--red); }
+.r-item.warn:hover { background:rgba(184,64,64,.04); }
+.r-icon-col { display:flex;flex-direction:column;align-items:center; padding:20px 0;gap:8px; background:rgba(0,0,0,.25); border-left:1px solid var(--br); transition:background .18s; }
+.r-item:hover .r-icon-col { background:rgba(0,0,0,.38); }
+.r-icon { width:22px;height:22px;fill:var(--tx-3);transition:fill .2s,filter .2s; }
+.r-item:hover .r-icon { fill:var(--tx-2);filter:drop-shadow(0 0 5px rgba(221,216,204,.15)); }
+.r-item.warn .r-icon { fill:var(--red); }
+.r-item.warn:hover .r-icon { fill:#d06060;filter:drop-shadow(0 0 6px rgba(184,64,64,.28)); }
+.r-num { font-family:var(--ui);font-size:.34rem;letter-spacing:.14em;color:var(--tx-3);writing-mode:vertical-rl;opacity:.4; }
+.r-content { padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px; }
+.r-header  { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+.r-title   { font-family:var(--ui);font-size:clamp(.6rem,1.9vw,.75rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
+.r-chip { font-family:var(--ui);font-size:.36rem;letter-spacing:.14em; color:var(--red);border:1px solid rgba(184,64,64,.38); background:rgba(184,64,64,.07); padding:2px 8px;border-radius:20px;text-transform:uppercase; }
+.r-short  { font-size:clamp(.86rem,1.8vw,.98rem);color:var(--tx-2);line-height:1.8; }
+.r-detail { font-size:clamp(.78rem,1.6vw,.86rem);color:var(--tx-3);line-height:1.75;padding-top:8px;border-top:1px dashed var(--br); }
+
+#gallery { background:var(--bg-2); }
+.gal-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+@media(min-width:620px){ .gal-grid{grid-template-columns:repeat(3,1fr);} }
+.gal-cell { aspect-ratio:4/3;background:var(--bg-3); border:1px solid var(--br);border-radius:var(--r); overflow:hidden;cursor:pointer;position:relative; -webkit-tap-highlight-color:transparent; transition:border-color .25s; }
+.gal-cell:hover { border-color:var(--br-glow); }
+.gal-cell img { width:100%;height:100%;object-fit:cover;display:block; filter:brightness(.78) saturate(.75) contrast(1.05); transition:transform .4s ease,filter .35s ease; }
+.gal-cell:hover img { transform:scale(1.07);filter:brightness(.95) saturate(1.1) contrast(1.05); }
+.gal-cell::after { content:'';position:absolute;inset:0; background:linear-gradient(to top, rgba(12,12,16,.6) 0%, transparent 50%); opacity:0;transition:opacity .25s; }
+.gal-cell:hover::after { opacity:1; }
+.gal-id { position:absolute;top:8px;right:8px;z-index:2; font-family:var(--ui);font-size:.36rem;letter-spacing:.12em; color:var(--tx-3);background:rgba(12,12,16,.75);padding:2px 6px;border-radius:3px; }
+
+#team { background:var(--bg); }
+.team-grid { display:grid;grid-template-columns:1fr;gap:12px; }
+@media(min-width:560px){ .team-grid{grid-template-columns:1fr 1fr;} }
+.team-card { background:var(--bg-2);border:1px solid var(--br);border-radius:var(--r); overflow:hidden;display:grid;grid-template-columns:120px 1fr; transition:border-color .25s,box-shadow .3s; }
+@media(min-width:420px){ .team-card{grid-template-columns:150px 1fr;} }
+.team-card:hover { border-color:var(--br-glow);box-shadow:0 4px 22px rgba(0,0,0,.5); }
+.team-photo { background:var(--bg-3);position:relative;overflow:hidden;min-height:210px; }
+.team-photo img { width:100%;height:100%;object-fit:cover;filter:grayscale(85%) contrast(1.05);transition:filter .4s; }
+.team-card:hover .team-photo img { filter:grayscale(0%) saturate(1.2); }
+.team-photo-ph { display:flex;align-items:center;justify-content:center;height:100%;min-height:210px;color:var(--tx-3);font-size:2rem;opacity:.15; }
+.team-photo-tag { position:absolute;bottom:0;inset-inline:0; background:rgba(12,12,16,.88);border-top:1px solid var(--br); padding:4px 8px;font-family:var(--ui);font-size:.36rem; letter-spacing:.14em;color:var(--tx-3);text-align:center;text-transform:uppercase; }
+.team-info { padding:16px 16px;display:flex;flex-direction:column;gap:8px; }
+.team-role { font-family:var(--ui);font-size:.46rem;letter-spacing:.28em;color:var(--tx-3);text-transform:uppercase; }
+.team-name { font-family:var(--ui);font-size:clamp(.85rem,2.6vw,1.1rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
+.team-title{ font-size:clamp(.8rem,1.6vw,.88rem);color:var(--tx-3); }
+.team-div  { height:1px;background:var(--br); }
+.team-desc { font-size:clamp(.82rem,1.7vw,.92rem);color:var(--tx-2);line-height:1.8; }
+.team-long { font-size:clamp(.78rem,1.6vw,.88rem);color:var(--tx-3);line-height:1.8; }
+.team-tags { display:flex;flex-wrap:wrap;gap:4px;margin-top:4px; }
+.team-tag  { font-family:var(--ui);font-size:.36rem;letter-spacing:.12em;color:var(--tx-3);border:1px solid var(--br);padding:3px 8px;border-radius:3px;text-transform:uppercase; }
+
+#faq { background:var(--bg-2); }
+.faq-outer { max-width:700px;margin:0 auto;border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
+.faq-bar   { background:var(--bg-3);border-bottom:1px solid var(--br);padding:10px 16px;display:flex;align-items:center;gap:8px;direction:ltr; }
+.faq-dot   { width:7px;height:7px;border-radius:50%; }
+.faq-dot.r { background:#b84040; }
+.faq-dot.y { background:#b89640; }
+.faq-dot.g { background:#5a9060; }
+.faq-bar-t { font-family:var(--ui);font-size:.44rem;letter-spacing:.2em;color:var(--tx-3);text-transform:uppercase;margin-right:auto; }
+.faq-item  { border-bottom:1px solid var(--br); }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { width:100%;background:none;border:none; display:flex;align-items:center;gap:10px;padding:16px 18px; cursor:pointer;min-height:var(--tap);text-align:right; -webkit-tap-highlight-color:transparent;transition:background .15s; }
+.faq-q:hover  { background:rgba(255,255,255,.02); }
+.faq-q:active { background:rgba(255,255,255,.04); }
+.faq-prompt   { font-family:var(--ui);font-size:.56rem;color:var(--green);flex-shrink:0; }
+.faq-q-text   { font-family:var(--ui);font-size:clamp(.58rem,1.9vw,.72rem);letter-spacing:.08em;color:var(--tx-2);flex:1;text-align:right; }
+.faq-item.open .faq-q-text { color:var(--tx); }
+.faq-chev     { font-family:var(--ui);font-size:.54rem;color:var(--tx-3);transition:transform .3s ease;flex-shrink:0; }
+.faq-item.open .faq-chev { transform:rotate(90deg); }
+.faq-a   { max-height:0;overflow:hidden;opacity:0;transition:max-height .4s cubic-bezier(.4,0,.2,1),opacity .25s ease; }
+.faq-item.open .faq-a { opacity:1; }
+.faq-a-in{ padding:2px 18px 18px;border-right:2px solid rgba(90,144,96,.3);margin-right:28px; }
+.faq-a-t { font-size:clamp(.86rem,1.8vw,.98rem);color:var(--tx-2);line-height:1.9; }
+
+#join { background:var(--bg); }
+.join-inner { max-width:500px;margin:0 auto;text-align:center; }
+.join-desc  { font-size:clamp(.9rem,1.9vw,1rem);color:var(--tx-2);line-height:2;margin-bottom:28px; }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--bg-2);border-top:1px solid var(--br);
+  padding-bottom:var(--safe);
+}
+.ft-top { display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--br);direction:ltr;gap:8px; }
+.ft-logo { font-family:var(--ui);font-size:clamp(.52rem,1.9vw,.64rem);letter-spacing:.3em;color:var(--tx); }
+.ft-meta { display:none; }
+@media(min-width:460px){ .ft-meta{display:flex;gap:0;} }
+.ft-meta-i { font-family:var(--ui);font-size:.4rem;letter-spacing:.1em;color:var(--tx-3);padding:0 11px;border-left:1px solid var(--br); }
+
+/* Spotify — full-width prominent block */
+.ft-spotify-block {
+  display: flex; align-items: center; gap: 18px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(109,217,122,.07) 0%, rgba(12,12,16,0) 60%);
+  border-top: 1px solid rgba(109,217,122,.18);
+  border-bottom: 1px solid var(--br);
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+  -webkit-tap-highlight-color: transparent;
+  animation: pulse-spotify 4s ease-in-out infinite;
+}
+.ft-spotify-block:hover {
+  background: linear-gradient(135deg, rgba(109,217,122,.13) 0%, rgba(12,12,16,0) 60%);
+  border-color: rgba(109,217,122,.38);
+}
+.ft-spotify-block:active { background: rgba(109,217,122,.06); }
+.ft-sp-ico {
+  font-size: 1.8rem; opacity: .85; flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(109,217,122,.35));
+}
+.ft-sp-text { flex: 1; }
+.ft-sp-label { font-family:var(--ui);font-size:.42rem;letter-spacing:.3em;color:rgba(109,217,122,.6);text-transform:uppercase;margin-bottom:4px; }
+.ft-sp-name  { font-family:var(--ui);font-size:clamp(.72rem,2.2vw,.95rem);letter-spacing:.2em;color:#6dd97a;text-transform:uppercase; }
+.ft-sp-sub   { font-size:clamp(.78rem,1.7vw,.88rem);color:var(--tx-3);margin-top:3px; }
+.ft-sp-arrow { font-family:var(--ui);font-size:.7rem;color:rgba(109,217,122,.5);flex-shrink:0;transition:transform .2s; }
+.ft-spotify-block:hover .ft-sp-arrow { transform: translateX(-4px); }
+
+.ft-copy { padding:10px 20px;font-size:clamp(.7rem,1.7vw,.78rem);color:var(--tx-3);text-align:center;border-top:1px solid var(--br); }
+
+.modal-ov { position:fixed;inset:0;z-index:1000; background:rgba(0,0,0,.78);backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); display:flex;align-items:flex-end;justify-content:center; opacity:0;pointer-events:none;transition:opacity .25s ease;padding:0; }
+@media(min-width:580px){ .modal-ov{align-items:center;padding:20px;} }
+.modal-ov.open { opacity:1;pointer-events:all; }
+.modal-box { background:var(--bg-2);border:1px solid var(--br-hi); border-radius:var(--r) var(--r) 0 0; width:100%;max-width:660px;max-height:88svh;overflow-y:auto; transform:translateY(18px);transition:transform .28s cubic-bezier(.4,0,.2,1); }
+@media(min-width:580px){ .modal-box{border-radius:var(--r);transform:translateY(12px) scale(.97);} }
+.modal-ov.open .modal-box { transform:none; }
+.modal-bar { position:sticky;top:0;z-index:1; background:var(--bg-3);border-bottom:1px solid var(--br); padding:12px 18px;display:flex;align-items:center;justify-content:space-between; }
+.modal-handle { width:34px;height:3px;background:var(--br-hi);border-radius:2px;margin:0 auto 12px;display:block; }
+@media(min-width:580px){ .modal-handle{display:none;} }
+.modal-id    { font-family:var(--ui);font-size:.42rem;letter-spacing:.22em;color:var(--tx-3); }
+.modal-close { background:none;border:1px solid var(--br);border-radius:3px; color:var(--tx-3);font-family:var(--ui);font-size:.46rem; letter-spacing:.14em;padding:6px 12px;cursor:pointer; min-height:36px;display:flex;align-items:center;gap:5px; transition:color .15s,border-color .15s; }
+.modal-close:active { color:var(--tx);border-color:var(--br-hi); }
+.modal-head  { padding:16px 20px 14px;border-bottom:1px solid var(--br); }
+.modal-type  { font-family:var(--ui);font-size:.42rem;letter-spacing:.3em;color:var(--tx-3);text-transform:uppercase;margin-bottom:6px; }
+.modal-title { font-family:var(--ui);font-size:clamp(1rem,3.2vw,1.7rem);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px; }
+.modal-title.ac { color:var(--android); }
+.modal-title.mc { color:var(--machine); }
+.modal-body  { padding:18px 20px; }
+.modal-body p { font-size:clamp(.84rem,1.8vw,.94rem);color:var(--tx-2);line-height:1.9;margin-bottom:12px; }
+
+.lightbox { position:fixed;inset:0;z-index:1100; background:rgba(0,0,0,.93);backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:none;align-items:center;justify-content:center;padding:20px; }
+.lightbox.show { display:flex; }
+.lightbox img  { max-width:100%;max-height:90svh;border-radius:4px; }
+.lb-close { position:absolute;top:16px;right:16px; background:rgba(30,30,40,.9);border:1px solid var(--br-hi); border-radius:3px;color:var(--tx);font-family:var(--ui); font-size:.52rem;letter-spacing:.16em;padding:8px 14px; cursor:pointer;min-height:var(--tap);display:flex;align-items:center;gap:6px; }
+
+#music-bar { position:fixed;bottom:calc(12px + var(--safe)); left:12px;right:12px;z-index:700; max-width:360px; background:rgba(24,24,32,.94); backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px); border:1px solid var(--br-hi);border-radius:10px; display:flex;align-items:center;gap:12px;padding:10px 14px; transform:translateY(100px); transition:transform .38s cubic-bezier(.4,0,.2,1); }
+@media(min-width:420px){ #music-bar{left:auto;right:16px;width:270px;} }
+#music-bar.vis { transform:none; }
+.mb-icon  { font-size:.95rem;opacity:.55;flex-shrink:0; }
+.mb-track { flex:1;min-width:0; }
+.mb-name  { font-family:var(--ui);font-size:.42rem;letter-spacing:.12em;color:var(--tx-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;margin-bottom:4px; }
+.mb-viz   { display:flex;align-items:flex-end;gap:2px;height:14px; }
+.mb-b     { flex:1;background:var(--br-hi);min-height:2px;border-radius:1px;transition:height .1s ease; }
+.mb-viz.on .mb-b { background:var(--tx-2); }
+.mb-play  { width:34px;height:34px;border-radius:50%; background:var(--tx);color:var(--bg);border:none;cursor:pointer; display:flex;align-items:center;justify-content:center; font-family:var(--ui);font-size:.6rem;flex-shrink:0; transition:background .15s; }
+.mb-play:active { background:var(--tx-2); }
+.mb-close { background:none;border:none;color:var(--tx-3);font-size:.68rem;cursor:pointer;padding:4px;flex-shrink:0;width:26px;height:26px;display:flex;align-items:center;justify-content:center; }
+
+#btt { position:fixed;bottom:calc(68px + var(--safe));left:12px;z-index:700; width:40px;height:40px;border-radius:50%; background:var(--bg-3);border:1px solid var(--br-hi); color:var(--tx-3);font-family:var(--ui);font-size:.6rem; display:flex;align-items:center;justify-content:center; opacity:0;pointer-events:none;transition:opacity .3s;cursor:pointer; }
+#btt.vis { opacity:1;pointer-events:all; }
+</style>
+</head>
+<body>
+<!-- BOOT SCREEN -->
+<div id="boot-overlay" style="position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;overflow:hidden;">
+  <canvas id="boot-canvas" style="position:absolute;inset:0;pointer-events:none"></canvas>
+  <div style="position:absolute;top:12px;right:12px;width:16px;height:16px;border-top:1px solid #38383f;border-right:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:1px solid #38383f;border-left:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:1px solid #38383f;border-right:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;bottom:12px;left:12px;width:16px;height:16px;border-bottom:1px solid #38383f;border-left:1px solid #38383f;opacity:.3"></div>
+  <div style="position:absolute;inset-inline:0;height:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.03),transparent);animation:bootscan 8s linear infinite;pointer-events:none"></div>
+
+  <!-- שלב 1: טעינה -->
+  <div id="boot-loading" style="position:relative;z-index:2;text-align:center;padding:32px 20px;max-width:580px;width:100%">
+    <div style="font-size:9px;letter-spacing:5px;color:#2a4a2a;margin-bottom:18px">// YoRHa Tactical Net — Node: REBOOT_PRIME //</div>
+    <div style="font-size:clamp(26px,8vw,52px);letter-spacing:14px;color:#c8c4a8;margin-bottom:6px">PROJECT REBOOT</div>
+    <div style="font-size:9px;letter-spacing:6px;color:#4a7a78;margin-bottom:30px">GLORY TO MANKIND</div>
+    <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px">
+      <div style="flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,#38383f,transparent)"></div>
+      <div style="width:6px;height:6px;background:#7a7660;transform:rotate(45deg)"></div>
+      <div style="flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,#38383f)"></div>
+    </div>
+    <div style="width:100%;max-width:460px;margin:0 auto 24px;height:100px;overflow:hidden;position:relative;text-align:left">
+      <div id="boot-log-inner" style="position:absolute;bottom:0;width:100%"></div>
+    </div>
+    <div style="width:100%;max-width:380px;margin:0 auto 10px">
+      <div style="display:flex;justify-content:space-between;font-size:9px;letter-spacing:3px;color:#3a5a3a;margin-bottom:6px">
+        <span>BOOT SEQUENCE</span><span id="boot-pct-label">0%</span>
+      </div>
+      <div style="height:2px;background:#111;border:1px solid #1a2a1a">
+        <div id="boot-bar" style="height:100%;width:0%;background:#4a7a48;transition:width .12s linear"></div>
+      </div>
+    </div>
+    <div id="boot-num" style="font-size:clamp(28px,8vw,54px);letter-spacing:8px;color:#3a5a3a;margin-bottom:4px">000%</div>
+    <div id="boot-status" style="font-size:9px;letter-spacing:3px;color:#2a3a2a;min-height:14px">INITIALIZING SYSTEM...</div>
+  </div>
+
+  <!-- שלב 2: כפתור ENTER (מוסתר בהתחלה) -->
+  <div id="boot-enter" style="display:none;position:relative;z-index:2;text-align:center;padding:32px 20px">
+    <div style="font-size:9px;letter-spacing:5px;color:#2a4a2a;margin-bottom:18px">// YoRHa Tactical Net — Node: REBOOT_PRIME //</div>
+    <div style="font-size:clamp(26px,8vw,52px);letter-spacing:14px;color:#c8c4a8;margin-bottom:6px">PROJECT REBOOT</div>
+    <div style="font-size:9px;letter-spacing:6px;color:#4a7a78;margin-bottom:40px">GLORY TO MANKIND</div>
+    <div id="tap-btn" style="display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(200,196,168,.35);padding:16px 40px;color:#c8c4a8;font-size:11px;letter-spacing:5px;cursor:pointer;animation:tapblink 2.5s ease-in-out infinite;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#c8c4a8;animation:dotblink 1.8s step-end infinite"></span>
+      ENTER // כניסה
+    </div>
+    <div style="margin-top:16px;font-size:9px;letter-spacing:3px;color:#2a3a2a">// PRESS TO INITIALIZE SYSTEM //</div>
+  </div>
+</div>
+
+<style>
+@keyframes bootscan { 0%{top:-4px} 100%{top:100%} }
+@keyframes tapblink { 0%,100%{opacity:1} 50%{opacity:.45} }
+@keyframes dotblink { 0%,100%{opacity:1} 50%{opacity:0} }
+</style>
+
+<script>
+(function(){
+  var ov       = document.getElementById('boot-overlay');
+  var cv       = document.getElementById('boot-canvas');
+  var ctx      = cv.getContext('2d');
+  var loadEl   = document.getElementById('boot-loading');
+  var enterEl  = document.getElementById('boot-enter');
+
+  function sz(){ cv.width=ov.offsetWidth; cv.height=ov.offsetHeight; }
+  sz(); window.addEventListener('resize',sz,{passive:true});
+
+  var chars='01アイウエオカキクケコサシスセソ0110101ヤユヨラリルレロ';
+  var cols=Math.floor(cv.width/18);
+  var drops=[];
+  for(var i=0;i<cols;i++) drops[i]=Math.random()*-60;
+
+  function rain(){
+    ctx.fillStyle='rgba(0,0,0,0.06)';
+    ctx.fillRect(0,0,cv.width,cv.height);
+    for(var c=0;c<drops.length;c++){
+      var ch=chars[Math.floor(Math.random()*chars.length)];
+      var a=0.07+Math.random()*0.11;
+      ctx.fillStyle='rgba(40,90,40,'+a+')';
+      ctx.font='13px "Share Tech Mono",monospace';
+      ctx.fillText(ch,c*18,drops[c]*18);
+      if(drops[c]*18>cv.height&&Math.random()>.97) drops[c]=0;
+      drops[c]++;
+    }
+  }
+  setInterval(rain,55);
+
+  // שורות לוג
+  var logInner=document.getElementById('boot-log-inner');
+  var logEls=[];
+  var logs=[
+    {t:300,  c:'#2a5a5a', s:'[SYS] YoRHa Command Server......... ONLINE'},
+    {t:650,  c:'#3a6a3a', s:'[OK]  Machine Network Interface..... READY'},
+    {t:950,  c:'#2a5a5a', s:'[SYS] Loading faction database..... 100%'},
+    {t:1200, c:'#3a6a3a', s:'[OK]  Android Unit Protocols........ ACTIVE'},
+    {t:1450, c:'#2a5a5a', s:'[SYS] Scanning field coordinates...'},
+    {t:1700, c:'#3a6a3a', s:'[OK]  HACK-THE-BOX breach system... ARMED'},
+    {t:1950, c:'#8a7030', s:'[!]   Alien threat level: CRITICAL'},
+    {t:2200, c:'#4a7050', s:'[SYS] Battlefield: מקורות הירקון'},
+    {t:2450, c:'#3a6a3a', s:'[OK]  All systems nominal'},
+    {t:2700, c:'#5a8060', s:'>>> SYSTEM READY — AWAITING INPUT <<<'},
+  ];
+  logs.forEach(function(l){
+    setTimeout(function(){
+      var el=document.createElement('div');
+      el.style.cssText='font-size:11px;line-height:1.85;color:'+l.c+';opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;';
+      el.textContent=l.s;
+      logInner.appendChild(el);
+      setTimeout(function(){ el.style.opacity='1'; el.style.transform='none'; },20);
+      logEls.push(el);
+      if(logEls.length>6) logEls[logEls.length-7].style.opacity='.2';
+      if(logEls.length>8){ var o=logEls[logEls.length-9]; if(o) o.style.display='none'; }
+    },l.t);
+  });
+
+  // progress bar
+  var pctLabel=document.getElementById('boot-pct-label');
+  var bar=document.getElementById('boot-bar');
+  var num=document.getElementById('boot-num');
+  var statusEl=document.getElementById('boot-status');
+  var displayed=0, target=0, loadDone=false, si=0;
+
+  var stages=[{d:300,v:15},{d:700,v:35},{d:1000,v:55},{d:1300,v:72},{d:1600,v:88},{d:2100,v:100}];
+  var statuses=[
+    {p:15, m:'LOADING FACTION DATABASE...'},
+    {p:35, m:'SYNCING MACHINE NETWORK...'},
+    {p:55, m:'CALIBRATING COMBAT SYSTEMS...'},
+    {p:72, m:'DECRYPTING HACK-THE-BOX NODES...'},
+    {p:88, m:'ESTABLISHING YORHA CONNECTION...'},
+    {p:100,m:'SYSTEM ONLINE — GLORY TO MANKIND'}
+  ];
+  stages.forEach(function(s){ setTimeout(function(){ target=s.v; },s.d); });
+
+  function pad3(n){ return String(n).padStart(3,'0'); }
+
+  function tick(){
+    if(displayed<target){
+      displayed=Math.min(displayed+1,target);
+      num.textContent=pad3(displayed)+'%';
+      pctLabel.textContent=displayed+'%';
+      bar.style.width=displayed+'%';
+      for(var i=si;i<statuses.length;i++){
+        if(displayed>=statuses[i].p){ statusEl.textContent=statuses[i].m; si=i+1; }
+      }
+      if(displayed>=100&&!loadDone){
+        loadDone=true;
+        num.style.color='#c8c4a8';
+        statusEl.style.color='#7a7660';
+        // הטעינה נגמרה — הצג כפתור ENTER אחרי שנייה
+        setTimeout(function(){
+          loadEl.style.transition='opacity .4s';
+          loadEl.style.opacity='0';
+          setTimeout(function(){
+            loadEl.style.display='none';
+            enterEl.style.display='block';
+            enterEl.style.opacity='0';
+            enterEl.style.transition='opacity .4s';
+            setTimeout(function(){ enterEl.style.opacity='1'; },20);
+          },400);
+        },1000);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // לחיצה על ENTER — הפעל מוזיקה וכנס לאתר
+  document.getElementById('tap-btn').addEventListener('click', function(){
+    var bgMusic=document.getElementById('bgMusic');
+    if(bgMusic){ bgMusic.volume=0.6; bgMusic.play().catch(function(){}); }
+    ov.style.transition='opacity .7s ease';
+    ov.style.opacity='0';
+    ov.style.pointerEvents='none';
+    setTimeout(function(){ ov.style.display='none'; },700);
+  });
+})();
+</script>
+  <header id="topbar">
+  <span class="nav-logo">PROJECT REBOOT</span>
+  <nav class="nav-links">
+    <a href="#about">BRIEFING</a><a href="#history">HISTORY</a>
+    <a href="#factions">FACTIONS</a><a href="#lore">ARCHIVES</a>
+    <a href="#tech">TECH</a><a href="#rules">DIRECTIVES</a>
+    <a href="#gallery">RECORDS</a><a href="#team">TEAM</a><a href="#faq">FAQ</a>
+  </nav>
+  <a href="https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform" target="_blank" rel="noopener" class="nav-soon"><span class="nav-soon-dot"></span>הרשמה עכשיו</a>
+  <button class="nav-burger" id="burger" aria-label="תפריט" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<nav id="mobile-nav" aria-hidden="true">
+  <a href="#about"    onclick="closeNav()">BRIEFING</a>
+  <a href="#history"  onclick="closeNav()">HISTORY</a>
+  <a href="#factions" onclick="closeNav()">FACTIONS</a>
+  <a href="#lore"     onclick="closeNav()">ARCHIVES</a>
+  <a href="#tech"     onclick="closeNav()">TECH</a>
+  <a href="#rules"    onclick="closeNav()">DIRECTIVES</a>
+  <a href="#gallery"  onclick="closeNav()">RECORDS</a>
+  <a href="#team"     onclick="closeNav()">TEAM</a>
+  <a href="#faq"      onclick="closeNav()">FAQ</a>
+  <a href="https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform" target="_blank" rel="noopener" onclick="closeNav()">✦ הרשמה עכשיו ✦</a>
+</nav>
+
+<main>
+
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div id="orb-a"></div>
+  <div id="orb-b"></div>
+  <div id="hero-grid"></div>
+  <div class="hero-scan"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+  <div class="hero-inner" style="position:relative;z-index:2">
+    <p class="hero-eye">// YoRHa Tactical Net — Node: REBOOT_PRIME //</p>
+    <h1 class="hero-title">PROJECT REBOOT</h1>
+    <p class="hero-sub-line">Glory to Mankind</p>
+    <div class="hero-div">
+      <div class="hero-div-line"></div>
+      <div class="hero-div-gem"></div>
+      <div class="hero-div-line"></div>
+    </div>
+    <p class="hero-tagline" id="hero-tagline"></p>
+    <div class="hero-cta">
+      <a href="https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform" target="_blank" rel="noopener" class="btn-coming-soon"><span class="btn-cs-dot"></span>הרשמה עכשיו</a>
+    </div>
+    <div class="hero-countdown">
+      <div class="cd-lbl">// T-MINUS — TIME TO DEPLOYMENT //</div>
+      <div id="cd-display"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-alt" id="about">
+  <div class="sec-inner" style="position:relative;z-index:1">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Mission Briefing</p>
+      <h2 class="sec-title">About the Event</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">FILE: PUBLIC RECORD</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-body reveal" id="about-body"></div>
+      <div class="reveal">
+        <div class="data-card">
+          <div class="data-card-head"><span class="data-head-l">Event Data</span><span class="data-head-r">● ACTIVE</span></div>
+          <div id="data-rows"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="history">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Historical Record</p>
+      <h2 class="sec-title">World Timeline</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">DELTA CLEARANCE</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="tl-wrap reveal">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">// YEAR 5012</div>
+        <div class="tl-title">Alien Invasion</div>
+        <p class="tl-body">חייזרים פלשו לכדור הארץ ושחררו צורת חיים מלאכותית — רובוטים. הם גרמו להשמדת רוב האנושות. הניצולים נמלטו אל הירח.</p>
+        <span class="tl-badge alert">// CATASTROPHIC EVENT</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">// YEAR 5204</div>
+        <div class="tl-title">YoRHa Counterattack</div>
+        <p class="tl-body">האנושות שלחה את צבא האנדרואידים לתקוף את החייזרים ורובוטיהם בכדור הארץ. מלחמת שחרור ארוכה ואכזרית החלה.</p>
+        <span class="tl-badge alert">// WAR INITIATED</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">// YEAR 11,945 — PRESENT</div>
+        <div class="tl-title">The Endless War</div>
+        <p class="tl-body">הקרב בין הרובוטים והאנדרואידים עדיין מתחולל. מלחמה שנמשכת אלפי שנים, שני הצדדים לכודים בלולאה אינסופית.</p>
+        <span class="tl-badge live">// ACTIVE CONFLICT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-alt" id="factions">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Faction Database</p>
+      <h2 class="sec-title">Choose Your Allegiance</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">FACTION DATABASE</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="fac-grid reveal stagger" id="faction-wrap"></div>
+  </div>
+</section>
+
+<section id="lore">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Classified Archives</p>
+      <h2 class="sec-title">World Records</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">CLEARANCE: DELTA</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="acc-wrap reveal" id="lore-wrap"></div>
+  </div>
+</section>
+
+<section class="sec-alt" id="tech">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Field Technology</p>
+      <h2 class="sec-title">טכנולוגיית שדה</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">TECH INTEGRATION v1.0</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="tech-intro reveal">
+      <p>הטלפון שבכיסכם אינו עוד מכשיר פרטי. בשטח הוא יהפוך לצורה נוספת לתקשר עם קבוצתכם.</p>
+    </div>
+    <div class="tech-steps reveal stagger">
+      <div class="ts-step"><div class="ts-num">SYS_01</div><div class="ts-icon">📡</div><div class="ts-label">קבלת פקודות</div><div class="ts-sub">פקודות ומשימות ישלחו ישירות לטלפון</div></div>
+      <div class="ts-step"><div class="ts-num">SYS_02</div><div class="ts-icon">🗺️</div><div class="ts-label">מודיעין</div><div class="ts-sub">נקודות עניין ומפות יירוכזו במכשיר</div></div>
+      <div class="ts-step"><div class="ts-num">SYS_03</div><div class="ts-icon">🔗</div><div class="ts-label">רשת קולקטיבית</div><div class="ts-sub">שיתוף מידע בין כל חברי הסיעה</div></div>
+      <div class="ts-step" id="step4"><div class="ts-num">SYS_04</div><div class="ts-icon">🔓</div><div class="ts-label">פריצת תיבות</div><div class="ts-sub">הדרך האידיאלית להשיג מידע</div><div class="ts-hint" id="ts-hint">[ הקש לפרטים ▼ ]</div></div>
+    </div>
+    <div class="tabs-outer reveal">
+      <div class="tabs-bar">
+        <button class="tab-btn active android" data-tab="android"><span class="tab-dot"></span>YoRHa // אנדרואידים</button>
+        <button class="tab-btn machine" data-tab="machine"><span class="tab-dot"></span>מכונות // Machine</button>
+      </div>
+      <div class="tab-panel active" data-panel="android">
+        <div class="tab-title">רשת YoRHa</div>
+        <p>הרשת מאפשרת קבלת פקודות ממפעילים ומפקדים, גישה לפרטי מידע חשובים, ושידור דיווחים בזמן אמת.</p>
+        <span class="tab-badge android">// ANDROID ACCESS</span>
+      </div>
+      <div class="tab-panel" data-panel="machine">
+        <div class="tab-title">הרשת המשותפת</div>
+        <p>מכונות מחוברות לרשת הקולקטיבית — כל מידע שנאסף ע"י מכונה אחת זמין לכלל הרשת. ניתן לשדר הודעות ולתאם פעולות.</p>
+        <span class="tab-badge machine">// MACHINE NETWORK</span>
+      </div>
+    </div>
+    <div class="net3-card reveal" style="margin-top:12px">
+      <div class="tab-title">קבלת משימות // ALL FACTIONS</div>
+      <p style="font-size:clamp(.88rem,1.9vw,.98rem);color:var(--tx-2);line-height:1.85;margin-top:8px">פקודות שדה, בריפינגים ועדכוני מצב יישלחו אל הטלפון. חובה לבדוק את המכשיר מעת לעת.</p>
+      <span class="tab-badge all" style="margin-top:10px;display:inline-block">// ALL FACTIONS</span>
+    </div>
+    <div class="hack-trigger" id="hack-trigger">
+      <span class="ht-i">🔓</span>
+      <div class="ht-b">
+        <div class="ht-n">SYS_04 // BREACH PROTOCOL</div>
+        <div class="ht-t">HACK THE BOX // פריצת תיבות</div>
+        <div class="ht-s">תיבות נעולות בשטח — סרקו, שחקו, פרצו.</div>
+      </div>
+      <span class="ht-badge">ACTIVE</span>
+      <span class="ht-arrow">▶</span>
+    </div>
+    <div class="hack-drawer" id="hack-drawer">
+      <div class="hack-inner">
+        <div class="flow-grid">
+          <div class="flow-step"><div class="fs-n">STEP 01</div><div class="fs-i">📦</div><div class="fs-l">מצאו תיבה</div><div class="fs-s">תיבות מסומנות בסמל HACK בשטח</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 02</div><div class="fs-i">📷</div><div class="fs-l">סרקו ברקוד</div><div class="fs-s">פיתחו מצלמה וסרקו את הברקוד</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 03</div><div class="fs-i">🎮</div><div class="fs-l">שחקו ונצחו</div><div class="fs-s">השלימו משחק פריצה תוך זמן מוגבל</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 04</div><div class="fs-i">🔓</div><div class="fs-l">הזינו קוד</div><div class="fs-s">הקוד פותח את המנעול הפיזי</div></div>
+        </div>
+        <div class="game-grid">
+          <div class="game-card shooter"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_01</div><span class="game-ico">🎯</span><div class="game-name">Shooter Protocol</div><p class="game-desc">שני ג'ויסטיקים — אחד לתנועה, אחד לירי. הרסו שכבות הגנה ופגעו בגרעין.</p><span class="game-mode">Landscape</span></div></div>
+          <div class="game-card memory"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_02</div><span class="game-ico">🧠</span><div class="game-name">Memory Breach</div><p class="game-desc">רצף צמתים מוצג ונעלם — חזרו עליו בדיוק. שלושה רצפים לפריצה מלאה.</p><span class="game-mode">Portrait</span></div></div>
+          <div class="game-card blocks"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_03</div><span class="game-ico">🧩</span><div class="game-name">Block Infiltration</div><p class="game-desc">החליקו בלוקים כדי לפנות מסלול לגרעין. פאזל קלאסי.</p><span class="game-mode">Portrait</span></div></div>
+        </div>
+        <div class="alert-box">
+          <span class="alert-ico">⚠</span>
+          <div><div class="alert-t">// HELP CODES</div><p class="alert-b">נתקעתם? קודי עזרה ניתנים לרכישה. כל קוד תקף לשימוש אחד בלבד.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Operational Directives</p>
+      <h2 class="sec-title">Field Conduct</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">MANDATORY</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="rules-list reveal stagger" id="rules-wrap"></div>
+  </div>
+</section>
+
+<section class="sec-alt" id="gallery">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Visual Records</p>
+      <h2 class="sec-title">Field Archive</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">IMAGE DATABASE</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="gal-grid reveal stagger" id="gallery-wrap"></div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Operative Files</p>
+      <h2 class="sec-title">The Team</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">ORGANIZER DATABASE</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="team-grid reveal stagger" id="team-grid"></div>
+  </div>
+</section>
+
+<section class="sec-alt" id="faq">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Inquiry Protocol</p>
+      <h2 class="sec-title">FAQ // שאלות ותשובות</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">OPEN ACCESS</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="faq-outer reveal">
+      <div class="faq-bar" dir="ltr">
+        <div class="faq-dot r"></div><div class="faq-dot y"></div><div class="faq-dot g"></div>
+        <span class="faq-bar-t">REBOOT_NET // FAQ_DATABASE v1.0</span>
+      </div>
+      <div id="faq-wrap"></div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="sec-inner">
+    <div class="join-inner">
+      <div class="sec-head reveal">
+        <p class="sec-eye">Enlistment Protocol</p>
+        <h2 class="sec-title" id="join-title">הצטרף עכשיו</h2>
+        <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">ROSTER OPEN</span><div class="sec-rule-line"></div></div>
+      </div>
+      <p class="join-desc reveal" id="join-desc"></p>
+      <div class="reveal" id="join-cta" style="text-align:center"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="ft-top">
+    <span class="ft-logo" id="footer-logo">PROJECT REBOOT</span>
+    <div class="ft-meta">
+      <span class="ft-meta-i">Androids: Active</span>
+      <span class="ft-meta-i">Machines: Active</span>
+    </div>
+  </div>
+  <a href="https://open.spotify.com/playlist/5bZw0uBXQ2xQKsfN7tfcw7" target="_blank" rel="noopener" class="ft-spotify-block" id="spotifyBtn">
+    <span class="ft-sp-ico">♪</span>
+    <div class="ft-sp-text">
+      <div class="ft-sp-label">LISTEN ON SPOTIFY</div>
+      <div class="ft-sp-name">PROJECT REBOOT // OST</div>
+      <div class="ft-sp-sub">פלייליסט רשמי של האירוע</div>
+    </div>
+    <span class="ft-sp-arrow">◀</span>
+  </a>
+  <div class="ft-copy" id="footer-copy"></div>
+</footer>
+
+<div class="modal-ov" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-bar">
+      <span class="modal-handle"></span>
+      <span class="modal-id" id="modal-id"></span>
+      <button class="modal-close" id="modal-close">✕ סגור</button>
+    </div>
+    <div class="modal-head">
+      <div class="modal-type" id="modal-type"></div>
+      <div class="modal-title" id="modal-title"></div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<div id="lightbox" class="lightbox">
+  <button class="lb-close" id="lb-close">✕ סגור</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<div id="music-bar">
+  <span class="mb-icon">♪</span>
+  <div class="mb-track">
+    <div class="mb-name">PROJECT REBOOT // OST</div>
+    <div class="mb-viz" id="mb-viz">
+      <div class="mb-b"></div><div class="mb-b"></div><div class="mb-b"></div>
+      <div class="mb-b"></div><div class="mb-b"></div><div class="mb-b"></div>
+      <div class="mb-b"></div><div class="mb-b"></div>
+    </div>
+  </div>
+  <button class="mb-play" id="mb-play" aria-label="נגן">▶</button>
+  <button class="mb-close" id="mb-close" aria-label="סגור">✕</button>
+</div>
+<audio id="bgMusic" loop preload="none"><source src="music.mp3" type="audio/mpeg"></audio>
+<button id="btt" aria-label="חזרה למעלה">▲</button>
+
+<script>
+const REGISTRATION_URL = "https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform";
+
+const C = {
+  hero:{tagline:"בעולם שבו הכל נראה מוכתב מראש, המרד האמיתי הוא לבחור בעצמך."},
+  about:{
+    paragraphs:[
+      "פרויקט ריבוט הוא משחק LARP מיליטנטי המתרחש בעולם פוסט-אפוקליפטי עתידני בהשראת המשחק NieR: Automata.",
+      "מה זה LARP? Live Action Role-Playing — משחק תפקידים חי. חוויה אינטראקטיבית המשלבת תיאטרון מאולתר, משחק חברתי, אתגרים והרפתקה בעולם אחר. כל משתתף נכנס לדמות משלו וחווה את העולם דרך עיניה.",
+      "בלארפ זה תכנסו לעולם העתידני של NieR, תבחרו צד במלחמה ארוכת השנים ותובילו את קבוצתכם לניצחון."
+    ],
+    stats:[
+      {k:"תאריך",v:"26.3 – 27.3"},{k:"מיקום",v:"מקורות הירקון"},
+      {k:"מחיר",v:'200–250 ₪ (כתלות בכמות המשתתפים)'},{k:"יצירת קשר",v:"noy.wolster@gmail.com"}
+    ]
+  },
+  factions:[
+    {
+      type:"android",num:"01",name:"Android Units",id:"YoRHa Combat Designation",
+      desc:"האנדרואידים נוצרו על ידי האנושות כדי להילחם ביצורי המכונות שכבשו את כדור הארץ. בזמן שבני האדם חיים בגלות על הירח, האנדרואידים נשלחים לכדור הארץ כחיילים, סיירים ותומכי לחימה.",
+      longDesc:["במשחק תשחקו אנדרואידים תחת ארגון YoRHa — ארגון צבאי של אנדרואידים מתקדמים.","מודל קרבי (B-Type): התמקדות בנשק פיזי ולחימה.","מודל סקאוט (S-Type): חקר ומידע.","מודל מרפא (H-Type): ריפוי והתמחות בנזקים פיזיים.","הפרוטוקול אוסר על קיום חיים אישיים מחוץ לגבולות המשימה. אך בשטח, רבים מפרים כללים אלה בסתר."],
+      data:[{k:"יעד ראשי",v:"השמדת הרובוטים"},{k:"סגנון",v:"היררכי, מיליטנטי"},{k:"עיקרון",v:"יעילות מעל הכל"},{k:"התנהגות",v:"קור רוח קרבי"}]
+    },
+    {
+      type:"machine",num:"02",name:"Machine Lifeforms",id:"Network Intelligence Unit",
+      desc:"הרובוטים נוצרו לצורכי מלחמה, אך עם הזמן פיתחו קהילות, תרבות ודפוסי התנהגות המזכירים בני אדם. הם חיים בצורה שיתופית ומשפחתית.",
+      longDesc:["מכונות נחותות במורכבותן מהאנדרואידים, אך נעלות בפן החברתי והקהילתי.","לצופה מבחוץ הן נראות תמימות — אך האם זאת האמת?","הרובוטים רואים בקהילותיהם משפחות. הגנה, יצירה ושמירה על חברים הם ערכיהם.","לרובוטים רשת משותפת — יכולת לחלוק מידע עם כל בני מינם בזמן אמת."],
+      data:[{k:"מטרה",v:"הישרדות ולמידה"},{k:"סגנון",v:"קהילתי, שיתופי"},{k:"דפוס",v:"אנושי "},{k:"כוח",v:"קטלני בעת איום"}]
+    }
+  ],
+  lore:[
+    {title:"The Abandonment",stamp:"HISTORICAL",text:"לפני אלפי שנים מכונות חייזריות פלשו לכדור הארץ. האנושות ברחה לבסיסי הירח ומינתה את האנדרואידים לנהל את המלחמה.",long:"עד היום המלחמה מתנהלת. האנושות עדיין על הירח. המכונות עדיין מסתובבות ומהוות איום."},
+    {title:"The Machine Network",stamp:"INTELLIGENCE",text:"כל יצורי המכונות מקושרים דרך רשת משותפת — תודעה קולקטיבית המשתפת מידע וזיכרונות בזמן אמת.",long:"הרשת הפכה לאוסף אינדיבידואלים עם צרכים שונים. חלקם אלימים, חלקם תמימים, וחלקם פשוט רוצים לחיות."},
+    {title:"YoRHa Directive",stamp:"CLASSIFIED",text:"יחידות אנדרואיד פועלות תחת היררכיה נוקשה. אסור השימוש בשמות אישיים, הבעת רגשות, או חיים אישיים מחוץ לגבולות המשימה.",long:"הפרוטוקול בנוי על אמונה שאנדרואידים יעילים יותר ללא רגשות. אך ההיסטוריה מוכיחה ההפך."},
+    {title:"The Ruined Cities",stamp:"FIELD OBS.",text:"שטח המשחק משתרע על יסודות עיר אנושית לשעבר — מגדלים קורסים, כיכרות מוצפות, ושרידי מכונות עתיקות.",long:"שדה המשחק מחולק לאזורים עם אווירה שונה. בחלק מהם ברורה השליטה — ובאחרים, הכל אפשרי."},
+    {title:"Outliers",stamp:"ANOMALY",text:"לא כל אינדיבידואל מתאים לאידיאולוגיה של סיעתו. אנדרואידים שנטשו, מכונות שעזבו. חיים בשוליי המלחמה ארוכת השנים.",long:"ה-Outliers נלחמים למענם בלבד ומוצאים בריתות זמניות בהתאם לצורך."}
+  ],
+  rules:[
+    {warn:true, icon:`<svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>`,title:"Safety Protocol",short:'מילת בטיחות "חד"ל" מפסיקה את כל הלחימה מיד, ללא שאלות.',detail:"כאשר נאמרת, כולם עוצרים מיד. הבטיחות הפיזית והנפשית חשובה יותר מכל סיפור."},
+    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>`,title:"Combat System",short:"נשק נרף / ספוג בלבד. כל הנשקים חייבים לעבור בדיקת בטיחות בכניסה.",detail:'נשק LARP מאושר בלבד. בדיקה בתחילת האירוע ע"י הצוות.'},
+    {warn:true, icon:`<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,title:"Consent & Respect",short:"יש לכבד גבולות אישיים בכל עת. הטרדה גורמת להסרה מיידית.",detail:"קונפליקטים בין דמויות מעודדים. קונפליקטים בין שחקנים — לא. כל בעיה: פנה לחבר צוות."},
+    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 2c-5.52 0-10 4.48-10 10 0 5.52 4.48 10 10 10s10-4.48 10-10c0-5.52-4.48-10-10-10zm-3 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM12 18c-2.5 0-4.67-1.4-5.5-3.5h11c-.83 2.1-3 3.5-5.5 3.5z"/></svg>`,title:"Character Integrity",short:"שמור על דמות בתוך אזור המשחק. מטאגיימינג פוגע בחוויה של כולם.",detail:"בתוך האזור — אתה הדמות שלך. לצאת מדמות: ידיים באיקס על החזה."},
+    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>`,title:"Death & Respawn",short:"כשנפלת — חכה. מרפאים מיועדים יכולים להחיות אותך.",detail:"מוות קבוע הוא בחירה דרמטית שנעשית עם המארגנים. אל תפחד מרגע המוות הרגעי לפעמים זה הרגע הכי טוב במשחק."},
+    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`,title:"Organizer Authority",short:"למארגנים סמכות סופית בכל מחלוקת. התייחס לכולם בכבוד.",detail:"הצוות כאן כדי לוודא שכולם נהנים. בכל בעיה — פנה מיד."}
+  ],
+  gallery:[
+    {src:"robot2.jpg",alt:"מכונה"},{src:"yorah.png",alt:"YoRHa"},
+    {src:"android1.jpeg",alt:"אנדרואיד"},{src:"android 2.jpg",alt:"לחימה"},
+    {src:"city.jpg",alt:"עיר"},{src:"pascal.webp",alt:"קבוצה"}
+  ],
+  team:[
+    {id:"OPERATIVE_01",name:"נוי וולסטר",role:"Game Master",titleHe:"מנהלת משחק ראשי",photo:"image_noy.jpg",desc:"חלק מקהילת ה-LARP בשנתיים האחרונות, לקחה חלק בהקמה וניהול של אירועים קהילתיים — אולדהיים, מעשיות אוסטמיר וערבי פונדק שונים.",long:"המטרה שלי היא לחלוק את הערצה שלי לסדרת המשחקים הנהדרת הזאת.",tags:["Game Master"]},
+    {id:"OPERATIVE_02",name:"עדי יעקבסון",role:"Game Master",titleHe:"מנהל משחק ראשי",photo:"image_adi.jpg",desc:"חלק מקהילת הלארפים בחמש שנים האחרונות, השתתף בלארפים רבים כשחקן וכנאפס.",long:"המטרה שלי היא ליצור חווית רולפליי ייחודית שעוד לא נראתה כמותה.",tags:["Game Master"]}
+  ],
+  faq:[
+    {q:"האם צריך ניסיון קודם ב-LARP?",a:"לא! נקיים תדריך מלא לפני האירוע. כל מה שצריך הוא רצון להשתתף."},
+    {q:"מה לובשים לאירוע?",a:"הכלל המרכזי: אנדרואידים לובשים בגדים מודרניים עתידניים מתוקתקים. מכונות לובשות בגדים אפוקליפטים בלויים. אנחנו שואפים לתלבושות פשוטות ומשתלמות."},
+    {q:"מה קורה אם נפצעים במהלך המשחק?",a:"יהיה חובש זמין בסביבת המשחק. הבטיחות תמיד קודמת לכל דבר אחר."},
+    {q:"כמה זמן נמשך האירוע?",a:"יום וחצי כולל שינה. תדריך בבוקר, לארפ מהצהריים ועד הצהריים למחרת."},
+    {q:"האם אפשר להגיע ללא נשק?",a:"כן. ניתן לשאול נשק ספוג מהצוות בהודעה מראש. נשק משלכם עובר בדיקת בטיחות."},
+    {q:"האם הלארפ מספק אוכל?",a:"המשחק יספק נשנושים קלים ומים בלבד. במקום יש מקררים ואפשרות לבישול — יש להגיע עם אוכל מהבית."},
+    {q:"כיצד בוחרים צד?",a:"בטופס ההרשמה תקבלו שאלות שיעזרו לעצב את חווית המשחק ובהם תבחרו צד."},
+    {q:"כיצד עובדת פריצת התיבות?",a:"מצאו תיבה → סרקו ברקוד → שחקו את משחק הפריצה → קבלו קוד → פיתחו מנעול. שלושה סוגי משחקים: Shooter, Memory Breach, Block Infiltration."}
+  ],
+  join:{desc:"המקומות מוגבלים. ההרשמה פתוחה — מלאו את הטופס כדי לשריין מקום."},
+  footer:{copy:"© פרויקט ריבוט LARP  ·  יוזמת מעריצים — אינה קשורה ל-Square Enix"}
+};
+
+document.getElementById('hero-tagline').textContent = C.hero.tagline;
+document.getElementById('about-body').innerHTML = C.about.paragraphs.map(p=>`<p>${p}</p>`).join('');
+document.getElementById('data-rows').innerHTML = C.about.stats.map(s=>`<div class="data-row"><span class="data-k">${s.k}</span><span class="data-v">${s.v}</span></div>`).join('');
+
+document.getElementById('faction-wrap').innerHTML = C.factions.map(f=>`
+  <div class="fac-card ${f.type}">
+    <div class="fac-watermark">${f.num}</div>
+    <div class="fac-head">
+      <img class="fac-head-img" src="${f.type==='android'?'android 2.jpg':'robot2.jpg'}" alt="" aria-hidden="true">
+      <div class="fac-id">// ${f.id}</div>
+      <div class="fac-name">${f.name}</div>
+    </div>
+    <div class="fac-body">
+      <p class="fac-desc">${f.desc}</p>
+      <div class="fac-details">${f.longDesc.map(p=>`<p>${p}</p>`).join('')}</div>
+      <div class="fac-stats">${f.data.map(d=>`<div class="fac-stat"><span class="fac-sk">${d.k}</span><span class="fac-sv">${d.v}</span></div>`).join('')}</div>
+    </div>
+  </div>`).join('');
+
+document.getElementById('lore-wrap').innerHTML = C.lore.map((l,i)=>`
+  <div class="acc-item">
+    <button class="acc-trigger">
+      <span class="acc-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="acc-title">${l.title}</span>
+      <span class="acc-stamp">${l.stamp}</span>
+      <span class="acc-arrow">▶</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <p class="acc-text">${l.text}</p>
+      <p class="acc-extra">${l.long}</p>
+    </div></div>
+  </div>`).join('');
+document.querySelectorAll('.acc-item').forEach(item=>{
+  item.querySelector('.acc-trigger').addEventListener('click',()=>{
+    const o=item.classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(i=>{i.classList.remove('open');i.querySelector('.acc-body').style.maxHeight='0';});
+    if(!o){item.classList.add('open');const b=item.querySelector('.acc-body');b.style.maxHeight=b.scrollHeight+'px';}
+  });
+});
+
+document.getElementById('rules-wrap').innerHTML = C.rules.map((r,i)=>`
+  <div class="r-item ${r.warn?'warn':''}">
+    <div class="r-icon-col">
+      <span class="r-icon">${r.icon}</span>
+      <span class="r-num">DIR-${String(i+1).padStart(3,'0')}</span>
+    </div>
+    <div class="r-content">
+      <div class="r-header">
+        <span class="r-title">${r.title}</span>
+        ${r.warn?'<span class="r-chip">⚠ WARNING</span>':''}
+      </div>
+      <p class="r-short">${r.short}</p>
+      <p class="r-detail">${r.detail}</p>
+    </div>
+  </div>`).join('');
+
+document.getElementById('gallery-wrap').innerHTML = C.gallery.map((g,i)=>`
+  <div class="gal-cell" data-src="${g.src}">
+    <img src="${g.src}" alt="${g.alt}" loading="lazy">
+    <span class="gal-id">IMG_${String(i+1).padStart(3,'0')}</span>
+  </div>`).join('');
+document.querySelectorAll('.gal-cell[data-src]').forEach(c=>{
+  c.addEventListener('click',()=>openLB(c.dataset.src));
+});
+
+document.getElementById('team-grid').innerHTML = C.team.map(m=>`
+  <div class="team-card">
+    <div class="team-photo">
+      ${m.photo?`<img src="${m.photo}" alt="${m.name}" loading="lazy">`:'<div class="team-photo-ph">◈</div>'}
+      <span class="team-photo-tag">${m.id}</span>
+    </div>
+    <div class="team-info">
+      <div class="team-role">// ${m.role}</div>
+      <div class="team-name">${m.name}</div>
+      <div class="team-title">${m.titleHe}</div>
+      <div class="team-div"></div>
+      <p class="team-desc">${m.desc}</p>
+      <p class="team-long">${m.long}</p>
+      <div class="team-tags">${m.tags.map(t=>`<span class="team-tag">${t}</span>`).join('')}</div>
+    </div>
+  </div>`).join('');
+
+document.getElementById('faq-wrap').innerHTML = C.faq.map((f,i)=>`
+  <div class="faq-item">
+    <button class="faq-q">
+      <span class="faq-prompt">$&gt;</span>
+      <span class="faq-q-text">${f.q}</span>
+      <span class="faq-chev">▶</span>
+    </button>
+    <div class="faq-a"><div class="faq-a-in"><p class="faq-a-t">${f.a}</p></div></div>
+  </div>`).join('');
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click',()=>{
+    const o=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight='0';});
+    if(!o){item.classList.add('open');const a=item.querySelector('.faq-a');a.style.maxHeight=a.scrollHeight+'px';}
+  });
+});
+
+document.getElementById('join-title').textContent='הצטרפו עכשיו';
+document.getElementById('join-desc').textContent=C.join.desc;
+document.getElementById('join-cta').innerHTML=`<a href="${REGISTRATION_URL}" target="_blank" rel="noopener" class="btn-coming-soon"><span class="btn-cs-dot"></span>למילוי טופס ההרשמה</a>`;
+document.getElementById('footer-logo').textContent='PROJECT REBOOT';
+document.getElementById('footer-copy').textContent=C.footer.copy;
+
+const burger=document.getElementById('burger'),mNav=document.getElementById('mobile-nav');
+function closeNav(){burger.classList.remove('open');mNav.classList.remove('open');burger.setAttribute('aria-expanded','false');mNav.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+burger.addEventListener('click',()=>{
+  const o=mNav.classList.contains('open');
+  if(o){closeNav();}else{burger.classList.add('open');mNav.classList.add('open');burger.setAttribute('aria-expanded','true');mNav.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+});
+
+const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img');
+function openLB(src){lbImg.src=src;lb.classList.add('show');document.body.style.overflow='hidden';}
+function closeLB(){lb.classList.remove('show');document.body.style.overflow='';setTimeout(()=>{lbImg.src='';},300);}
+document.getElementById('lb-close').addEventListener('click',closeLB);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('show'))closeLB();});
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const w=btn.dataset.tab,wrap=btn.closest('.tabs-outer');
+    wrap.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    wrap.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.dataset.panel===w);});
+  });
+});
+
+const hTrig=document.getElementById('hack-trigger'),hDraw=document.getElementById('hack-drawer'),step4=document.getElementById('step4'),tsHint=document.getElementById('ts-hint');
+function toggleHack(){
+  const o=hTrig.classList.contains('open');
+  hTrig.classList.toggle('open',!o);hDraw.classList.toggle('open',!o);
+  hDraw.style.maxHeight=o?'0':hDraw.scrollHeight+'px';
+  if(tsHint)tsHint.textContent=o?'[ הקש לפרטים ▼ ]':'[ הקש לסגירה ▲ ]';
+  if(!o)setTimeout(()=>hTrig.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+}
+hTrig.addEventListener('click',toggleHack);
+if(step4)step4.addEventListener('click',toggleHack);
+window.addEventListener('resize',()=>{if(hDraw.classList.contains('open'))hDraw.style.maxHeight=hDraw.scrollHeight+'px';},{passive:true});
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.tl-item').forEach((it,i)=>setTimeout(()=>it.classList.add('in'),i*110));
+    }
+  });
+},{threshold:.06});
+document.querySelectorAll('.reveal,.stagger').forEach(el=>obs.observe(el));
+
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>{btt.classList.toggle('vis',window.scrollY>300);},{passive:true});
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+(function(){
+  const EVENT_DATE='2027-03-26T10:00:00+03:00';
+  const el=document.getElementById('cd-display');
+  function pad(n){return String(n).padStart(2,'0');}
+  function flip(id,val){const b=document.getElementById(id);if(!b)return;const s=pad(val);if(b.textContent!==s){b.classList.remove('flip');void b.offsetWidth;b.textContent=s;b.classList.add('flip');}}
+  function render(){
+    if(!EVENT_DATE){el.innerHTML=`<div class="cd-tbd">DATE: TBD</div><div class="cd-tbd-sub">// תאריך יפורסם בקרוב //</div>`;return;}
+    const diff=new Date(EVENT_DATE).getTime()-Date.now();
+    if(diff<=0){el.innerHTML=`<div class="cd-tbd">// REBOOT IS NOW //</div>`;return;}
+    const d=Math.ceil(diff/86400000);
+    if(!document.getElementById('cd-d')){el.innerHTML=`<div class="cd-units"><div class="cd-unit"><div class="cd-num" id="cd-d">${pad(d)}</div><div class="cd-sub">ימים לאירוע</div></div></div>`;}
+    else{flip('cd-d',d);}
+  }
+  render();if(EVENT_DATE)setInterval(render,60000);
+})();
+
+(function(){
+  const music=document.getElementById('bgMusic');
+  const bar=document.getElementById('music-bar'),play=document.getElementById('mb-play'),close=document.getElementById('mb-close');
+  const viz=document.getElementById('mb-viz'),bars=viz.querySelectorAll('.mb-b');
+  let raf=null,ctx=null,analyser=null;
+  setTimeout(()=>bar.classList.add('vis'),3500);
+  function initCtx(){if(ctx)return;try{ctx=new(window.AudioContext||window.webkitAudioContext)();analyser=ctx.createAnalyser();analyser.fftSize=32;const s=ctx.createMediaElementSource(music);s.connect(analyser);analyser.connect(ctx.destination);}catch(e){}}
+  function startViz(){viz.classList.add('on');const d=analyser?new Uint8Array(analyser.frequencyBinCount):null;const t=()=>{if(music.paused){stopViz();return;}if(analyser&&d){analyser.getByteFrequencyData(d);bars.forEach((b,i)=>{b.style.height=Math.max(2,(d[Math.floor(i*d.length/bars.length)]/255)*100)+'%';});}else bars.forEach(b=>b.style.height=(Math.random()*70+5)+'%');raf=requestAnimationFrame(t);};raf=requestAnimationFrame(t);}
+  function stopViz(){viz.classList.remove('on');if(raf){cancelAnimationFrame(raf);raf=null;}bars.forEach(b=>b.style.height='2px');}
+  function upd(){const p=!music.paused;play.textContent=p?'■':'▶';if(p)startViz();else stopViz();}
+  play.addEventListener('click',()=>{initCtx();if(ctx&&ctx.state==='suspended')ctx.resume();if(music.paused){music.volume=.6;music.play().then(upd).catch(()=>{});}else{music.pause();upd();}});
+  close.addEventListener('click',()=>{music.pause();upd();bar.classList.remove('vis');});
+  music.addEventListener('play',upd);music.addEventListener('pause',upd);
+})();
+</script>
+</body>
+</html>
