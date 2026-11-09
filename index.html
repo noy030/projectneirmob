@@ -6,7 +6,7 @@
 <title>PROJECT REBOOT — NieR LARP</title>
 <meta property="og:type" content="website">
 <meta property="og:title" content="PROJECT REBOOT — NieR:Automata LARP">
-<meta property="og:description" content="בחרו צד במלחמה. אנדרואידים נגד מכונות. LARP מיליטנטי בהשראת NieR:Automata.">
+<meta property="og:description" content="לארפ של חקר עולם בהשראת NieR:Automata. אנדרואידים, מכונות, ועולם מלא סודות שמחכים להיחשף.">
 <meta property="og:image" content="https://noy030.github.io/projectneirmob/android1.jpeg">
 <meta property="og:url" content="https://noy030.github.io/projectneirmob/">
 <meta name="twitter:card" content="summary_large_image">
@@ -324,11 +324,6 @@ main { padding-top: var(--nav-h); }
 
 .hero-countdown { animation: fadeUp .7s .5s ease both; }
 @media(max-width:599px){ .hero-eye, .cd-lbl { letter-spacing:.18em !important; } }
-.hero-facts { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:22px; animation: fadeUp .7s .58s ease both; }
-.hf { font-family:var(--he); font-size:.9rem; color:var(--tx); background:rgba(12,12,16,.7); border:1px solid var(--br-hi); border-radius:3px; padding:6px 12px; display:inline-flex; align-items:baseline; gap:8px; }
-.hf-k { font-size:.75rem; color:var(--tx-3); }
-.hero-cal { display:inline-block; margin-top:14px; font-family:var(--he); font-size:.85rem; color:var(--tx-2); border-bottom:1px dashed var(--br-glow); padding-bottom:2px; animation: fadeUp .7s .62s ease both; }
-.hero-cal:hover { color:var(--tx); }
 .cd-lbl {
   font-family: var(--ui); font-size: clamp(.68rem,1.4vw,.72rem);
   letter-spacing: .4em; color: var(--tx-3); text-transform: uppercase;
@@ -491,6 +486,11 @@ section { padding: 56px 16px; }
 .fac-card.open .fac-details { display:flex; }
 .fac-more { background:none;border:1px solid var(--br-hi);border-radius:3px;color:var(--tx-2);font-family:var(--he);font-size:.88rem;padding:0 16px;min-height:40px;margin-bottom:18px;transition:color .15s,border-color .15s; }
 .fac-more:hover { color:var(--tx);border-color:var(--br-glow); }
+.fac-actions { display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-bottom:18px; }
+.fac-actions .fac-more { margin-bottom:0; }
+.fac-doc { font-family:var(--he); font-size:.88rem; color:var(--tx-2); border-bottom:1px dashed var(--br-glow); }
+.fac-card.machine .fac-doc { color:var(--machine); }
+.fac-card.android .fac-doc { color:var(--android); }
 .mid-cta { text-align:center; margin-top:32px; }
 .mid-cta p { color:var(--tx-2); font-size:.95rem; margin-bottom:14px; }
 .fac-details p { font-size: clamp(.82rem,1.7vw,.9rem); color: var(--tx-3); line-height: 1.8; padding-right: 12px; }
@@ -504,6 +504,7 @@ section { padding: 56px 16px; }
 .fac-card.machine .fac-sv { color:var(--machine);font-size:clamp(.82rem,1.7vw,.92rem); }
 
 #lore { background:var(--bg); }
+.lore-teaser { max-width:700px; margin:0 auto; text-align:center; color:var(--tx-2); font-size:clamp(.92rem,2vw,1rem); line-height:1.9; }
 .acc-wrap { max-width:700px;margin:0 auto; border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
 .acc-item { border-bottom:1px solid var(--br); }
 .acc-item:last-child { border-bottom:none; }
@@ -541,7 +542,9 @@ section { padding: 56px 16px; }
 .ts-step#step4 { border-color:rgba(184,150,64,.35); }
 .ts-step#step4:hover { border-color:var(--gold); }
 .ts-num   { font-family:var(--ui);font-size:.68rem;letter-spacing:.26em;color:var(--tx-3); }
-.ts-icon  { font-size:1.25rem;opacity:.65; }
+.ts-icon  { color:var(--tx-2);line-height:0; }
+.ico-svg { width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:miter; }
+#step4 .ts-icon, .ht-i { color:var(--gold); }
 .ts-label { font-family:var(--ui);font-size:clamp(.68rem,1.7vw,.72rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
 .ts-sub   { font-size:clamp(.76rem,1.6vw,.82rem);color:var(--tx-3);line-height:1.55; }
 .ts-hint  { font-family:var(--ui);font-size:.68rem;letter-spacing:.14em;color:var(--gold); }
@@ -565,7 +568,7 @@ section { padding: 56px 16px; }
 .hack-trigger { max-width:720px;margin:22px auto 0; background:var(--bg-3);border:1px solid rgba(184,150,64,.3);border-radius:var(--r); display:flex;align-items:center;gap:14px;padding:16px 20px; cursor:pointer;-webkit-tap-highlight-color:transparent; transition:border-color .2s,background .15s; }
 .hack-trigger:hover { border-color:var(--gold);background:rgba(184,150,64,.04); }
 .hack-trigger.open  { border-color:var(--gold);background:rgba(184,150,64,.05); }
-.ht-i   { font-size:1.1rem;opacity:.6;flex-shrink:0; }
+.ht-i   { flex-shrink:0;line-height:0; }
 .ht-b   { flex:1;min-width:0; }
 .ht-n   { font-family:var(--ui);font-size:.68rem;letter-spacing:.26em;color:var(--tx-3);margin-bottom:4px; }
 .ht-t   { font-family:var(--ui);font-size:clamp(.76rem,2vw,.8rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase;margin-bottom:3px; }
@@ -580,7 +583,8 @@ section { padding: 56px 16px; }
 @media(min-width:580px){ .flow-grid{grid-template-columns:repeat(4,1fr);} }
 .flow-step { background:var(--bg-3);border:1px solid var(--br);border-radius:var(--r);padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center; }
 .fs-n { font-family:var(--ui);font-size:.68rem;letter-spacing:.24em;color:var(--tx-3); }
-.fs-i { font-size:1.05rem;opacity:.6; }
+.fs-i { color:var(--tx-2);line-height:0; }
+.fs-i .ico-svg { width:22px;height:22px; }
 .fs-l { font-family:var(--ui);font-size:clamp(.68rem,1.6vw,.72rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
 .fs-s { font-size:clamp(.76rem,1.5vw,.8rem);color:var(--tx-3);line-height:1.5; }
 .game-grid { display:grid;grid-template-columns:1fr;gap:8px; }
@@ -592,7 +596,8 @@ section { padding: 56px 16px; }
 .game-card.blocks  .game-top { background:var(--gold); }
 .game-in   { padding:14px 14px; }
 .game-id   { font-family:var(--ui);font-size:.68rem;letter-spacing:.2em;color:var(--tx-3);margin-bottom:5px; }
-.game-ico  { font-size:.95rem;opacity:.55;margin-bottom:6px;display:block; }
+.game-ico  { color:var(--tx-2);margin-bottom:6px;display:block;line-height:0; }
+.game-ico .ico-svg { width:22px;height:22px; }
 .game-name { font-family:var(--ui);font-size:clamp(.76rem,1.9vw,.78rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase;margin-bottom:6px; }
 .game-desc { font-size:clamp(.8rem,1.7vw,.9rem);color:var(--tx-2);line-height:1.75;margin-bottom:8px; }
 .game-mode { font-family:var(--ui);font-size:.68rem;letter-spacing:.14em;padding:2px 7px;border:1px solid;border-radius:3px;display:inline-block;text-transform:uppercase; }
@@ -600,6 +605,9 @@ section { padding: 56px 16px; }
 .game-card.memory  .game-mode { color:var(--machine);border-color:rgba(122,184,180,.28); }
 .game-card.blocks  .game-mode { color:var(--gold);border-color:rgba(184,150,64,.28); }
 .alert-box { display:flex;gap:12px;align-items:flex-start;background:rgba(184,64,64,.07);border:1px solid rgba(184,64,64,.28);border-radius:var(--r);padding:14px 16px; }
+.tech-note { margin-top:10px; font-size:.9rem; color:var(--gold); }
+.hack-who { font-size:clamp(.88rem,1.9vw,.96rem); color:var(--tx-2); line-height:1.85; margin-bottom:14px; padding:12px 14px; border:1px solid var(--br); border-radius:var(--r); background:var(--bg-3); }
+.hack-rules { font-size:.86rem; color:var(--tx-3); margin-top:12px; text-align:center; }
 .alert-ico { color:var(--red);font-size:.9rem;flex-shrink:0;margin-top:2px; }
 .alert-t   { font-family:var(--ui);font-size:.72rem;letter-spacing:.18em;color:var(--red);text-transform:uppercase;margin-bottom:6px; }
 .alert-b   { font-size:clamp(.82rem,1.7vw,.9rem);color:var(--tx-2);line-height:1.75; }
@@ -679,6 +687,8 @@ section { padding: 56px 16px; }
 .faq-item.open .faq-a { opacity:1; }
 .faq-a-in{ padding:2px 18px 18px;border-right:2px solid rgba(90,144,96,.3);margin-right:28px; }
 .faq-a-t { font-size:clamp(.86rem,1.8vw,.98rem);color:var(--tx-2);line-height:1.9; }
+.faq-a-t b { color:var(--tx); font-weight:700; }
+.faq-link { color:var(--machine); border-bottom:1px dashed var(--machine-2); white-space:nowrap; }
 
 #join { background:var(--bg); }
 .join-inner { max-width:500px;margin:0 auto;text-align:center; }
@@ -1023,12 +1033,6 @@ footer {
       <div class="cd-lbl" dir="ltr">// T-MINUS — TIME TO DEPLOYMENT //</div>
       <div id="cd-display"></div>
     </div>
-    <div class="hero-facts">
-      <span class="hf"><span class="hf-k">מתי</span><span dir="ltr">26–27.3.2027</span></span>
-      <span class="hf"><span class="hf-k">איפה</span>יפורסם בקרוב</span>
-      <span class="hf"><span class="hf-k">כמה</span><span dir="ltr">200–250</span> ₪</span>
-    </div>
-    <a class="hero-cal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=PROJECT%20REBOOT%20%E2%80%94%20NieR%20LARP&amp;dates=20270326T100000/20270327T120000&amp;ctz=Asia/Jerusalem&amp;details=noy030.github.io/projectneirmob" target="_blank" rel="noopener">+ הוסף ליומן</a>
   </div>
 </section>
 
@@ -1106,7 +1110,7 @@ footer {
       <h2 class="sec-title">World Records</h2>
       <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">CLEARANCE: DELTA</span><div class="sec-rule-line"></div></div>
     </div>
-    <div class="acc-wrap reveal" id="lore-wrap"></div>
+    <p class="lore-teaser reveal">ציר הזמן, מסמכי העולם של שני המחנות, רשומות שדה וסרטונים: כל הלור מרוכז בארכיון ומתעדכן לאורך הדרך.</p>
     <a href="archive.html" class="db-cta reveal">
       <span class="db-cta-eye">// FULL LORE DATABASE</span>
       <span class="db-cta-main">לארכיון המלא — סרטונים, מסמכים ורשומות</span>
@@ -1124,12 +1128,13 @@ footer {
     </div>
     <div class="tech-intro reveal">
       <p>הטלפון שבכיסכם אינו עוד מכשיר פרטי. בשטח הוא יהפוך לצורה נוספת לתקשר עם קבוצתכם.</p>
+      <p class="tech-note">המשחק משתמש בטלפון הרבה, אז מומלץ מאוד להביא סוללת גיבוי ניידת.</p>
     </div>
     <div class="tech-steps reveal stagger">
-      <div class="ts-step"><div class="ts-num">SYS_01</div><div class="ts-icon">📡</div><div class="ts-label">קבלת פקודות</div><div class="ts-sub">פקודות ומשימות ישלחו ישירות לטלפון</div></div>
-      <div class="ts-step"><div class="ts-num">SYS_02</div><div class="ts-icon">🗺️</div><div class="ts-label">מודיעין</div><div class="ts-sub">נקודות עניין ומפות יירוכזו במכשיר</div></div>
-      <div class="ts-step"><div class="ts-num">SYS_03</div><div class="ts-icon">🔗</div><div class="ts-label">רשת קולקטיבית</div><div class="ts-sub">שיתוף מידע בין כל חברי הסיעה</div></div>
-      <div class="ts-step" id="step4"><div class="ts-num">SYS_04</div><div class="ts-icon">🔓</div><div class="ts-label">פריצת תיבות</div><div class="ts-sub">הדרך האידיאלית להשיג מידע</div><div class="ts-hint" id="ts-hint">[ הקש לפרטים ▼ ]</div></div>
+      <div class="ts-step"><div class="ts-num">SYS_01</div><div class="ts-icon"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 9.5a10 10 0 0 1 15 0M7.5 12.5a6 6 0 0 1 9 0"/><circle cx="12" cy="15.5" r="1.4"/><path d="M12 17v4"/></svg></div><div class="ts-label">קבלת פקודות</div><div class="ts-sub">פקודות ומשימות ישלחו ישירות לטלפון</div></div>
+      <div class="ts-step"><div class="ts-num">SYS_02</div><div class="ts-icon"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></div><div class="ts-label">מודיעין</div><div class="ts-sub">נקודות עניין ומפות יירוכזו במכשיר</div></div>
+      <div class="ts-step"><div class="ts-num">SYS_03</div><div class="ts-icon"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M8 6h8M7 7.8l4 8.4M17 7.8l-4 8.4"/></svg></div><div class="ts-label">רשת קולקטיבית</div><div class="ts-sub">שיתוף מידע בין כל חברי הסיעה</div></div>
+      <div class="ts-step" id="step4"><div class="ts-num">SYS_04</div><div class="ts-icon"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 7.6-1.7"/><path d="M12 15v2"/></svg></div><div class="ts-label">פריצת תיבות</div><div class="ts-sub">הדרך להשיג מידע ומשאבים. למודל S-Type בלבד</div><div class="ts-hint" id="ts-hint">[ הקש לפרטים ▼ ]</div></div>
     </div>
     <div class="tabs-outer reveal">
       <div class="tabs-bar">
@@ -1153,32 +1158,34 @@ footer {
       <span class="tab-badge all" style="margin-top:10px;display:inline-block">// ALL FACTIONS</span>
     </div>
     <div class="hack-trigger" id="hack-trigger">
-      <span class="ht-i">🔓</span>
+      <span class="ht-i"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 7.6-1.7"/><path d="M12 15v2"/></svg></span>
       <div class="ht-b">
         <div class="ht-n">SYS_04 // BREACH PROTOCOL</div>
         <div class="ht-t">HACK THE BOX // פריצת תיבות</div>
-        <div class="ht-s">תיבות נעולות בשטח — סרקו, שחקו, פרצו.</div>
+        <div class="ht-s">תיבות נעולות בשטח. דמויות מדגם S-Type (סריקה) סורקות, משחקות ופורצות.</div>
       </div>
       <span class="ht-badge">ACTIVE</span>
       <span class="ht-arrow">▶</span>
     </div>
     <div class="hack-drawer" id="hack-drawer">
       <div class="hack-inner">
+        <p class="hack-who">פריצת תיבות היא היכולת המיוחדת של מודל הסריקה (S-Type), אצל האנדרואידים ואצל המכונות. רק דמויות מהמודל הזה יכולות לסרוק תיבה, וכל תיבה שנפרצה נותנת מידע או משאבים. אם הניסיון הראשון נכשל ואין קרב באזור, אפשר לנסות שוב.</p>
         <div class="flow-grid">
-          <div class="flow-step"><div class="fs-n">STEP 01</div><div class="fs-i">📦</div><div class="fs-l">מצאו תיבה</div><div class="fs-s">תיבות מסומנות בסמל HACK בשטח</div></div>
-          <div class="flow-step"><div class="fs-n">STEP 02</div><div class="fs-i">📷</div><div class="fs-l">סרקו ברקוד</div><div class="fs-s">פיתחו מצלמה וסרקו את הברקוד</div></div>
-          <div class="flow-step"><div class="fs-n">STEP 03</div><div class="fs-i">🎮</div><div class="fs-l">שחקו ונצחו</div><div class="fs-s">השלימו משחק פריצה תוך זמן מוגבל</div></div>
-          <div class="flow-step"><div class="fs-n">STEP 04</div><div class="fs-i">🔓</div><div class="fs-l">הזינו קוד</div><div class="fs-s">הקוד פותח את המנעול הפיזי</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 01</div><div class="fs-i"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5l9-4.5 9 4.5v9l-9 4.5-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/></svg></div><div class="fs-l">מצאו תיבה</div><div class="fs-s">תיבות מסומנות בסמל HACK בשטח</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 02</div><div class="fs-i"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5M7 12h10"/></svg></div><div class="fs-l">סרקו ברקוד</div><div class="fs-s">פיתחו מצלמה וסרקו את הברקוד</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 03</div><div class="fs-i"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="19" height="10" rx="2"/><path d="M7 10v4M5 12h4"/><path d="M15.5 11h.01M18 13h.01" stroke-width="2.4"/></svg></div><div class="fs-l">שחקו ונצחו</div><div class="fs-s">השלימו משחק פריצה תוך זמן מוגבל</div></div>
+          <div class="flow-step"><div class="fs-n">STEP 04</div><div class="fs-i"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 7.6-1.7"/><path d="M12 15v2"/></svg></div><div class="fs-l">הזינו קוד</div><div class="fs-s">הקוד פותח את המנעול הפיזי</div></div>
         </div>
         <div class="game-grid">
-          <div class="game-card shooter"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_01</div><span class="game-ico">🎯</span><div class="game-name">Shooter Protocol</div><p class="game-desc">שני ג'ויסטיקים — אחד לתנועה, אחד לירי. הרסו שכבות הגנה ופגעו בגרעין.</p><span class="game-mode">Landscape</span></div></div>
-          <div class="game-card memory"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_02</div><span class="game-ico">🧠</span><div class="game-name">Memory Breach</div><p class="game-desc">רצף צמתים מוצג ונעלם — חזרו עליו בדיוק. שלושה רצפים לפריצה מלאה.</p><span class="game-mode">Portrait</span></div></div>
-          <div class="game-card blocks"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_03</div><span class="game-ico">🧩</span><div class="game-name">Block Infiltration</div><p class="game-desc">החליקו בלוקים כדי לפנות מסלול לגרעין. פאזל קלאסי.</p><span class="game-mode">Portrait</span></div></div>
+          <div class="game-card shooter"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_01</div><span class="game-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></span><div class="game-name">Shooter Protocol</div><p class="game-desc">שני ג'ויסטיקים — אחד לתנועה, אחד לירי. הרסו שכבות הגנה ופגעו בגרעין.</p><span class="game-mode">Landscape</span></div></div>
+          <div class="game-card memory"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_02</div><span class="game-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14"/><path d="M9 5V2M15 5V2M9 22v-3M15 22v-3M5 9H2M5 15H2M22 9h-3M22 15h-3"/><rect x="9" y="9" width="6" height="6"/></svg></span><div class="game-name">Memory Breach</div><p class="game-desc">רצף צמתים מוצג ונעלם — חזרו עליו בדיוק. שלושה רצפים לפריצה מלאה.</p><span class="game-mode">Portrait</span></div></div>
+          <div class="game-card blocks"><div class="game-top"></div><div class="game-in"><div class="game-id">BREACH_03</div><span class="game-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><path d="M15 17h4M17 15v4"/></svg></span><div class="game-name">Block Infiltration</div><p class="game-desc">החליקו בלוקים כדי לפנות מסלול לגרעין. פאזל קלאסי.</p><span class="game-mode">Portrait</span></div></div>
         </div>
         <div class="alert-box">
           <span class="alert-ico">⚠</span>
-          <div><div class="alert-t">// HELP CODES</div><p class="alert-b">נתקעתם? קודי עזרה ניתנים לרכישה. כל קוד תקף לשימוש אחד בלבד.</p></div>
+          <div><div class="alert-t">// HELP CODES</div><p class="alert-b">נתקעתם? קודי סיוע לפריצה אפשר להשיג במהלך המשחק. כל קוד תקף לשימוש אחד בלבד.</p></div>
         </div>
+        <p class="hack-rules">חוקי השימוש המלאים בפריצת תיבות יפורסמו במסמך מכאניקת המשחק.</p>
       </div>
     </div>
   </div>
@@ -1312,26 +1319,29 @@ var C = {
   hero:{tagline:"בעולם שבו הכל נראה מוכתב מראש, המרד האמיתי הוא לבחור בעצמך."},
   about:{
     paragraphs:[
-      "פרויקט ריבוט הוא משחק LARP מיליטנטי המתרחש בעולם פוסט-אפוקליפטי עתידני בהשראת המשחק NieR: Automata.",
+      "פרויקט ריבוט הוא לארפ של חקר עולם, המתרחש בעולם פוסט-אפוקליפטי עתידני בהשראת המשחק NieR: Automata.",
       "מה זה LARP? Live Action Role-Playing — משחק תפקידים חי. חוויה אינטראקטיבית המשלבת תיאטרון מאולתר, משחק חברתי, אתגרים והרפתקה בעולם אחר. כל משתתף נכנס לדמות משלו וחווה את העולם דרך עיניה.",
-      "בלארפ זה תכנסו לעולם העתידני של NieR, תבחרו צד במלחמה ארוכת השנים ותובילו את קבוצתכם לניצחון."
+      "יש שני מחנות, יש יריבות אמיתית ויהיו קרבות, אבל זה לא משחק PVP ואין בו ניצחון של צד אחד על השני. האתגר הוא העולם עצמו: לחשוף את הסודות שלו, לפרוץ תיבות, לפענח, ולגלות מי הדמות שלכם באמת. הלחימה היא כלי, לא המטרה.",
+      "גם אם אתם פחות רוצים להילחם, יש לכם מקום מלא כאן: סקאוטים, מרפאים, חוקרים ומי שבא בשביל הדרמה והסודות. המשחק עדיין מיליטנטי, וקרבות ספונטניים בשטח יכולים לקרות, חוץ מאזורים מוגדרים לרולפליי ללא לחימה."
     ],
     stats:[
-      {k:"תאריך",v:'<span dir="ltr">26–27.3.2027</span>'},{k:"מיקום",v:"יעודכן בקרוב"},
-      {k:"מחיר",v:'<span dir="ltr">200–250</span> ₪ (לפי כמות המשתתפים)'},{k:"יצירת קשר",v:"larpreboot@gmail.com"}
+      {k:"תאריך",v:'<span dir="ltr">26.3 – 27.3</span>'},{k:"מיקום",v:"יעודכן בקרוב"},
+      {k:"מחיר",v:'<span dir="ltr">200–250</span> ₪ (כתלות בכמות המשתתפים)'},{k:"יצירת קשר",v:"larpreboot@gmail.com"}
     ]
   },
   factions:[
     {
       type:"android",num:"01",name:"Android Units",id:"YoRHa Combat Designation",
       desc:"האנדרואידים נוצרו על ידי האנושות כדי להילחם ביצורי המכונות שכבשו את כדור הארץ. בזמן שבני האדם חיים בגלות על הירח, האנדרואידים נשלחים לכדור הארץ כחיילים, סיירים ותומכי לחימה.",
-      longDesc:["במשחק תשחקו אנדרואידים תחת ארגון YoRHa — ארגון צבאי של אנדרואידים מתקדמים.","מודל קרבי (B-Type): התמקדות בנשק פיזי ולחימה.","מודל סקאוט (S-Type): חקר ומידע.","מודל מרפא (H-Type): ריפוי והתמחות בנזקים פיזיים.","הפרוטוקול אוסר על קיום חיים אישיים מחוץ לגבולות המשימה. אך בשטח, רבים מפרים כללים אלה בסתר."],
+      longDesc:["במשחק תשחקו אנדרואידים תחת ארגון YoRHa, ביחידות של עד 5. לכל דמות אחד משלושה מודלים:","מודל קרבי (B-Type): מתמחה בלחימה ישירה. פעם במחזור חיים, כשהדמות נופלת, היא חוזרת מיד לקרב.","מודל סריקה (S-Type): מודיעין ופריצה. רק הוא יכול לסרוק ולפרוץ תיבות.","מודל מרפא (H-Type): מרפא חברים ומייצב את מי שנפל. פעם במחזור חיים יכול לרפא כמה חברים יחד.","הפרוטוקול אוסר על קיום חיים אישיים מחוץ לגבולות המשימה. אך בשטח, רבים מפרים כללים אלה בסתר."],
+      doc:"archive.html#ARC-008",
       data:[{k:"יעד ראשי",v:"השמדת הרובוטים"},{k:"סגנון",v:"היררכי, מיליטנטי"},{k:"עיקרון",v:"יעילות מעל הכל"},{k:"התנהגות",v:"קור רוח קרבי"}]
     },
     {
       type:"machine",num:"02",name:"Machine Lifeforms",id:"Network Intelligence Unit",
       desc:"הרובוטים נוצרו לצורכי מלחמה, אך עם הזמן פיתחו קהילות, תרבות ודפוסי התנהגות המזכירים בני אדם. הם חיים בצורה שיתופית ומשפחתית.",
-      longDesc:["מכונות נחותות במורכבותן מהאנדרואידים, אך נעלות בפן החברתי והקהילתי.","לצופה מבחוץ הן נראות תמימות — אך האם זאת האמת?","הרובוטים רואים בקהילותיהם משפחות. הגנה, יצירה ושמירה על חברים הם ערכיהם.","לרובוטים רשת משותפת — יכולת לחלוק מידע עם כל בני מינם בזמן אמת."],
+      longDesc:["במשחק תשחקו קהילות של מכונות, בצוותים של עד 5, שכל אחת מחקה משהו מהעולם הישן: משפחה, כפר, להקה, כת. גם למכונות שלושה מודלים:","מכונת קרב (B-Type): מתמחה בלחימה ישירה. פעם במחזור חיים, כשהמכונה נופלת, היא חוזרת מיד לקרב.","מכונת סריקה (S-Type): מודיעין ופריצה. רק היא יכולה לסרוק ולפרוץ תיבות.","מכונת תמיכה ורפואה (H-Type): מתקנת חברים ומייצבת את מי שנפל. פעם במחזור חיים יכולה לתקן כמה חברים יחד.","לצופה מבחוץ הן נראות תמימות — אך האם זאת האמת?"],
+      doc:"archive.html#ARC-009",
       data:[{k:"מטרה",v:"הישרדות ולמידה"},{k:"סגנון",v:"קהילתי, שיתופי"},{k:"דפוס",v:"אנושי "},{k:"כוח",v:"קטלני בעת איום"}]
     }
   ],
@@ -1344,10 +1354,10 @@ var C = {
   ],
   rules:[
     {warn:true, icon:'<svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>',title:"Safety Protocol",short:'מילת בטיחות "חד"ל" מפסיקה את כל הלחימה מיד, ללא שאלות.',detail:"כאשר נאמרת, כולם עוצרים מיד. הבטיחות הפיזית והנפשית חשובה יותר מכל סיפור."},
-    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>',title:"Combat System",short:"נשק נרף / ספוג בלבד. כל הנשקים חייבים לעבור בדיקת בטיחות בכניסה.",detail:'נשק LARP מאושר בלבד. בדיקה בתחילת האירוע ע"י הצוות.'},
+    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>',title:"Combat System",short:"נשקי לארפ רכים ונשקי נרף תקניים בלבד. כל נשק עובר בדיקת בטיחות בכניסה ומקבל מדבקה.",detail:'מותרים רובי Nerf, X-Shot ו-Dart Zone, עם תחמושת Accustrike Elite או Mega. אסורים: נשקי הטלה, חץ וקשת של נרף, איירסופט, כדורי ג׳ל וחיקויים זולים. לא מכוונים לפנים, לא בנשק ולא בנרף.'},
     {warn:true, icon:'<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',title:"Consent & Respect",short:"יש לכבד גבולות אישיים בכל עת. הטרדה גורמת להסרה מיידית.",detail:"קונפליקטים בין דמויות מעודדים. קונפליקטים בין שחקנים — לא. כל בעיה: פנה לחבר צוות."},
     {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2c-5.52 0-10 4.48-10 10 0 5.52 4.48 10 10 10s10-4.48 10-10c0-5.52-4.48-10-10-10zm-3 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM12 18c-2.5 0-4.67-1.4-5.5-3.5h11c-.83 2.1-3 3.5-5.5 3.5z"/></svg>',title:"Character Integrity",short:"שמור על דמות בתוך אזור המשחק. מטאגיימינג פוגע בחוויה של כולם.",detail:"בתוך האזור — אתה הדמות שלך. לצאת מדמות: ידיים באיקס על החזה."},
-    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>',title:"Death & Respawn",short:"כשנפלת — חכה. מרפאים מיועדים יכולים להחיות אותך.",detail:"מוות קבוע הוא בחירה דרמטית שנעשית עם המארגנים. אל תפחד מרגע המוות הרגעי לפעמים זה הרגע הכי טוב במשחק."},
+    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>',title:"Death & Respawn",short:"ירדתם ל-0 נקודות חיים? אתם מנוטרלים, ויש 30 שניות שבהן מרפא יכול לייצב אתכם.",detail:"מנוטרלים לא נלחמים: הולכים עם נשק מורד למקום בטוח קרוב וכורעים ברך. עברו 30 שניות בלי ייצוב? הדמות מתה. שמים יד על הראש והולכים לנקודת ה-Respawn, ומשם חוזרים למשחק. אנדרואידים מאבדים את כל מה שקרה מאז גיבוי הזיכרון האחרון בקופסה השחורה. מוות קבוע נעשה רק בתיאום עם המארגנים. אל תפחדו מרגע המוות, לפעמים זה הרגע הכי טוב במשחק."},
     {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',title:"Organizer Authority",short:"למארגנים סמכות סופית בכל מחלוקת. התייחס לכולם בכבוד.",detail:"הצוות כאן כדי לוודא שכולם נהנים. בכל בעיה — פנה מיד."}
   ],
   gallery:[
@@ -1360,14 +1370,18 @@ var C = {
     {id:"OPERATIVE_02",name:"עדי יעקבסון",role:"Game Master",titleHe:"מנהל משחק ראשי",photo:"image_adi.jpg",desc:"חלק מקהילת הלארפים בחמש שנים האחרונות, השתתף בלארפים רבים כשחקן וכנאפס.",long:"המטרה שלי היא ליצור חווית רולפליי ייחודית שעוד לא נראתה כמותה.",tags:["Game Master"]}
   ],
   faq:[
+    {q:"מאיזה גיל אפשר להשתתף?",a:"הלארפ מיועד לגילאי 16 ומעלה."},
+    {q:"האם זה לארפ קרבי?",a:"לא במובן הרגיל. Reboot הוא לארפ של חקר עולם: יש שני מחנות ויש קרבות, אבל אין ניצחון של צד אחד על השני, וגם השמדת המחנה השני לא תביא אתכם לשום מקום. הלב של המשחק הוא הסודות של העולם, פריצת תיבות, פענוח והדמות שלכם. מי שפחות רוצה להילחם מקבל משחק מלא, ומי שאוהב להילחם מוזמן להביא נרף ולהגן על המחנה."},
     {q:"האם צריך ניסיון קודם ב-LARP?",a:"לא! נקיים תדריך מלא לפני האירוע. כל מה שצריך הוא רצון להשתתף."},
-    {q:"מה לובשים לאירוע?",a:"הכלל המרכזי: אנדרואידים לובשים בגדים מודרניים עתידניים מתוקתקים. מכונות לובשות בגדים אפוקליפטים בלויים. אנחנו שואפים לתלבושות פשוטות ומשתלמות."},
+    {q:"מה לובשים לאירוע?",a:'לא צריך תפירה או תקציב גדול, רוב הפריטים נמצאים בארון או בחנויות יד שנייה.<br><br><b>אנדרואידים:</b> שחור, לבן, כסף וזהב, עם נגיעות צבע. סגנון סייברפאנק חדשני, בגדים מחויטים ונקיים בלי קרעים, וכמה שיותר נוצץ ומבריק. <a class="faq-link" href="https://pin.it/37Uhfh5V5" target="_blank" rel="noopener">השראה בפינטרסט ↗</a><br><br><b>מכונות:</b> צבעים מדבריים ודהויים, ברונזה ומתכת חלודה. סגנון פוסט-אפוקליפטי, בגדים בלויים, קרועים ומלוכלכים. אפשר לקחת בגדי יום-יום ו״ליישן״ אותם: לקרוע, לשפשף בנייר זכוכית, לטבול בתה. <a class="faq-link" href="https://pin.it/10odOf7J0" target="_blank" rel="noopener">השראה בפינטרסט ↗</a><br><br>לא לשכוח נעליים סגורות ונוחות, ושכבות חמות. המשחק ממשיך בלילה, ובמרץ קר.'},
     {q:"מה קורה אם נפצעים במהלך המשחק?",a:"יהיה חובש זמין בסביבת המשחק. הבטיחות תמיד קודמת לכל דבר אחר."},
     {q:"כמה זמן נמשך האירוע?",a:"יום וחצי כולל שינה. תדריך בבוקר, לארפ מהצהריים ועד הצהריים למחרת."},
     {q:"האם אפשר להגיע ללא נשק?",a:"כן. ניתן לשאול נשק ספוג מהצוות בהודעה מראש. נשק משלכם עובר בדיקת בטיחות."},
     {q:"האם הלארפ מספק אוכל?",a:"המשחק יספק נשנושים קלים ומים בלבד. במקום יש מקררים ואפשרות לבישול — יש להגיע עם אוכל מהבית."},
+    {q:"איך בונים צוות?",a:'בכל מחנה פועלים צוותים של עד 5 משתתפים. מכונות בוחרות מה הן מחקות (משפחה, כפר, להקה, כת, חנות) ומחלקות תפקידים כמו ״אמא״, ״המוכר״ או ״הכוהן״. אנדרואידים הם יחידה צבאית עם שם, מספרי דגם ומפקד, ולכל יחידה יש ״סדק״ משלה. <a class="faq-link" href="archive.html#ARC-011">המדריך המלא בארכיון ←</a>'},
+    {q:"מה כדאי להביא?",a:"סוללת גיבוי לטלפון (המשחק משתמש בו הרבה), נעליים סגורות, שכבות חמות ללילה, אוכל מהבית, ונשק לארפ או נרף אם יש לכם."},
     {q:"כיצד בוחרים צד?",a:"בטופס ההרשמה תקבלו שאלות שיעזרו לעצב את חווית המשחק ובהם תבחרו צד."},
-    {q:"כיצד עובדת פריצת התיבות?",a:"מצאו תיבה → סרקו ברקוד → שחקו את משחק הפריצה → קבלו קוד → פיתחו מנעול. שלושה סוגי משחקים: Shooter, Memory Breach, Block Infiltration."}
+    {q:"מי יכול לפרוץ תיבות?",a:'רק דמויות מדגם S-Type (סריקה), גם אנדרואידים וגם מכונות. <a class="faq-link" href="#tech">איך זה עובד, בסעיף טכנולוגיית שדה ←</a>'}
   ],
   join:{desc:"המקומות מוגבלים. ההרשמה פתוחה — מלאו את הטופס כדי לשריין מקום."},
   footer:{copy:"© פרויקט ריבוט LARP  ·  יוזמת מעריצים — אינה קשורה ל-Square Enix"}
@@ -1401,13 +1415,13 @@ document.getElementById('faction-wrap').innerHTML = mapJoin(C.factions,function(
     '\n    <div class="fac-body">'+
     '\n      <p class="fac-desc">'+f.desc+'</p>'+
     '\n      <div class="fac-details">'+mapJoin(f.longDesc,function(p){ return '<p>'+p+'</p>'; })+'</div>'+
-    '\n      <button class="fac-more" type="button" aria-expanded="false">קרא עוד ▾</button>'+
+    '\n      <div class="fac-actions"><button class="fac-more" type="button" aria-expanded="false">קרא עוד ▾</button>'+(f.doc?'<a class="fac-doc" href="'+f.doc+'">המסמך המלא בארכיון ←</a>':'')+'</div>'+
     '\n      <div class="fac-stats">'+mapJoin(f.data,function(d){ return '<div class="fac-stat"><span class="fac-sk">'+d.k+'</span><span class="fac-sv">'+d.v+'</span></div>'; })+'</div>'+
     '\n    </div>'+
     '\n  </div>';
 });
 
-document.getElementById('lore-wrap').innerHTML = mapJoin(C.lore,function(l,i){
+if(document.getElementById('lore-wrap')) document.getElementById('lore-wrap').innerHTML = mapJoin(C.lore,function(l,i){
   return '\n  <div class="acc-item">'+
     '\n    <button class="acc-trigger">'+
     '\n      <span class="acc-num">'+padN(i+1,2)+'</span>'+
