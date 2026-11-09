@@ -33,9 +33,9 @@
 
 var ARCHIVE = [
 
-  {type:"video", title:"For the Glory of Mankind", faction:"general", tags:["פתיח","5012","היסטוריה"], source:"NieR:Automata · תרגום: Grognak the Barbarian", added:"2026-11-09",
+  {type:"video", title:"For the Glory of Mankind", faction:"general", tags:["פתיח","5012","היסטוריה"], source:"YouTube · Grognak the Barbarian", added:"2026-11-09",
    summary:"קטע פתיחה מהמשחק: הפלישה של 5012, הבריחה לירח ותחילת המלחמה.",
-   url:"lore/glory-to-mankind.mp4", thumb:"lore/glory-to-mankind.jpg"},
+   url:"https://www.youtube.com/watch?v=0faQZcPUc4A"},
 
   {type:"text", title:"על מכונות בעולם החדש", faction:"machine", tags:["מכונות","network","תלבושות","חיקוי"], source:"מסמך עולם", added:"2026-11-09",
    summary:"איך המכונות לומדות מהאינטרנט האנושי הישן, הרשת שמחברת ביניהן, הבגדים מהעולם הישן והחיקוי שהפך לחיים קהילתיים.",
