@@ -493,6 +493,10 @@ section { padding: 56px 16px; }
 .fac-card.android .fac-doc { color:var(--android); }
 .mid-cta { text-align:center; margin-top:32px; }
 .mid-cta p { color:var(--tx-2); font-size:.95rem; margin-bottom:14px; }
+.quiz-cta { display:inline-flex; flex-direction:column; align-items:center; gap:2px; background:#dad4bb; color:#4e4b42; padding:12px 26px; margin-bottom:22px; border:1px solid #b5af98; box-shadow:4px 4px 0 rgba(0,0,0,.35); transition:background .15s,color .15s; }
+.quiz-cta:hover { background:#48443a; color:#dad4bb; }
+.quiz-cta-eye { font-family:var(--ui); font-size:.68rem; letter-spacing:.24em; opacity:.7; direction:ltr; }
+.quiz-cta-main { font-family:var(--he); font-size:1rem; font-weight:700; }
 .fac-details p { font-size: clamp(.82rem,1.7vw,.9rem); color: var(--tx-3); line-height: 1.8; padding-right: 12px; }
 .fac-card.android .fac-details p { border-right: 1.5px solid rgba(200,196,168,.25); }
 .fac-card.machine .fac-details p { border-right: 1.5px solid rgba(122,184,180,.25); }
@@ -995,6 +999,7 @@ footer {
   <a href="#about"    onclick="closeNav()">על האירוע<small>BRIEFING</small></a>
   <a href="#history"  onclick="closeNav()">היסטוריה<small>HISTORY</small></a>
   <a href="#factions" onclick="closeNav()">הפלגים<small>FACTIONS</small></a>
+  <a href="quiz.html" onclick="closeNav()">איזה צד מתאים לי?<small>QUIZ</small></a>
   <a href="archive.html" onclick="closeNav()" class="mn-db">ארכיון לור ↗<small>LORE DATABASE</small></a>
   <a href="#tech"     onclick="closeNav()">טכנולוגיה<small>TECH</small></a>
   <a href="#rules"    onclick="closeNav()">חוקים<small>DIRECTIVES</small></a>
@@ -1097,6 +1102,10 @@ footer {
     </div>
     <div class="fac-grid reveal stagger" id="faction-wrap"></div>
     <div class="mid-cta reveal">
+      <a href="quiz.html" class="quiz-cta">
+        <span class="quiz-cta-eye">UNIT CLASSIFICATION</span>
+        <span class="quiz-cta-main">לא בטוחים איזה צד? שאלון קצר ←</span>
+      </a>
       <p>בחרתם צד? את הבחירה עושים בטופס ההרשמה.</p>
       <a href="https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform" target="_blank" rel="noopener" class="btn-coming-soon"><span class="btn-cs-dot"></span>להרשמה</a>
     </div>
