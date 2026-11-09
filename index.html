@@ -61,7 +61,7 @@ button { font-family: inherit; cursor: pointer; }
 ::-webkit-scrollbar-thumb { background: var(--br-hi); }
 
 #hero {
-  background-image: url('1779268648819_image.png');
+  background-image: url('hero-bg.jpg');
   background-size: cover;
   background-position: center 40%;
   background-repeat: no-repeat;
@@ -873,7 +873,7 @@ footer {
   ];
   stages.forEach(function(s){ setTimeout(function(){ target=s.v; },s.d); });
 
-  function pad3(n){ return String(n).padStart(3,'0'); }
+  function pad3(n){ var s=String(n); while(s.length<3){ s='0'+s; } return s; }
 
   function tick(){
     if(displayed<target){
@@ -909,7 +909,7 @@ footer {
   // לחיצה על ENTER — הפעל מוזיקה וכנס לאתר
   document.getElementById('tap-btn').addEventListener('click', function(){
     var bgMusic=document.getElementById('bgMusic');
-    if(bgMusic){ bgMusic.volume=0.6; bgMusic.play().catch(function(){}); }
+    if(bgMusic){ bgMusic.volume=0.6; try{ var pp=bgMusic.play(); if(pp&&typeof pp.then==='function'){ pp.then(null,function(){}); } }catch(e){} }
     ov.style.transition='opacity .7s ease';
     ov.style.opacity='0';
     ov.style.pointerEvents='none';
@@ -1241,9 +1241,9 @@ footer {
 <button id="btt" aria-label="חזרה למעלה">▲</button>
 
 <script>
-const REGISTRATION_URL = "https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform";
+var REGISTRATION_URL = "https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform";
 
-const C = {
+var C = {
   hero:{tagline:"בעולם שבו הכל נראה מוכתב מראש, המרד האמיתי הוא לבחור בעצמך."},
   about:{
     paragraphs:[
@@ -1278,12 +1278,12 @@ const C = {
     {title:"Outliers",stamp:"ANOMALY",text:"לא כל אינדיבידואל מתאים לאידיאולוגיה של סיעתו. אנדרואידים שנטשו, מכונות שעזבו. חיים בשוליי המלחמה ארוכת השנים.",long:"ה-Outliers נלחמים למענם בלבד ומוצאים בריתות זמניות בהתאם לצורך."}
   ],
   rules:[
-    {warn:true, icon:`<svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>`,title:"Safety Protocol",short:'מילת בטיחות "חד"ל" מפסיקה את כל הלחימה מיד, ללא שאלות.',detail:"כאשר נאמרת, כולם עוצרים מיד. הבטיחות הפיזית והנפשית חשובה יותר מכל סיפור."},
-    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>`,title:"Combat System",short:"נשק נרף / ספוג בלבד. כל הנשקים חייבים לעבור בדיקת בטיחות בכניסה.",detail:'נשק LARP מאושר בלבד. בדיקה בתחילת האירוע ע"י הצוות.'},
-    {warn:true, icon:`<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,title:"Consent & Respect",short:"יש לכבד גבולות אישיים בכל עת. הטרדה גורמת להסרה מיידית.",detail:"קונפליקטים בין דמויות מעודדים. קונפליקטים בין שחקנים — לא. כל בעיה: פנה לחבר צוות."},
-    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 2c-5.52 0-10 4.48-10 10 0 5.52 4.48 10 10 10s10-4.48 10-10c0-5.52-4.48-10-10-10zm-3 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM12 18c-2.5 0-4.67-1.4-5.5-3.5h11c-.83 2.1-3 3.5-5.5 3.5z"/></svg>`,title:"Character Integrity",short:"שמור על דמות בתוך אזור המשחק. מטאגיימינג פוגע בחוויה של כולם.",detail:"בתוך האזור — אתה הדמות שלך. לצאת מדמות: ידיים באיקס על החזה."},
-    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>`,title:"Death & Respawn",short:"כשנפלת — חכה. מרפאים מיועדים יכולים להחיות אותך.",detail:"מוות קבוע הוא בחירה דרמטית שנעשית עם המארגנים. אל תפחד מרגע המוות הרגעי לפעמים זה הרגע הכי טוב במשחק."},
-    {warn:false,icon:`<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`,title:"Organizer Authority",short:"למארגנים סמכות סופית בכל מחלוקת. התייחס לכולם בכבוד.",detail:"הצוות כאן כדי לוודא שכולם נהנים. בכל בעיה — פנה מיד."}
+    {warn:true, icon:'<svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>',title:"Safety Protocol",short:'מילת בטיחות "חד"ל" מפסיקה את כל הלחימה מיד, ללא שאלות.',detail:"כאשר נאמרת, כולם עוצרים מיד. הבטיחות הפיזית והנפשית חשובה יותר מכל סיפור."},
+    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>',title:"Combat System",short:"נשק נרף / ספוג בלבד. כל הנשקים חייבים לעבור בדיקת בטיחות בכניסה.",detail:'נשק LARP מאושר בלבד. בדיקה בתחילת האירוע ע"י הצוות.'},
+    {warn:true, icon:'<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',title:"Consent & Respect",short:"יש לכבד גבולות אישיים בכל עת. הטרדה גורמת להסרה מיידית.",detail:"קונפליקטים בין דמויות מעודדים. קונפליקטים בין שחקנים — לא. כל בעיה: פנה לחבר צוות."},
+    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2c-5.52 0-10 4.48-10 10 0 5.52 4.48 10 10 10s10-4.48 10-10c0-5.52-4.48-10-10-10zm-3 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM12 18c-2.5 0-4.67-1.4-5.5-3.5h11c-.83 2.1-3 3.5-5.5 3.5z"/></svg>',title:"Character Integrity",short:"שמור על דמות בתוך אזור המשחק. מטאגיימינג פוגע בחוויה של כולם.",detail:"בתוך האזור — אתה הדמות שלך. לצאת מדמות: ידיים באיקס על החזה."},
+    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>',title:"Death & Respawn",short:"כשנפלת — חכה. מרפאים מיועדים יכולים להחיות אותך.",detail:"מוות קבוע הוא בחירה דרמטית שנעשית עם המארגנים. אל תפחד מרגע המוות הרגעי לפעמים זה הרגע הכי טוב במשחק."},
+    {warn:false,icon:'<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',title:"Organizer Authority",short:"למארגנים סמכות סופית בכל מחלוקת. התייחס לכולם בכבוד.",detail:"הצוות כאן כדי לוודא שכולם נהנים. בכל בעיה — פנה מיד."}
   ],
   gallery:[
     {src:"robot2.jpg",alt:"מכונה"},{src:"yorah.png",alt:"YoRHa"},
@@ -1307,189 +1307,240 @@ const C = {
   join:{desc:"המקומות מוגבלים. ההרשמה פתוחה — מלאו את הטופס כדי לשריין מקום."},
   footer:{copy:"© פרויקט ריבוט LARP  ·  יוזמת מעריצים — אינה קשורה ל-Square Enix"}
 };
+// ---- ES5 helpers (old Android WebViews: no padStart / NodeList.forEach / closest / play() promise) ----
+function padN(n,len){ var s=String(n); while(s.length<len){ s='0'+s; } return s; }
+function each(list,fn){ for(var i=0;i<list.length;i++){ fn(list[i],i); } }
+function mapJoin(arr,fn){ var out=[]; for(var i=0;i<arr.length;i++){ out.push(fn(arr[i],i)); } return out.join(''); }
+function closestEl(el,cls){ while(el&&el.nodeType===1){ if(el.classList&&el.classList.contains(cls)){ return el; } el=el.parentNode; } return null; }
+function safePlay(media,onOk){
+  var p;
+  try{ p=media.play(); }catch(e){ return; }
+  if(p&&typeof p.then==='function'){ p.then(function(){ if(onOk){ onOk(); } },function(){}); }
+  else if(onOk){ onOk(); }
+}
 
 document.getElementById('hero-tagline').textContent = C.hero.tagline;
-document.getElementById('about-body').innerHTML = C.about.paragraphs.map(p=>`<p>${p}</p>`).join('');
-document.getElementById('data-rows').innerHTML = C.about.stats.map(s=>`<div class="data-row"><span class="data-k">${s.k}</span><span class="data-v">${s.v}</span></div>`).join('');
+document.getElementById('about-body').innerHTML = mapJoin(C.about.paragraphs,function(p){ return '<p>'+p+'</p>'; });
+document.getElementById('data-rows').innerHTML = mapJoin(C.about.stats,function(s){
+  return '<div class="data-row"><span class="data-k">'+s.k+'</span><span class="data-v">'+s.v+'</span></div>';
+});
 
-document.getElementById('faction-wrap').innerHTML = C.factions.map(f=>`
-  <div class="fac-card ${f.type}">
-    <div class="fac-watermark">${f.num}</div>
-    <div class="fac-head">
-      <img class="fac-head-img" src="${f.type==='android'?'android 2.jpg':'robot2.jpg'}" alt="" aria-hidden="true">
-      <div class="fac-id">// ${f.id}</div>
-      <div class="fac-name">${f.name}</div>
-    </div>
-    <div class="fac-body">
-      <p class="fac-desc">${f.desc}</p>
-      <div class="fac-details">${f.longDesc.map(p=>`<p>${p}</p>`).join('')}</div>
-      <div class="fac-stats">${f.data.map(d=>`<div class="fac-stat"><span class="fac-sk">${d.k}</span><span class="fac-sv">${d.v}</span></div>`).join('')}</div>
-    </div>
-  </div>`).join('');
+document.getElementById('faction-wrap').innerHTML = mapJoin(C.factions,function(f){
+  return '\n  <div class="fac-card '+f.type+'">'+
+    '\n    <div class="fac-watermark">'+f.num+'</div>'+
+    '\n    <div class="fac-head">'+
+    '\n      <img class="fac-head-img" src="'+(f.type==='android'?'android 2.jpg':'robot2.jpg')+'" alt="" aria-hidden="true">'+
+    '\n      <div class="fac-id">// '+f.id+'</div>'+
+    '\n      <div class="fac-name">'+f.name+'</div>'+
+    '\n    </div>'+
+    '\n    <div class="fac-body">'+
+    '\n      <p class="fac-desc">'+f.desc+'</p>'+
+    '\n      <div class="fac-details">'+mapJoin(f.longDesc,function(p){ return '<p>'+p+'</p>'; })+'</div>'+
+    '\n      <div class="fac-stats">'+mapJoin(f.data,function(d){ return '<div class="fac-stat"><span class="fac-sk">'+d.k+'</span><span class="fac-sv">'+d.v+'</span></div>'; })+'</div>'+
+    '\n    </div>'+
+    '\n  </div>';
+});
 
-document.getElementById('lore-wrap').innerHTML = C.lore.map((l,i)=>`
-  <div class="acc-item">
-    <button class="acc-trigger">
-      <span class="acc-num">${String(i+1).padStart(2,'0')}</span>
-      <span class="acc-title">${l.title}</span>
-      <span class="acc-stamp">${l.stamp}</span>
-      <span class="acc-arrow">▶</span>
-    </button>
-    <div class="acc-body"><div class="acc-inner">
-      <p class="acc-text">${l.text}</p>
-      <p class="acc-extra">${l.long}</p>
-    </div></div>
-  </div>`).join('');
-document.querySelectorAll('.acc-item').forEach(item=>{
-  item.querySelector('.acc-trigger').addEventListener('click',()=>{
-    const o=item.classList.contains('open');
-    document.querySelectorAll('.acc-item').forEach(i=>{i.classList.remove('open');i.querySelector('.acc-body').style.maxHeight='0';});
-    if(!o){item.classList.add('open');const b=item.querySelector('.acc-body');b.style.maxHeight=b.scrollHeight+'px';}
+document.getElementById('lore-wrap').innerHTML = mapJoin(C.lore,function(l,i){
+  return '\n  <div class="acc-item">'+
+    '\n    <button class="acc-trigger">'+
+    '\n      <span class="acc-num">'+padN(i+1,2)+'</span>'+
+    '\n      <span class="acc-title">'+l.title+'</span>'+
+    '\n      <span class="acc-stamp">'+l.stamp+'</span>'+
+    '\n      <span class="acc-arrow">▶</span>'+
+    '\n    </button>'+
+    '\n    <div class="acc-body"><div class="acc-inner">'+
+    '\n      <p class="acc-text">'+l.text+'</p>'+
+    '\n      <p class="acc-extra">'+l.long+'</p>'+
+    '\n    </div></div>'+
+    '\n  </div>';
+});
+// accordion: one open at a time (shared by lore + faq)
+function bindAccordion(itemSel,trigSel,bodySel){
+  var items=document.querySelectorAll(itemSel);
+  each(items,function(item){
+    item.querySelector(trigSel).addEventListener('click',function(){
+      var o=item.classList.contains('open');
+      each(items,function(it){ it.classList.remove('open'); it.querySelector(bodySel).style.maxHeight='0'; });
+      if(!o){ item.classList.add('open'); var b=item.querySelector(bodySel); b.style.maxHeight=b.scrollHeight+'px'; }
+    });
   });
+}
+bindAccordion('.acc-item','.acc-trigger','.acc-body');
+
+document.getElementById('rules-wrap').innerHTML = mapJoin(C.rules,function(r,i){
+  return '\n  <div class="r-item '+(r.warn?'warn':'')+'">'+
+    '\n    <div class="r-icon-col">'+
+    '\n      <span class="r-icon">'+r.icon+'</span>'+
+    '\n      <span class="r-num">DIR-'+padN(i+1,3)+'</span>'+
+    '\n    </div>'+
+    '\n    <div class="r-content">'+
+    '\n      <div class="r-header">'+
+    '\n        <span class="r-title">'+r.title+'</span>'+
+    '\n        '+(r.warn?'<span class="r-chip">⚠ WARNING</span>':'')+
+    '\n      </div>'+
+    '\n      <p class="r-short">'+r.short+'</p>'+
+    '\n      <p class="r-detail">'+r.detail+'</p>'+
+    '\n    </div>'+
+    '\n  </div>';
 });
 
-document.getElementById('rules-wrap').innerHTML = C.rules.map((r,i)=>`
-  <div class="r-item ${r.warn?'warn':''}">
-    <div class="r-icon-col">
-      <span class="r-icon">${r.icon}</span>
-      <span class="r-num">DIR-${String(i+1).padStart(3,'0')}</span>
-    </div>
-    <div class="r-content">
-      <div class="r-header">
-        <span class="r-title">${r.title}</span>
-        ${r.warn?'<span class="r-chip">⚠ WARNING</span>':''}
-      </div>
-      <p class="r-short">${r.short}</p>
-      <p class="r-detail">${r.detail}</p>
-    </div>
-  </div>`).join('');
-
-document.getElementById('gallery-wrap').innerHTML = C.gallery.map((g,i)=>`
-  <div class="gal-cell" data-src="${g.src}">
-    <img src="${g.src}" alt="${g.alt}" loading="lazy">
-    <span class="gal-id">IMG_${String(i+1).padStart(3,'0')}</span>
-  </div>`).join('');
-document.querySelectorAll('.gal-cell[data-src]').forEach(c=>{
-  c.addEventListener('click',()=>openLB(c.dataset.src));
+document.getElementById('gallery-wrap').innerHTML = mapJoin(C.gallery,function(g,i){
+  return '\n  <div class="gal-cell" data-src="'+g.src+'">'+
+    '\n    <img src="'+g.src+'" alt="'+g.alt+'" loading="lazy">'+
+    '\n    <span class="gal-id">IMG_'+padN(i+1,3)+'</span>'+
+    '\n  </div>';
+});
+each(document.querySelectorAll('.gal-cell[data-src]'),function(c){
+  c.addEventListener('click',function(){ openLB(c.getAttribute('data-src')); });
 });
 
-document.getElementById('team-grid').innerHTML = C.team.map(m=>`
-  <div class="team-card">
-    <div class="team-photo">
-      ${m.photo?`<img src="${m.photo}" alt="${m.name}" loading="lazy">`:'<div class="team-photo-ph">◈</div>'}
-      <span class="team-photo-tag">${m.id}</span>
-    </div>
-    <div class="team-info">
-      <div class="team-role">// ${m.role}</div>
-      <div class="team-name">${m.name}</div>
-      <div class="team-title">${m.titleHe}</div>
-      <div class="team-div"></div>
-      <p class="team-desc">${m.desc}</p>
-      <p class="team-long">${m.long}</p>
-      <div class="team-tags">${m.tags.map(t=>`<span class="team-tag">${t}</span>`).join('')}</div>
-    </div>
-  </div>`).join('');
-
-document.getElementById('faq-wrap').innerHTML = C.faq.map((f,i)=>`
-  <div class="faq-item">
-    <button class="faq-q">
-      <span class="faq-prompt">$&gt;</span>
-      <span class="faq-q-text">${f.q}</span>
-      <span class="faq-chev">▶</span>
-    </button>
-    <div class="faq-a"><div class="faq-a-in"><p class="faq-a-t">${f.a}</p></div></div>
-  </div>`).join('');
-document.querySelectorAll('.faq-item').forEach(item=>{
-  item.querySelector('.faq-q').addEventListener('click',()=>{
-    const o=item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight='0';});
-    if(!o){item.classList.add('open');const a=item.querySelector('.faq-a');a.style.maxHeight=a.scrollHeight+'px';}
-  });
+document.getElementById('team-grid').innerHTML = mapJoin(C.team,function(m){
+  return '\n  <div class="team-card">'+
+    '\n    <div class="team-photo">'+
+    '\n      '+(m.photo?'<img src="'+m.photo+'" alt="'+m.name+'" loading="lazy">':'<div class="team-photo-ph">◈</div>')+
+    '\n      <span class="team-photo-tag">'+m.id+'</span>'+
+    '\n    </div>'+
+    '\n    <div class="team-info">'+
+    '\n      <div class="team-role">// '+m.role+'</div>'+
+    '\n      <div class="team-name">'+m.name+'</div>'+
+    '\n      <div class="team-title">'+m.titleHe+'</div>'+
+    '\n      <div class="team-div"></div>'+
+    '\n      <p class="team-desc">'+m.desc+'</p>'+
+    '\n      <p class="team-long">'+m.long+'</p>'+
+    '\n      <div class="team-tags">'+mapJoin(m.tags,function(t){ return '<span class="team-tag">'+t+'</span>'; })+'</div>'+
+    '\n    </div>'+
+    '\n  </div>';
 });
+
+document.getElementById('faq-wrap').innerHTML = mapJoin(C.faq,function(f){
+  return '\n  <div class="faq-item">'+
+    '\n    <button class="faq-q">'+
+    '\n      <span class="faq-prompt">$&gt;</span>'+
+    '\n      <span class="faq-q-text">'+f.q+'</span>'+
+    '\n      <span class="faq-chev">▶</span>'+
+    '\n    </button>'+
+    '\n    <div class="faq-a"><div class="faq-a-in"><p class="faq-a-t">'+f.a+'</p></div></div>'+
+    '\n  </div>';
+});
+bindAccordion('.faq-item','.faq-q','.faq-a');
 
 document.getElementById('join-title').textContent='הצטרפו עכשיו';
 document.getElementById('join-desc').textContent=C.join.desc;
-document.getElementById('join-cta').innerHTML=`<a href="${REGISTRATION_URL}" target="_blank" rel="noopener" class="btn-coming-soon"><span class="btn-cs-dot"></span>למילוי טופס ההרשמה</a>`;
+document.getElementById('join-cta').innerHTML='<a href="'+REGISTRATION_URL+'" target="_blank" rel="noopener" class="btn-coming-soon"><span class="btn-cs-dot"></span>למילוי טופס ההרשמה</a>';
 document.getElementById('footer-logo').textContent='PROJECT REBOOT';
 document.getElementById('footer-copy').textContent=C.footer.copy;
 
-const burger=document.getElementById('burger'),mNav=document.getElementById('mobile-nav');
+// mobile nav — closeNav stays global (called from inline onclick in the menu)
+var burger=document.getElementById('burger'),mNav=document.getElementById('mobile-nav');
 function closeNav(){burger.classList.remove('open');mNav.classList.remove('open');burger.setAttribute('aria-expanded','false');mNav.setAttribute('aria-hidden','true');document.body.style.overflow='';}
-burger.addEventListener('click',()=>{
-  const o=mNav.classList.contains('open');
+burger.addEventListener('click',function(){
+  var o=mNav.classList.contains('open');
   if(o){closeNav();}else{burger.classList.add('open');mNav.classList.add('open');burger.setAttribute('aria-expanded','true');mNav.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
 });
 
-const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img');
+var lb=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img');
 function openLB(src){lbImg.src=src;lb.classList.add('show');document.body.style.overflow='hidden';}
-function closeLB(){lb.classList.remove('show');document.body.style.overflow='';setTimeout(()=>{lbImg.src='';},300);}
+function closeLB(){lb.classList.remove('show');document.body.style.overflow='';setTimeout(function(){lbImg.src='';},300);}
 document.getElementById('lb-close').addEventListener('click',closeLB);
-lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('show'))closeLB();});
+lb.addEventListener('click',function(e){if(e.target===lb)closeLB();});
+document.addEventListener('keydown',function(e){if((e.key==='Escape'||e.keyCode===27)&&lb.classList.contains('show'))closeLB();});
 
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const w=btn.dataset.tab,wrap=btn.closest('.tabs-outer');
-    wrap.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+each(document.querySelectorAll('.tab-btn'),function(btn){
+  btn.addEventListener('click',function(){
+    var w=btn.getAttribute('data-tab'),wrap=closestEl(btn,'tabs-outer');
+    if(!wrap)return;
+    each(wrap.querySelectorAll('.tab-btn'),function(b){b.classList.remove('active');});
     btn.classList.add('active');
-    wrap.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.dataset.panel===w);});
+    each(wrap.querySelectorAll('.tab-panel'),function(p){
+      if(p.getAttribute('data-panel')===w){p.classList.add('active');}else{p.classList.remove('active');}
+    });
   });
 });
 
-const hTrig=document.getElementById('hack-trigger'),hDraw=document.getElementById('hack-drawer'),step4=document.getElementById('step4'),tsHint=document.getElementById('ts-hint');
+var hTrig=document.getElementById('hack-trigger'),hDraw=document.getElementById('hack-drawer'),step4=document.getElementById('step4'),tsHint=document.getElementById('ts-hint');
 function toggleHack(){
-  const o=hTrig.classList.contains('open');
-  hTrig.classList.toggle('open',!o);hDraw.classList.toggle('open',!o);
+  var o=hTrig.classList.contains('open');
+  if(o){hTrig.classList.remove('open');hDraw.classList.remove('open');}
+  else{hTrig.classList.add('open');hDraw.classList.add('open');}
   hDraw.style.maxHeight=o?'0':hDraw.scrollHeight+'px';
   if(tsHint)tsHint.textContent=o?'[ הקש לפרטים ▼ ]':'[ הקש לסגירה ▲ ]';
-  if(!o)setTimeout(()=>hTrig.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+  if(!o)setTimeout(function(){
+    try{hTrig.scrollIntoView({behavior:'smooth',block:'nearest'});}catch(e){hTrig.scrollIntoView(false);}
+  },80);
 }
 hTrig.addEventListener('click',toggleHack);
 if(step4)step4.addEventListener('click',toggleHack);
-window.addEventListener('resize',()=>{if(hDraw.classList.contains('open'))hDraw.style.maxHeight=hDraw.scrollHeight+'px';},{passive:true});
+window.addEventListener('resize',function(){if(hDraw.classList.contains('open'))hDraw.style.maxHeight=hDraw.scrollHeight+'px';},false);
 
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.classList.add('in');
-      e.target.querySelectorAll('.tl-item').forEach((it,i)=>setTimeout(()=>it.classList.add('in'),i*110));
-    }
-  });
-},{threshold:.06});
-document.querySelectorAll('.reveal,.stagger').forEach(el=>obs.observe(el));
+// reveal on scroll — without IntersectionObserver, show everything at once (content would stay invisible otherwise)
+(function(){
+  var targets=document.querySelectorAll('.reveal,.stagger');
+  function reveal(el){
+    el.classList.add('in');
+    each(el.querySelectorAll('.tl-item'),function(it,i){setTimeout(function(){it.classList.add('in');},i*110);});
+  }
+  if(!('IntersectionObserver' in window)){ each(targets,reveal); return; }
+  var obs=new IntersectionObserver(function(entries){
+    each(entries,function(e){ if(e.isIntersecting){ reveal(e.target); } });
+  },{threshold:.06});
+  each(targets,function(el){obs.observe(el);});
+})();
 
-const btt=document.getElementById('btt');
-window.addEventListener('scroll',()=>{btt.classList.toggle('vis',window.scrollY>300);},{passive:true});
-btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+var btt=document.getElementById('btt');
+window.addEventListener('scroll',function(){
+  var y=window.pageYOffset||document.documentElement.scrollTop||0;
+  if(y>300){btt.classList.add('vis');}else{btt.classList.remove('vis');}
+},false);
+btt.addEventListener('click',function(){
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
+});
 
 (function(){
-  const EVENT_DATE='2027-03-26T10:00:00+03:00';
-  const el=document.getElementById('cd-display');
-  function pad(n){return String(n).padStart(2,'0');}
-  function flip(id,val){const b=document.getElementById(id);if(!b)return;const s=pad(val);if(b.textContent!==s){b.classList.remove('flip');void b.offsetWidth;b.textContent=s;b.classList.add('flip');}}
+  var EVENT_DATE='2027-03-26T10:00:00+03:00';
+  var el=document.getElementById('cd-display');
+  function pad(n){return padN(n,2);}
+  function flip(id,val){var b=document.getElementById(id);if(!b)return;var s=pad(val);if(b.textContent!==s){b.classList.remove('flip');void b.offsetWidth;b.textContent=s;b.classList.add('flip');}}
   function render(){
-    if(!EVENT_DATE){el.innerHTML=`<div class="cd-tbd">DATE: TBD</div><div class="cd-tbd-sub">// תאריך יפורסם בקרוב //</div>`;return;}
-    const diff=new Date(EVENT_DATE).getTime()-Date.now();
-    if(diff<=0){el.innerHTML=`<div class="cd-tbd">// REBOOT IS NOW //</div>`;return;}
-    const d=Math.ceil(diff/86400000);
-    if(!document.getElementById('cd-d')){el.innerHTML=`<div class="cd-units"><div class="cd-unit"><div class="cd-num" id="cd-d">${pad(d)}</div><div class="cd-sub">ימים לאירוע</div></div></div>`;}
+    if(!EVENT_DATE){el.innerHTML='<div class="cd-tbd">DATE: TBD</div><div class="cd-tbd-sub">// תאריך יפורסם בקרוב //</div>';return;}
+    var diff=new Date(EVENT_DATE).getTime()-Date.now();
+    if(diff<=0){el.innerHTML='<div class="cd-tbd">// REBOOT IS NOW //</div>';return;}
+    var d=Math.ceil(diff/86400000);
+    if(!document.getElementById('cd-d')){el.innerHTML='<div class="cd-units"><div class="cd-unit"><div class="cd-num" id="cd-d">'+pad(d)+'</div><div class="cd-sub">ימים לאירוע</div></div></div>';}
     else{flip('cd-d',d);}
   }
   render();if(EVENT_DATE)setInterval(render,60000);
 })();
 
 (function(){
-  const music=document.getElementById('bgMusic');
-  const bar=document.getElementById('music-bar'),play=document.getElementById('mb-play'),close=document.getElementById('mb-close');
-  const viz=document.getElementById('mb-viz'),bars=viz.querySelectorAll('.mb-b');
-  let raf=null,ctx=null,analyser=null;
-  setTimeout(()=>bar.classList.add('vis'),3500);
-  function initCtx(){if(ctx)return;try{ctx=new(window.AudioContext||window.webkitAudioContext)();analyser=ctx.createAnalyser();analyser.fftSize=32;const s=ctx.createMediaElementSource(music);s.connect(analyser);analyser.connect(ctx.destination);}catch(e){}}
-  function startViz(){viz.classList.add('on');const d=analyser?new Uint8Array(analyser.frequencyBinCount):null;const t=()=>{if(music.paused){stopViz();return;}if(analyser&&d){analyser.getByteFrequencyData(d);bars.forEach((b,i)=>{b.style.height=Math.max(2,(d[Math.floor(i*d.length/bars.length)]/255)*100)+'%';});}else bars.forEach(b=>b.style.height=(Math.random()*70+5)+'%');raf=requestAnimationFrame(t);};raf=requestAnimationFrame(t);}
-  function stopViz(){viz.classList.remove('on');if(raf){cancelAnimationFrame(raf);raf=null;}bars.forEach(b=>b.style.height='2px');}
-  function upd(){const p=!music.paused;play.textContent=p?'■':'▶';if(p)startViz();else stopViz();}
-  play.addEventListener('click',()=>{initCtx();if(ctx&&ctx.state==='suspended')ctx.resume();if(music.paused){music.volume=.6;music.play().then(upd).catch(()=>{});}else{music.pause();upd();}});
-  close.addEventListener('click',()=>{music.pause();upd();bar.classList.remove('vis');});
+  var music=document.getElementById('bgMusic');
+  var bar=document.getElementById('music-bar'),play=document.getElementById('mb-play'),close=document.getElementById('mb-close');
+  var viz=document.getElementById('mb-viz'),bars=viz.querySelectorAll('.mb-b');
+  var raf=null,ctx=null,analyser=null;
+  var rAF=window.requestAnimationFrame||window.webkitRequestAnimationFrame||function(f){return setTimeout(f,16);};
+  var cAF=window.cancelAnimationFrame||window.webkitCancelAnimationFrame||clearTimeout;
+  setTimeout(function(){bar.classList.add('vis');},3500);
+  function initCtx(){if(ctx)return;try{var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();analyser=ctx.createAnalyser();analyser.fftSize=32;var s=ctx.createMediaElementSource(music);s.connect(analyser);analyser.connect(ctx.destination);}catch(e){}}
+  function startViz(){
+    viz.classList.add('on');
+    if(raf)return; // already animating
+    var d=(analyser&&window.Uint8Array)?new Uint8Array(analyser.frequencyBinCount):null;
+    var t=function(){
+      if(music.paused){stopViz();return;}
+      if(analyser&&d){analyser.getByteFrequencyData(d);each(bars,function(b,i){b.style.height=Math.max(2,(d[Math.floor(i*d.length/bars.length)]/255)*100)+'%';});}
+      else each(bars,function(b){b.style.height=(Math.random()*70+5)+'%';});
+      raf=rAF(t);
+    };
+    raf=rAF(t);
+  }
+  function stopViz(){viz.classList.remove('on');if(raf){cAF(raf);raf=null;}each(bars,function(b){b.style.height='2px';});}
+  function upd(){var p=!music.paused;play.textContent=p?'■':'▶';if(p)startViz();else stopViz();}
+  play.addEventListener('click',function(){
+    initCtx();
+    if(ctx&&ctx.state==='suspended'&&ctx.resume){try{ctx.resume();}catch(e){}}
+    if(music.paused){music.volume=.6;safePlay(music,upd);}else{music.pause();upd();}
+  });
+  close.addEventListener('click',function(){music.pause();upd();bar.classList.remove('vis');});
   music.addEventListener('play',upd);music.addEventListener('pause',upd);
 })();
 </script>
