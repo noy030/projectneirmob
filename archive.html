@@ -172,6 +172,12 @@ main { padding:calc(var(--nav-h) + 40px) 16px 80px; max-width:1080px; margin:0 a
 .modal-body { padding:0 20px 20px; }
 .modal-body p { font-size:clamp(.88rem,1.9vw,.96rem); color:var(--tx-2); line-height:1.9; margin-bottom:12px; }
 .modal-body p.lead { color:var(--tx); }
+.m-h { font-family:var(--ui); font-size:.78rem; letter-spacing:.12em; color:var(--tx); margin:22px 0 8px; display:flex; align-items:center; gap:10px; }
+.m-h::before { content:''; width:8px; height:8px; background:var(--tx-2); flex-shrink:0; }
+.m-ul { list-style:none; margin:0 0 14px; border-right:1px solid var(--br-hi); padding-right:14px; }
+.m-ul li { font-size:clamp(.88rem,1.9vw,.96rem); color:var(--tx-2); line-height:1.8; margin-bottom:6px; }
+.m-ul li::before { content:'▸ '; color:var(--tx-3); }
+.ratio video { position:absolute; top:0; left:0; width:100%; height:100%; background:#000; }
 .m-meta { border-top:1px solid var(--br); margin-top:6px; }
 .m-row { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--br); font-size:.84rem; }
 .m-row .k { font-family:var(--ui); font-size:.5rem; letter-spacing:.14em; color:var(--tx-3); text-transform:uppercase; padding-top:3px; }
@@ -281,9 +287,11 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
     if(!m || m[1] === 'forms'){ return null; }
     return 'https://docs.google.com/' + m[1] + '/d/' + m[2] + '/preview';
   }
+  function isFile(u){ return /\.(mp4|webm|m4v)(\?|#|$)/i.test(u || ''); }
   function embedFor(it){
     var u = it.url || '', id;
     if(it.type === 'video'){
+      if(isFile(u)){ return {src:u, kind:'file'}; }
       if((id = ytId(u))){ return {src:'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&playsinline=1&autoplay=1', kind:'video'}; }
       if((id = driveId(u))){ return {src:'https://drive.google.com/file/d/' + id + '/preview', kind:'video'}; }
     }
@@ -430,13 +438,28 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
 
   function bodyParas(txt){
     var parts = String(txt).split(/\n\s*\n/), out = '';
-    for(var i = 0; i < parts.length; i++){ if(parts[i].replace(/\s/g, '')){ out += '<p>' + esc(parts[i]).replace(/\n/g, '<br>') + '</p>'; } }
+    for(var i = 0; i < parts.length; i++){
+      var blk = parts[i].replace(/^\s+|\s+$/g, '');
+      if(!blk){ continue; }
+      if(/^## /.test(blk)){ out += '<h3 class="m-h">' + esc(blk.slice(3)) + '</h3>'; continue; }
+      var lines = blk.split('\n'), allB = true;
+      for(var j = 0; j < lines.length; j++){ if(!/^- /.test(lines[j])){ allB = false; break; } }
+      if(allB){
+        out += '<ul class="m-ul">';
+        for(var k = 0; k < lines.length; k++){ out += '<li>' + esc(lines[k].slice(2)) + '</li>'; }
+        out += '</ul>';
+        continue;
+      }
+      out += '<p>' + esc(blk).replace(/\n/g, '<br>') + '</p>';
+    }
     return out;
   }
 
   function renderModal(it){
     var ti = typeInfo(it.type), emb = embedFor(it), media = '';
-    if(emb){
+    if(emb && emb.kind === 'file'){
+      media = '<div class="ratio"><video controls playsinline autoplay preload="metadata"' + (it.thumb ? ' poster="' + esc(it.thumb) + '"' : '') + '><source src="' + esc(emb.src) + '" type="video/' + (/\.webm/i.test(emb.src) ? 'webm' : 'mp4') + '"></video></div>';
+    } else if(emb){
       media = '<div class="ratio' + (emb.kind === 'doc' ? ' doc' : '') + '"><iframe src="' + esc(emb.src) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="' + esc(it.title) + '"></iframe></div>';
     } else if(it.type === 'image' && it.url){
       media = '<img src="' + esc(it.url) + '" alt="' + esc(it.title) + '">';
@@ -465,7 +488,7 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
 
     var acts = '';
     if(it.url && it.type !== 'text'){
-      var lbl = it.type === 'video' ? 'פתח ביוטיוב / במקור' : it.type === 'image' ? 'פתח תמונה מלאה' : it.type === 'doc' ? 'פתח מסמך' : 'פתח קישור';
+      var lbl = it.type === 'video' ? (isFile(it.url) ? 'פתח וידאו במסך מלא' : 'פתח ביוטיוב / במקור') : it.type === 'image' ? 'פתח תמונה מלאה' : it.type === 'doc' ? 'פתח מסמך' : 'פתח קישור';
       acts += '<a class="m-btn primary" href="' + esc(it.url) + '" target="_blank" rel="noopener">↗ ' + lbl + '</a>';
     }
     acts += '<button class="m-btn" id="m-share">⧉ העתק קישור לרשומה</button>';
@@ -489,6 +512,8 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
     openId = null;
     modal.className = 'modal-ov';
     document.body.style.overflow = '';
+    var v = $('m-media').getElementsByTagName('video');
+    for(var i = 0; i < v.length; i++){ try { v[i].pause(); } catch(e) {} }
     setTimeout(function(){ if(!openId){ $('m-media').innerHTML = ''; } }, 260); // kills video playback
   }
   function closeModal(){
