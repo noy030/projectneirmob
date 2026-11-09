@@ -496,6 +496,14 @@ section { padding: 56px 16px; }
 .acc-num { font-family:var(--ui);font-size:.46rem;color:var(--tx-3);min-width:20px;flex-shrink:0; }
 .acc-title { font-family:var(--ui);font-size:clamp(.68rem,2.1vw,.84rem);letter-spacing:.14em;color:var(--tx-2);text-transform:uppercase;flex:1;text-align:right; }
 .acc-item.open .acc-title { color:var(--tx); }
+.nav-links a.nav-db { color:var(--machine); }
+.db-cta { max-width:700px; margin:14px auto 0; display:flex; align-items:center; gap:14px; padding:16px 20px; border:1px solid var(--machine-2); border-radius:var(--r); background:rgba(122,184,180,.06); transition:background .2s,border-color .2s; }
+.db-cta:hover { background:rgba(122,184,180,.12); border-color:var(--machine); }
+.db-cta-eye { font-family:var(--ui); font-size:.46rem; letter-spacing:.2em; color:var(--machine-2); white-space:nowrap; display:none; }
+@media(min-width:520px){ .db-cta-eye{display:block;} }
+.db-cta-main { flex:1; font-size:clamp(.86rem,2vw,.95rem); color:var(--machine); }
+.db-cta-arrow { font-family:var(--ui); color:var(--machine); transition:transform .2s; }
+.db-cta:hover .db-cta-arrow { transform:translateX(-4px); }
 .acc-stamp { font-family:var(--ui);font-size:.4rem;letter-spacing:.1em;color:var(--tx-3);border:1px solid var(--br);padding:3px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;display:none; }
 @media(min-width:440px){ .acc-stamp{display:block;} }
 .acc-arrow { font-family:var(--ui);font-size:.58rem;color:var(--tx-3);transition:transform .3s ease;flex-shrink:0; }
@@ -921,7 +929,7 @@ footer {
   <span class="nav-logo">PROJECT REBOOT</span>
   <nav class="nav-links">
     <a href="#about">BRIEFING</a><a href="#history">HISTORY</a>
-    <a href="#factions">FACTIONS</a><a href="#lore">ARCHIVES</a>
+    <a href="#factions">FACTIONS</a><a href="#lore">ARCHIVES</a><a href="archive.html" class="nav-db">LORE DB</a>
     <a href="#tech">TECH</a><a href="#rules">DIRECTIVES</a>
     <a href="#gallery">RECORDS</a><a href="#team">TEAM</a><a href="#faq">FAQ</a>
   </nav>
@@ -936,6 +944,7 @@ footer {
   <a href="#history"  onclick="closeNav()">HISTORY</a>
   <a href="#factions" onclick="closeNav()">FACTIONS</a>
   <a href="#lore"     onclick="closeNav()">ARCHIVES</a>
+  <a href="archive.html" onclick="closeNav()">LORE DATABASE ↗</a>
   <a href="#tech"     onclick="closeNav()">TECH</a>
   <a href="#rules"    onclick="closeNav()">DIRECTIVES</a>
   <a href="#gallery"  onclick="closeNav()">RECORDS</a>
@@ -1047,6 +1056,11 @@ footer {
       <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">CLEARANCE: DELTA</span><div class="sec-rule-line"></div></div>
     </div>
     <div class="acc-wrap reveal" id="lore-wrap"></div>
+    <a href="archive.html" class="db-cta reveal">
+      <span class="db-cta-eye">// FULL LORE DATABASE</span>
+      <span class="db-cta-main">לארכיון המלא — סרטונים, מסמכים ורשומות</span>
+      <span class="db-cta-arrow">←</span>
+    </a>
   </div>
 </section>
 
