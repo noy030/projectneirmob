@@ -100,6 +100,7 @@ button { font-family: inherit; cursor: pointer; }
 .stagger.in > *:nth-child(4){opacity:1;transform:none;transition-delay:.25s}
 .stagger.in > *:nth-child(5){opacity:1;transform:none;transition-delay:.32s}
 .stagger.in > *:nth-child(6){opacity:1;transform:none;transition-delay:.39s}
+.stagger.in > *:nth-child(n+7){opacity:1;transform:none;transition-delay:.45s}
 
 #topbar {
   position: fixed; top: 0; inset-inline: 0; z-index: 900;
@@ -649,25 +650,22 @@ section { padding: 56px 16px; }
 .gal-id { position:absolute;top:8px;right:8px;z-index:2; font-family:var(--he);font-size:.78rem;letter-spacing:0; color:var(--tx-3);background:rgba(12,12,16,.75);padding:2px 6px;border-radius:3px; }
 
 #team { background:var(--bg); }
-.team-grid { display:grid;grid-template-columns:1fr;gap:12px; }
-@media(min-width:560px){ .team-grid{grid-template-columns:1fr 1fr;} }
-.team-card { background:var(--bg-2);border:1px solid var(--br);border-radius:var(--r); overflow:hidden;display:grid;grid-template-columns:120px 1fr; transition:border-color .25s,box-shadow .3s; }
-@media(min-width:420px){ .team-card{grid-template-columns:150px 1fr;} }
-.team-card:hover { border-color:var(--br-glow);box-shadow:0 4px 22px rgba(0,0,0,.5); }
-.team-photo { background:var(--bg-3);position:relative;overflow:hidden;min-height:210px; }
-.team-photo img { width:100%;height:100%;object-fit:cover;filter:grayscale(85%) contrast(1.05);transition:filter .4s; }
-.team-card:hover .team-photo img { filter:grayscale(0%) saturate(1.2); }
-.team-photo-ph { display:flex;align-items:center;justify-content:center;height:100%;min-height:210px;color:var(--tx-3);font-size:2rem;opacity:.15; }
-.team-photo-tag { position:absolute;bottom:0;inset-inline:0; background:rgba(12,12,16,.88);border-top:1px solid var(--br); padding:4px 8px;font-family:var(--ui);font-size:.68rem; letter-spacing:.14em;color:var(--tx-3);text-align:center;text-transform:uppercase; }
-.team-info { padding:16px 16px;display:flex;flex-direction:column;gap:8px; }
-.team-role { font-family:var(--ui);font-size:.68rem;letter-spacing:.28em;color:var(--tx-3);text-transform:uppercase; }
-.team-name { font-family:var(--ui);font-size:clamp(.85rem,2.6vw,1.1rem);letter-spacing:.14em;color:var(--tx);text-transform:uppercase; }
-.team-title{ font-size:clamp(.8rem,1.6vw,.88rem);color:var(--tx-3); }
-.team-div  { height:1px;background:var(--br); }
-.team-desc { font-size:clamp(.82rem,1.7vw,.92rem);color:var(--tx-2);line-height:1.8; }
-.team-long { font-size:clamp(.78rem,1.6vw,.88rem);color:var(--tx-3);line-height:1.8; }
-.team-tags { display:flex;flex-wrap:wrap;gap:4px;margin-top:4px; }
-.team-tag  { font-family:var(--ui);font-size:.68rem;letter-spacing:.12em;color:var(--tx-3);border:1px solid var(--br);padding:3px 8px;border-radius:3px;text-transform:uppercase; }
+.team-grid { display:flex;flex-wrap:wrap;justify-content:center;gap:22px 8px;max-width:980px;margin:0 auto; }
+@media(min-width:620px){ .team-grid{gap:28px 14px;} }
+.team-card { width:calc(33.333% - 6px);max-width:170px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px; }
+@media(min-width:620px){ .team-card{width:170px;} }
+@media(min-width:960px){ .team-grid{gap:36px 28px;} .team-card{width:180px;} }
+.team-photo { width:96px;height:96px;border-radius:50%;overflow:hidden;background:var(--bg-3);border:1px solid var(--br-hi);transition:border-color .25s,box-shadow .3s; }
+@media(min-width:620px){ .team-photo{width:160px;height:160px;} }
+.team-break { flex-basis:100%;height:0; }
+.team-card.gm .team-photo { border-color:rgba(184,150,64,.55); }
+.team-card:hover .team-photo { border-color:var(--br-glow);box-shadow:0 0 0 4px rgba(255,255,255,.03),0 6px 22px rgba(0,0,0,.5); }
+.team-photo img { width:100%;height:100%;object-fit:cover;object-position:center 0%; }
+.team-photo-ph { display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:var(--tx-3);font-size:2rem;opacity:.2; }
+.team-info { display:flex;flex-direction:column;gap:3px; }
+.team-name { font-family:var(--he);font-size:clamp(.88rem,2.4vw,1.02rem);color:var(--gold);font-weight:500; }
+.team-title{ font-size:clamp(.74rem,1.8vw,.85rem);color:var(--gold);opacity:.8;line-height:1.5; }
+.team-card.gm .team-title { color:var(--gold); }
 
 #faq { background:var(--bg-2); }
 .faq-outer { max-width:700px;margin:0 auto;border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
@@ -1372,9 +1370,15 @@ var C = {
     {src:"android1.jpeg",alt:"אנדרואיד"},{src:"android 2.jpg",alt:"לחימה"},
     {src:"city.jpg",alt:"עיר"},{src:"pascal.webp",alt:"קבוצה"}
   ],
+  // צוות: gm:true מסמן מנהלי משחק (זהב). photo = קובץ התמונה. גוף מלא בתוך העיגול; fit אופציונלי לכיוונון (למשל "transform:scale(.9)").
   team:[
-    {id:"OPERATIVE_01",name:"נוי וולסטר",role:"Game Master",titleHe:"מנהלת משחק ראשי",photo:"image_noy.jpg",desc:"חלק מקהילת ה-LARP בשנתיים האחרונות, לקחה חלק בהקמה וניהול של אירועים קהילתיים — אולדהיים, מעשיות אוסטמיר וערבי פונדק שונים.",long:"המטרה שלי היא לחלוק את הערצה שלי לסדרת המשחקים הנהדרת הזאת.",tags:["Game Master"]},
-    {id:"OPERATIVE_02",name:"עדי יעקבסון",role:"Game Master",titleHe:"מנהל משחק ראשי",photo:"image_adi.jpg",desc:"חלק מקהילת הלארפים בחמש שנים האחרונות, השתתף בלארפים רבים כשחקן וכנאפס.",long:"המטרה שלי היא ליצור חווית רולפליי ייחודית שעוד לא נראתה כמותה.",tags:["Game Master"]}
+    {gm:true,name:"נוי וולסטר",titleHe:"א. משחק",sub:"Game Master",photo:"image_noy.jpg",fit:"transform:scale(1.35);transform-origin:52% 20%"},
+    {gm:true,name:"עדי יעקבסון",titleHe:"א. משחק",sub:"Game Master",photo:"image_adi.jpg"},
+    {name:"קיטה",titleHe:"א. ארט · נאפסית",photo:"image_kita.jpg",fit:"object-position:center 30%;transform:scale(1.35);transform-origin:48% 35%"},
+    {name:"רועי פלד",titleHe:"א. אנדרואידים",photo:"image_roi.jpg"},
+    {name:"עומר בן ארי",titleHe:"א. שטח ולחימה",photo:"image_omer.jpg"},
+    {name:"גל-ים",titleHe:"א. מרחב בטוח · העמותה למשחקי תפקידים",photo:"image_galyam.jpg",fit:"transform:scale(1.35);transform-origin:46% 42%"},
+    {name:"עדן כהן",titleHe:"נציג מלווה מטעם העמותה למשחקי תפקידים",photo:"image_eden.jpg",fit:"object-position:center 30%"}
   ],
   faq:[
     {q:"מאיזה גיל אפשר להשתתף?",a:"הלארפ מיועד לגילאי 16 ומעלה."},
@@ -1489,21 +1493,11 @@ each(document.querySelectorAll('.gal-cell[data-src]'),function(c){
   c.addEventListener('click',function(){ openLB(c.getAttribute('data-src')); });
 });
 
-document.getElementById('team-grid').innerHTML = mapJoin(C.team,function(m){
-  return '\n  <div class="team-card">'+
-    '\n    <div class="team-photo">'+
-    '\n      '+(m.photo?'<img src="'+m.photo+'" alt="'+m.name+'" loading="lazy">':'<div class="team-photo-ph">◈</div>')+
-    '\n      <span class="team-photo-tag">'+m.id+'</span>'+
-    '\n    </div>'+
-    '\n    <div class="team-info">'+
-    '\n      <div class="team-role">// '+m.role+'</div>'+
-    '\n      <div class="team-name">'+m.name+'</div>'+
-    '\n      <div class="team-title">'+m.titleHe+'</div>'+
-    '\n      <div class="team-div"></div>'+
-    '\n      <p class="team-desc">'+m.desc+'</p>'+
-    '\n      <p class="team-long">'+m.long+'</p>'+
-    '\n      <div class="team-tags">'+mapJoin(m.tags,function(t){ return '<span class="team-tag">'+t+'</span>'; })+'</div>'+
-    '\n    </div>'+
+document.getElementById('team-grid').innerHTML = mapJoin(C.team,function(m,i){
+  var br=(i>0&&!m.gm&&C.team[i-1].gm)?'<div class="team-break" aria-hidden="true"></div>':'';
+  return br+'\n  <div class="team-card'+(m.gm?' gm':'')+'">'+
+    '\n    <div class="team-photo">'+(m.photo?'<img src="'+m.photo+'" alt="'+m.name+'" loading="lazy" style="'+(m.fit?m.fit:'')+'">':'<div class="team-photo-ph">◈</div>')+'</div>'+
+    '\n    <div class="team-info"><div class="team-name">'+m.name+'</div><div class="team-title">'+m.titleHe+'</div></div>'+
     '\n  </div>';
 });
 
