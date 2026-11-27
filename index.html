@@ -667,6 +667,45 @@ section { padding: 56px 16px; }
 .team-title{ font-size:clamp(.74rem,1.8vw,.85rem);color:var(--gold);opacity:.8;line-height:1.5; }
 .team-card.gm .team-title { color:var(--gold); }
 
+#groups { background:var(--bg); }
+.grp-cols { display:grid;grid-template-columns:1fr;gap:22px;max-width:900px;margin:0 auto; }
+.grp-tabs { display:flex;max-width:900px;margin:0 auto 16px;border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
+.grp-tabs .tab-btn { font-family:var(--he);font-size:.95rem;letter-spacing:0; }
+.grp-col { display:none; }
+.grp-col.active { display:block; }
+@media(min-width:700px){ .grp-tabs{display:none;} .grp-cols{grid-template-columns:1fr 1fr;} .grp-col{display:block;} }
+.grp-col-head { display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 2px 8px;margin-bottom:10px;border-bottom:1px solid var(--br); }
+.grp-col-name { font-family:var(--ui);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase; }
+.grp-col.android .grp-col-name { color:var(--android); }
+.grp-col.machine .grp-col-name { color:var(--machine); }
+.grp-col-count { font-family:var(--ui);font-size:.68rem;letter-spacing:.14em;color:var(--tx-3); }
+.grp-list { display:flex;flex-direction:column;gap:8px; }
+.grp-card { background:var(--bg-2);border:1px solid var(--br);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:6px;border-inline-start:2px solid var(--br-hi); }
+.grp-col.android .grp-card { border-inline-start-color:rgba(200,196,168,.45); }
+.grp-col.machine .grp-card { border-inline-start-color:rgba(122,184,180,.45); }
+.grp-name { font-family:var(--he);font-size:1rem;color:var(--tx);font-weight:600; }
+.grp-card.has-img { padding-top:0;overflow:hidden; }
+.grp-img { margin:0 -14px 4px;height:170px;position:relative;overflow:hidden;background:var(--bg-3); }
+@media(min-width:700px){ .grp-img{height:190px;} }
+.grp-img img { width:100%;height:100%;object-fit:cover;display:block; }
+.grp-img::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,var(--bg-2) 100%); }
+.grp-top { display:flex;align-items:flex-start;justify-content:space-between;gap:10px; }
+.grp-sub { font-size:.84rem;color:var(--tx-3);margin-top:2px; }
+.grp-status { font-family:var(--he);font-size:.74rem;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap;flex-shrink:0; }
+.grp-status.open { color:#6dd97a;border-color:rgba(109,217,122,.4);background:rgba(109,217,122,.07); }
+.grp-status.closed { color:var(--tx-3);border-color:var(--br-hi);background:var(--bg-3); }
+.grp-roles { display:flex;flex-direction:column;gap:6px; }
+.grp-roles ul { list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0; }
+.grp-roles li { font-size:.8rem;color:var(--tx-2);border:1px solid rgba(109,217,122,.3);background:rgba(109,217,122,.05);padding:3px 9px;border-radius:3px; }
+.grp-note { font-size:.76rem;color:var(--tx-3); }
+.grp-meta { display:grid;grid-template-columns:auto 1fr;gap:3px 10px;align-items:baseline;font-size:.86rem;margin-top:2px; }
+.grp-k { font-family:var(--he);font-size:.76rem;color:var(--tx-3); }
+.grp-v { color:var(--tx-2); }
+.grp-contact { color:var(--gold);justify-self:start;text-decoration:none;unicode-bidi:isolate; }
+a.grp-contact { border-bottom:1px dashed rgba(184,150,64,.5);min-height:24px;display:inline-flex;align-items:center; }
+.grp-desc { font-size:clamp(.82rem,1.7vw,.9rem);color:var(--tx-2);line-height:1.7;padding-top:6px;border-top:1px solid var(--br); }
+.grp-empty { font-size:.86rem;color:var(--tx-3);padding:12px 2px; }
+
 #faq { background:var(--bg-2); }
 .faq-outer { max-width:700px;margin:0 auto;border:1px solid var(--br);border-radius:var(--r);overflow:hidden; }
 .faq-bar   { background:var(--bg-3);border-bottom:1px solid var(--br);padding:10px 16px;display:flex;align-items:center;gap:8px;direction:ltr; }
@@ -983,7 +1022,7 @@ footer {
   <span class="nav-logo">PROJECT REBOOT</span>
   <nav class="nav-links">
     <a href="#about">על האירוע</a><a href="#history">היסטוריה</a>
-    <a href="#factions">הפלגים</a><a href="archive.html" class="nav-db">ארכיון לור</a>
+    <a href="#factions">הפלגים</a><a href="#groups">קבוצות</a><a href="archive.html" class="nav-db">ארכיון לור</a>
     <a href="#tech">טכנולוגיה</a><a href="#rules">חוקים</a>
     <a href="#gallery">גלריה</a><a href="#team">צוות</a><a href="#faq">שאלות</a>
   </nav>
@@ -997,6 +1036,7 @@ footer {
   <a href="#about"    onclick="closeNav()">על האירוע<small>BRIEFING</small></a>
   <a href="#history"  onclick="closeNav()">היסטוריה<small>HISTORY</small></a>
   <a href="#factions" onclick="closeNav()">הפלגים<small>FACTIONS</small></a>
+  <a href="#groups"   onclick="closeNav()">קבוצות<small>UNITS</small></a>
   <a href="quiz.html" onclick="closeNav()">איזה צד מתאים לי?<small>QUIZ</small></a>
   <a href="archive.html" onclick="closeNav()" class="mn-db">ארכיון לור ↗<small>LORE DATABASE</small></a>
   <a href="#tech"     onclick="closeNav()">טכנולוגיה<small>TECH</small></a>
@@ -1107,6 +1147,21 @@ footer {
       <p>בחרתם צד? את הבחירה עושים בטופס ההרשמה.</p>
       <a href="https://docs.google.com/forms/d/17XYK1M4WSUv1B1XWZVuOQ8QbJES_zASPk649c-l94Og/viewform" target="_blank" rel="noopener" class="btn-coming-soon"><span class="btn-cs-dot"></span>להרשמה</a>
     </div>
+  </div>
+</section>
+
+<section id="groups">
+  <div class="sec-inner">
+    <div class="sec-head reveal">
+      <p class="sec-eye">Unit Registry</p>
+      <h2 class="sec-title">Active Units</h2>
+      <div class="sec-rule"><div class="sec-rule-line"></div><span class="sec-rule-txt">REGISTERED GROUPS</span><div class="sec-rule-line"></div></div>
+    </div>
+    <div class="grp-tabs reveal" role="tablist">
+      <button class="tab-btn android active" type="button" role="tab" aria-selected="true" data-side="android"><span class="tab-dot"></span>אנדרואידים</button>
+      <button class="tab-btn machine" type="button" role="tab" aria-selected="false" data-side="machine"><span class="tab-dot"></span>מכונות</button>
+    </div>
+    <div class="grp-cols reveal" id="groups-wrap"></div>
   </div>
 </section>
 
@@ -1370,6 +1425,18 @@ var C = {
     {src:"android1.jpeg",alt:"אנדרואיד"},{src:"android 2.jpg",alt:"לחימה"},
     {src:"city.jpg",alt:"עיר"},{src:"pascal.webp",alt:"קבוצה"}
   ],
+  // קבוצות: side = "android" או "machine". sub = כותרת משנה (אופציונלי). captain = שם הקפטן.
+  // img = תמונת הקבוצה (אופציונלי), imgPos = מיקוד החיתוך (למשל "center 30%").
+  // roles = רשימת תפקידים פתוחים (אופציונלי), rolesNote = הערה קצרה מתחתם.
+  // open: true = פתוחים לגיוס, false = סגורים לגיוס. contact = טקסט ליצירת קשר (אופציונלי), link = לאן הלחיצה מובילה (אופציונלי).
+  groups:[
+    {side:"android",name:"יחידת גישוש 42",img:"group_unit42.jpg",imgPos:"center 45%",sub:"סקאוטים · S-Type בלבד",captain:"רומי חביבי",open:false,contact:"",link:"",desc:"יחידת אנדרואידים מסוג S שחוקרת את כדור הארץ ההרוס כבר עשרות שנים, וצוות קרוב כמעט כמו משפחה. במשימה אחת, אחד מחבריה נדבק בווירוס מהרשת ופנה נגד הצוות. הוא חזר מהאתחול בבונקר עם אותם פנים, אבל בלי שום זיכרון מהם. היחידה עדיין יוצאת למשימות, אבל משהו כבר לא כמו שהיה."},
+    {side:"machine",name:"הבוטיק של מאדאם בלדונה",img:"group_belladonna.jpg",imgPos:"center 2%",sub:"בוטיק יופי למכונות",captain:"גיל קאהן",open:true,contact:"פייסבוק",link:"https://www.facebook.com/profile.php?id=100086520978175&locale=he_IL",desc:"בוטיק היופי של מאדאם בלדונה, למכונות ששואפות ליותר. קבוצה שמשחקת סביב הרצון לשלמות וביטחון עצמי.",roles:["קוסמטיקאי/ת (רצוי ידע בציור)","מעצב/ת חומרה (רתך/ית)","מעצב/ת תוכנה (האקר/ית)"]},
+    {side:"machine",name:"התיאטרון",img:"group_theater.jpg",imgPos:"center 45%",sub:"",captain:"ספיר גל",open:true,contact:"פייסבוק",link:"https://www.facebook.com/groups/2473177589684262/user/100001739935384?locale=he_IL",desc:"אחרי אלפי שנים של מחקר על תרבות אנושית, מכונות הקימו תיאטרון בתקווה שאיפה שיש תיאטרון תיווצר תרבות. קבוצה של אומני במה עם דגש על רולפליי עמוק, מחקר וקשרי דמות קרובים. האם מכונה יכולה ליצור כמו אדם?"},
+    {side:"machine",name:"פרוטוקול אוברטיים",img:"group_overtime.jpg",imgPos:"center 12%",sub:"",captain:"דביר ג'רבי",open:true,contact:"פייסבוק",link:"https://www.facebook.com/groups/2473177589684262/user/1328388788/",desc:"לפני שנים רבות בני האדם המציאו משהו שנקרא ״עבודה״, ואנחנו הזכר האחרון לו. קבוצה שלומדת את דרכי העבודה כדי למצוא את הדבר האבוד שנקרא ״כסף״ ולחקור את העבר של בני האדם. מחפשים מי שרוצה למצוא את משמעות העבודה, או סתם הרפתקה."},
+    {side:"machine",name:"טרמינוס",img:"group_terminus.jpg",imgPos:"center 14%",sub:"",captain:"רון מרציאנו",open:false,contact:"",link:"",desc:"אנחנו טרמינוס, מלחמה זורמת במעגלים שלנו. הנשקים שלנו נבחנו מול התופת של שדות הקרב. אנחנו באים, תגרמו לנו להרגיש אנושיים."},
+    {side:"machine",name:"הג'נגה קוד",img:"group_jenga.jpg",imgPos:"center 32%",sub:"שמאנים וכהנים",captain:"ירין גרוס",open:false,contact:"",link:"",desc:"קבוצת מכונות הסוגדת למשדר: חפץ הפולט קרינה מסתורית שעלולה לשבש את קוד המכונות, אבל לפי אמונתם יכולה להוביל להתעלות רוחנית."}
+  ],
   // צוות: gm:true מסמן מנהלי משחק (זהב). photo = קובץ התמונה. גוף מלא בתוך העיגול; fit אופציונלי לכיוונון (למשל "transform:scale(.9)").
   team:[
     {gm:true,name:"נוי וולסטר",titleHe:"א. משחק",sub:"Game Master",photo:"image_noy.jpg",fit:"transform:scale(1.35);transform-origin:52% 20%"},
@@ -1500,6 +1567,31 @@ document.getElementById('team-grid').innerHTML = mapJoin(C.team,function(m,i){
     '\n    <div class="team-info"><div class="team-name">'+m.name+'</div><div class="team-title">'+m.titleHe+'</div></div>'+
     '\n  </div>';
 });
+
+(function(){
+  var sides=[{k:"android",label:"Android Units"},{k:"machine",label:"Machine Lifeforms"}];
+  document.getElementById('groups-wrap').innerHTML = mapJoin(sides,function(sd){
+    var list=[]; each(C.groups,function(g){ if(g.side===sd.k){ list.push(g); } });
+    return '\n  <div class="grp-col '+sd.k+(sd.k==='android'?' active':'')+'" role="tabpanel">'+
+      '\n    <div class="grp-col-head"><span class="grp-col-name">'+sd.label+'</span><span class="grp-col-count">'+padN(list.length,2)+' UNITS</span></div>'+
+      '\n    <div class="grp-list">'+(list.length?mapJoin(list,function(g){
+        var c=g.contact?(g.link?'<a class="grp-contact" href="'+g.link+'" target="_blank" rel="noopener" dir="ltr">'+g.contact+'</a>':'<span class="grp-contact" dir="ltr">'+g.contact+'</span>'):'';
+        var st=(g.open===true)?'<span class="grp-status open">פתוחים לגיוס</span>':(g.open===false?'<span class="grp-status closed">סגורים לגיוס</span>':'');
+        return '<div class="grp-card'+(g.img?' has-img':'')+'">'+(g.img?'<div class="grp-img"><img src="'+g.img+'" alt="'+g.name+'" loading="lazy" style="object-position:'+(g.imgPos||'center')+'"></div>':'')+'<div class="grp-top"><div><div class="grp-name">'+g.name+'</div>'+(g.sub?'<div class="grp-sub">'+g.sub+'</div>':'')+'</div>'+st+'</div>'+
+          '<div class="grp-meta">'+(g.captain?'<span class="grp-k">קפטן</span><span class="grp-v">'+g.captain+'</span>':'')+(c?'<span class="grp-k">קשר</span>'+c:'')+'</div>'+
+          (g.desc?'<p class="grp-desc">'+g.desc+'</p>':'')+
+          (g.roles&&g.roles.length?'<div class="grp-roles"><span class="grp-k">מחפשים</span><ul>'+mapJoin(g.roles,function(r){ return '<li>'+r+'</li>'; })+'</ul>'+(g.rolesNote?'<span class="grp-note">'+g.rolesNote+'</span>':'')+'</div>':'')+'</div>';
+      }):'<div class="grp-empty">עוד אין קבוצות רשומות.</div>')+'</div>'+
+      '\n  </div>';
+  });
+  each(document.querySelectorAll('.grp-tabs .tab-btn'),function(btn){
+    btn.addEventListener('click',function(){
+      var side=btn.getAttribute('data-side');
+      each(document.querySelectorAll('.grp-tabs .tab-btn'),function(b){ var on=b===btn; b.classList.toggle('active',on); b.setAttribute('aria-selected',on?'true':'false'); });
+      each(document.querySelectorAll('.grp-col'),function(c){ c.classList.toggle('active',c.classList.contains(side)); });
+    });
+  });
+})();
 
 document.getElementById('faq-wrap').innerHTML = mapJoin(C.faq,function(f){
   return '\n  <div class="faq-item">'+
