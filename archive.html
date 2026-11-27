@@ -198,6 +198,7 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
 /* Hebrew never in the mono display font (no Hebrew glyphs + wide tracking breaks words apart) */
 .he { font-family: var(--he) !important; letter-spacing: .01em !important; text-transform: none !important; }
 .he.he-b { font-weight: 700; }
+.m-link { color:#7ab8b4;text-decoration:none;border-bottom:1px dashed rgba(122,184,180,.5);word-break:break-all;unicode-bidi:isolate; }
 </style>
 </head>
 <body>
@@ -443,6 +444,7 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
 
   function findItem(id){ for(var i = 0; i < items.length; i++){ if(items[i].id === id){ return items[i]; } } return null; }
 
+  function linkify(h){ return h.replace(/(https?:\/\/[^\s<]+[^\s<.,:;!?)])/g, '<a class="m-link" href="$1" target="_blank" rel="noopener" dir="ltr">$1</a>'); }
   function bodyParas(txt){
     var parts = String(txt).split(/\n\s*\n/), out = '';
     for(var i = 0; i < parts.length; i++){
@@ -453,11 +455,11 @@ footer { border-top:1px solid var(--br); padding:16px; text-align:center; font-s
       for(var j = 0; j < lines.length; j++){ if(!/^- /.test(lines[j])){ allB = false; break; } }
       if(allB){
         out += '<ul class="m-ul">';
-        for(var k = 0; k < lines.length; k++){ out += '<li>' + esc(lines[k].slice(2)) + '</li>'; }
+        for(var k = 0; k < lines.length; k++){ out += '<li>' + linkify(esc(lines[k].slice(2))) + '</li>'; }
         out += '</ul>';
         continue;
       }
-      out += '<p>' + esc(blk).replace(/\n/g, '<br>') + '</p>';
+      out += '<p>' + linkify(esc(blk)).replace(/\n/g, '<br>') + '</p>';
     }
     return out;
   }
