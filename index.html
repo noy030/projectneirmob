@@ -690,6 +690,7 @@ section { padding: 56px 16px; }
 .grp-img img { width:100%;height:100%;object-fit:cover;display:block; }
 .grp-img::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,var(--bg-2) 100%); }
 .grp-top { display:flex;align-items:flex-start;justify-content:space-between;gap:10px; }
+.grp-name.pending { color:var(--tx-3);font-weight:500; }
 .grp-sub { font-size:.84rem;color:var(--tx-3);margin-top:2px; }
 .grp-status { font-family:var(--he);font-size:.74rem;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap;flex-shrink:0; }
 .grp-status.open { color:#6dd97a;border-color:rgba(109,217,122,.4);background:rgba(109,217,122,.07); }
@@ -1428,9 +1429,15 @@ var C = {
   // קבוצות: side = "android" או "machine". sub = כותרת משנה (אופציונלי). captain = שם הקפטן.
   // img = תמונת הקבוצה (אופציונלי), imgPos = מיקוד החיתוך (למשל "center 30%").
   // roles = רשימת תפקידים פתוחים (אופציונלי), rolesNote = הערה קצרה מתחתם.
+  // pending: true = קבוצה בהקמה (שם באפור).
   // open: true = פתוחים לגיוס, false = סגורים לגיוס. contact = טקסט ליצירת קשר (אופציונלי), link = לאן הלחיצה מובילה (אופציונלי).
   groups:[
+    {side:"android",name:"צוות 31B",sub:"",captain:"עילאי יגל",open:true,contact:"",link:"",desc:"הקונספט יפורסם בהמשך."},
     {side:"android",name:"יחידת גישוש 42",img:"group_unit42.jpg",imgPos:"center 45%",sub:"סקאוטים · S-Type בלבד",captain:"רומי חביבי",open:false,contact:"",link:"",desc:"יחידת אנדרואידים מסוג S שחוקרת את כדור הארץ ההרוס כבר עשרות שנים, וצוות קרוב כמעט כמו משפחה. במשימה אחת, אחד מחבריה נדבק בווירוס מהרשת ופנה נגד הצוות. הוא חזר מהאתחול בבונקר עם אותם פנים, אבל בלי שום זיכרון מהם. היחידה עדיין יוצאת למשימות, אבל משהו כבר לא כמו שהיה."},
+    {side:"android",pending:true,name:"יחידה בהקמה",captain:"יותם שפירא",contact:"",link:"",desc:"השם והקונספט יפורסמו בהמשך."},
+    {side:"android",pending:true,name:"יחידה בהקמה",captain:"גל צאיג",contact:"",link:"",desc:"השם והקונספט יפורסמו בהמשך."},
+    {side:"android",pending:true,name:"יחידה בהקמה",captain:"נעמה ווקסמן",contact:"",link:"",desc:"השם והקונספט יפורסמו בהמשך."},
+    {side:"android",pending:true,name:"יחידה בהקמה",captain:"יוני לוי",contact:"",link:"",desc:"השם והקונספט יפורסמו בהמשך."},
     {side:"machine",name:"הבוטיק של מאדאם בלדונה",img:"group_belladonna.jpg",imgPos:"center 2%",sub:"בוטיק יופי למכונות",captain:"גיל קאהן",open:true,contact:"פייסבוק",link:"https://www.facebook.com/profile.php?id=100086520978175&locale=he_IL",desc:"בוטיק היופי של מאדאם בלדונה, למכונות ששואפות ליותר. קבוצה שמשחקת סביב הרצון לשלמות וביטחון עצמי.",roles:["קוסמטיקאי/ת (רצוי ידע בציור)","מעצב/ת חומרה (רתך/ית)","מעצב/ת תוכנה (האקר/ית)"]},
     {side:"machine",name:"התיאטרון",img:"group_theater.jpg",imgPos:"center 45%",sub:"",captain:"ספיר גל",open:true,contact:"פייסבוק",link:"https://www.facebook.com/groups/2473177589684262/user/100001739935384?locale=he_IL",desc:"אחרי אלפי שנים של מחקר על תרבות אנושית, מכונות הקימו תיאטרון בתקווה שאיפה שיש תיאטרון תיווצר תרבות. קבוצה של אומני במה עם דגש על רולפליי עמוק, מחקר וקשרי דמות קרובים. האם מכונה יכולה ליצור כמו אדם?"},
     {side:"machine",name:"פרוטוקול אוברטיים",img:"group_overtime.jpg",imgPos:"center 12%",sub:"",captain:"דביר ג'רבי",open:true,contact:"פייסבוק",link:"https://www.facebook.com/groups/2473177589684262/user/1328388788/",desc:"לפני שנים רבות בני האדם המציאו משהו שנקרא ״עבודה״, ואנחנו הזכר האחרון לו. קבוצה שלומדת את דרכי העבודה כדי למצוא את הדבר האבוד שנקרא ״כסף״ ולחקור את העבר של בני האדם. מחפשים מי שרוצה למצוא את משמעות העבודה, או סתם הרפתקה."},
@@ -1577,7 +1584,7 @@ document.getElementById('team-grid').innerHTML = mapJoin(C.team,function(m,i){
       '\n    <div class="grp-list">'+(list.length?mapJoin(list,function(g){
         var c=g.contact?(g.link?'<a class="grp-contact" href="'+g.link+'" target="_blank" rel="noopener" dir="ltr">'+g.contact+'</a>':'<span class="grp-contact" dir="ltr">'+g.contact+'</span>'):'';
         var st=(g.open===true)?'<span class="grp-status open">פתוחים לגיוס</span>':(g.open===false?'<span class="grp-status closed">סגורים לגיוס</span>':'');
-        return '<div class="grp-card'+(g.img?' has-img':'')+'">'+(g.img?'<div class="grp-img"><img src="'+g.img+'" alt="'+g.name+'" loading="lazy" style="object-position:'+(g.imgPos||'center')+'"></div>':'')+'<div class="grp-top"><div><div class="grp-name">'+g.name+'</div>'+(g.sub?'<div class="grp-sub">'+g.sub+'</div>':'')+'</div>'+st+'</div>'+
+        return '<div class="grp-card'+(g.img?' has-img':'')+'">'+(g.img?'<div class="grp-img"><img src="'+g.img+'" alt="'+g.name+'" loading="lazy" style="object-position:'+(g.imgPos||'center')+'"></div>':'')+'<div class="grp-top"><div><div class="grp-name'+(g.pending?' pending':'')+'">'+g.name+'</div>'+(g.sub?'<div class="grp-sub">'+g.sub+'</div>':'')+'</div>'+st+'</div>'+
           '<div class="grp-meta">'+(g.captain?'<span class="grp-k">קפטן</span><span class="grp-v">'+g.captain+'</span>':'')+(c?'<span class="grp-k">קשר</span>'+c:'')+'</div>'+
           (g.desc?'<p class="grp-desc">'+g.desc+'</p>':'')+
           (g.roles&&g.roles.length?'<div class="grp-roles"><span class="grp-k">מחפשים</span><ul>'+mapJoin(g.roles,function(r){ return '<li>'+r+'</li>'; })+'</ul>'+(g.rolesNote?'<span class="grp-note">'+g.rolesNote+'</span>':'')+'</div>':'')+'</div>';
